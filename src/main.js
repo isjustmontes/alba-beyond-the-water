@@ -2,6 +2,7 @@ import './style.css';
 import './phase3.css';
 import './phase4.css';
 import './phase5.css';
+import './mobile-hud.css';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
 import { FishingGame, LURES, EQUIPMENT } from './fishing.js';
@@ -98,6 +99,7 @@ function updateUI() {
     audio.update(e,game.time);
   }
   const s = game.state, fighting = s === 'fighting', values = [...messages[s]];
+  if(document.documentElement.dataset.fishingState!==s)document.documentElement.dataset.fishingState=s;
   if(s==='waiting'&&game.school.approaching>0)values[2]='Un pez investiga el señuelo. Evita tirones bruscos.';
   if(touchMode)values[3]={ready:'LANZAR · MANTÉN',charging:'SUELTA PARA LANZAR',casting:'LANZANDO…',waiting:'RECOGER',bite:'¡CLAVAR!',fighting:'RECOGER · MANTÉN',caught:'¡CAPTURA!'}[s];
   ['phase-label','action-title','action-hint','action-text'].forEach((id,i)=>{ if ($(id).textContent !== values[i]) $(id).textContent = values[i]; });
@@ -128,6 +130,15 @@ function setPaused(value) {
   $('pause').textContent = value ? '▷' : 'Ⅱ';
 }
 function openDialog(id) { if(document.querySelector('dialog[open]'))return;clearHeld(); paused = true;if(id==='equipment-dialog')renderEquipment(); $(id).showModal(); }
+function showMobileInfo() {
+  // Snapshot the existing HUD while paused; no second simulation or saved data.
+  const text=ids=>ids.map(id=>$(id).textContent).join(' · ');
+  $('mobile-info-state').textContent=text(['phase-label','action-title','action-hint']);
+  $('mobile-info-fight').textContent=game.state==='fighting' ? `Distancia ${$('distance').textContent} · Resistencia ${$('stamina').textContent} · ${$('fish-mood').textContent}` : text(['distance','equipment-toggle']);
+  $('mobile-info-environment').textContent=text(['environment-time','environment-weather','environment-period','environment-water','environment-wind']);
+  $('mobile-info-catches').textContent=`${$('catch-count').textContent} capturas · ${text(['total-weight','last-catch'])}`;
+  openDialog('mobile-hud-dialog');
+}
 function renderSound() {const label=audio.enabled ? 'Desactivar sonido' : 'Activar sonido';$('sound-status').textContent=audio.enabled ? 'ON' : 'OFF';$('sound').setAttribute('aria-label',label);$('sound').title=`${label} (M)`;}
 function sound() { try { audio.toggle(); } catch { toast('El sonido no está disponible en este navegador.'); } finally {renderSound();} }
 function fullscreen() { const promise = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); promise?.catch(()=>toast('El navegador no permite pantalla completa.')); }
@@ -148,6 +159,7 @@ function controls() {
   $('help').onclick = ()=>openDialog('help-dialog'); $('open-log').onclick = ()=>openDialog('log-dialog');
   $('equipment-toggle').onclick=()=>openDialog('equipment-dialog');
   $('touch-equipment').onclick=()=>openDialog('equipment-dialog');$('touch-journal').onclick=()=>openDialog('log-dialog');
+  $('touch-hud-info').onclick=showMobileInfo;
   $('retrieve-rig').onclick=()=>{clearHeld();game.reset();renderEquipment();};
   document.querySelectorAll('[data-close]').forEach(button=>button.onclick=()=>button.closest('dialog').close());
   document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('close',()=>{ paused = false; $('pause').textContent = 'Ⅱ'; }));

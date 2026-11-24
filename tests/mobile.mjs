@@ -54,6 +54,9 @@ async function profile({name,viewport,fullGame}) {
       assert.equal((await snap()).hooks,1,'touch hook executes once');
       await page.waitForFunction(()=>window.__alba.snapshot().rodBend>.02);
       await page.screenshot({path:`test-results/${name}-fight.png`});
+      await tap('#touch-hud-info');assert.equal((await snap()).paused,true);
+      assert.match(await page.locator('#mobile-info-fight').textContent(),/Distancia.*Resistencia/);
+      await tap('#mobile-hud-dialog .close');await page.waitForFunction(()=>!window.__alba.snapshot().paused);
       let held=false;const started=Date.now();
       while(Date.now()-started<120000){
         const s=await snap();if(s.state==='caught')break;assert.equal(s.state,'fighting');
@@ -75,7 +78,8 @@ async function profile({name,viewport,fullGame}) {
     const panel=await page.locator('.fishing-panel').boundingBox();assert.ok(panel.x>=0&&panel.x+panel.width<=844);assert.ok(panel.y+panel.height<390);
     await page.screenshot({path:`test-results/${name}-landscape.png`});
     // Hybrid: mouse selects desktop mode, real touch restores touch mode.
-    await page.locator('#equipment-toggle').click();assert.equal((await snap()).touchMode,false);assert.equal(await page.locator('#touch-controls').isVisible(),false);
+    await page.mouse.click(400,170,{button:'right'});assert.equal((await snap()).touchMode,false);assert.equal(await page.locator('#touch-controls').isVisible(),false);
+    await page.locator('#equipment-toggle').click();
     await page.locator('#equipment-dialog .close').click();
     await page.touchscreen.tap(400,170);assert.equal((await snap()).touchMode,true);
     assert.equal((await snap()).casts,1,'camera/menu touches do not launch');

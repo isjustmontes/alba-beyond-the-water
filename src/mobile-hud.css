@@ -1,0 +1,46 @@
+/* Compact HUD is strictly opt-in to the existing capability-driven touch mode.
+   Desktop rules and fishing input handlers remain unchanged. */
+.touch-mode{--hud-safe-top:env(safe-area-inset-top);--hud-safe-right:env(safe-area-inset-right);--hud-safe-bottom:env(safe-area-inset-bottom);--hud-safe-left:env(safe-area-inset-left)}
+.touch-mode .topbar{top:calc(8px + var(--hud-safe-top));left:max(12px,var(--hud-safe-left));right:max(12px,var(--hud-safe-right));height:44px}
+.touch-mode .brand>span{font-size:22px}.touch-mode .brand small{display:none}.touch-mode .brand svg{width:26px;height:32px}
+.touch-mode .location,.touch-mode .compass,.touch-mode .session-card,.touch-mode #orientation-hint{display:none}
+.touch-mode .environment-hud{top:calc(62px + var(--hud-safe-top));left:max(12px,var(--hud-safe-left));max-width:calc(100% - 24px - var(--hud-safe-left) - var(--hud-safe-right));font-size:11px;line-height:1.5;padding:5px 9px;border-radius:7px}
+.touch-mode .environment-hud>div{gap:7px;flex-wrap:nowrap}.touch-mode .environment-hud>div+div{display:none}
+.touch-mode #environment-icon{font-size:15px}.touch-mode #environment-weather{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.touch-mode .fishing-panel{position:fixed;bottom:calc(68px + var(--hud-safe-bottom));left:auto;right:max(12px,var(--hud-safe-right));width:min(420px,calc(100% - 24px - var(--hud-safe-left) - var(--hud-safe-right)));transform:none;padding:0;border:0;background:none;box-shadow:none;backdrop-filter:none;pointer-events:none;border-radius:0}
+.touch-mode .panel-heading{position:absolute;bottom:64px;left:6px;right:auto;gap:0;pointer-events:none}
+.touch-mode .panel-heading>:not(#distance){display:none}.touch-mode .panel-heading #distance{font-size:11px;margin:0;color:#f0dfba;letter-spacing:.3px;text-shadow:0 1px 4px #102a25}
+.touch-mode .fishing-content{display:flex;align-items:flex-end;flex-wrap:nowrap;gap:12px;min-height:56px;margin:0}
+.touch-mode .action-copy{flex:1 1 0;min-width:0;flex-basis:0;padding:10px 12px;border:1px solid #d3dcb82e;border-radius:10px;background:#17362fe6;min-height:56px;display:flex;align-items:center}
+.touch-mode .action-copy h2{font-size:14px;line-height:1.4;font-weight:500;letter-spacing:0;margin:0}.touch-mode .action-copy p{display:none}
+.touch-mode .meter-block{display:none;flex:1 1 0;min-width:0;width:auto;height:56px;padding:9px 12px;border:1px solid #d3dcb82e;border-radius:10px;background:#17362fee}
+.touch-mode:is([data-fishing-state=charging],[data-fishing-state=casting],[data-fishing-state=fighting]) .meter-block{display:block}
+.touch-mode:is([data-fishing-state=charging],[data-fishing-state=casting],[data-fishing-state=fighting]) .action-copy{display:none}
+.touch-mode .meter-label{font-size:9px;letter-spacing:.3px;gap:5px}.touch-mode .meter-label strong{font-size:12px;font-weight:600}
+.touch-mode .meter-track{height:7px;margin:8px 0 0}.touch-mode .meter-notes{display:none}
+.touch-mode #action{flex:0 0 144px;width:144px;min-width:0;min-height:56px;height:56px;margin:0;padding:10px 8px;font-size:12px;letter-spacing:.2px;gap:0;justify-content:center;pointer-events:auto;border-radius:10px}
+.touch-mode .fight-stats{position:absolute;bottom:64px;right:156px;left:auto;display:flex;margin:0;padding:0;border:0;gap:0;font-size:10px;line-height:1.3;text-shadow:0 1px 4px #102a25;white-space:nowrap}
+.touch-mode .fight-stats>span:not(:nth-child(2)){display:none}.touch-mode .fight-stats b{margin-left:3px}
+.touch-mode #touch-controls{position:fixed;left:max(12px,var(--hud-safe-left));right:max(12px,var(--hud-safe-right));bottom:calc(10px + var(--hud-safe-bottom));gap:8px}
+.touch-mode #touch-controls>span{display:none}.touch-mode #touch-controls button{min-height:46px;min-width:72px;padding:8px 12px;font-size:10px;letter-spacing:.5px}
+.touch-mode #touch-hud-info{background:#16352dcc;color:#d6dfc8}
+.touch-mode .bite-alert{display:none}.touch-mode[data-fishing-state=bite] #action{background:#f5d99e;box-shadow:0 0 0 2px #ffe2a149}
+.touch-mode .toast{bottom:calc(146px + var(--hud-safe-bottom));max-width:calc(100% - 24px);width:max-content;padding:8px 12px;font-size:11px;line-height:1.4;pointer-events:none}
+.touch-mode .catch-banner{top:auto;bottom:calc(142px + var(--hud-safe-bottom));padding:10px 16px;width:max-content;max-width:calc(100% - 24px);transform:translateX(-50%)}
+.touch-mode .catch-banner>span{font-size:8px}.touch-mode .catch-banner h2{font-size:20px;margin:5px 0}.touch-mode .catch-banner p{font-size:12px;margin:0}
+.touch-mode[data-fishing-state=caught] .toast{display:none}
+.touch-mode #mobile-hud-dialog dl{display:grid;gap:7px;margin:22px 0}.touch-mode #mobile-hud-dialog dt{color:var(--cream);font-size:11px;margin-top:9px}
+.touch-mode #mobile-hud-dialog dd{margin:0;color:#c3d0bc;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+@media(max-width:360px){
+  .touch-mode #action{flex-basis:124px;width:124px;font-size:11px}.touch-mode .fight-stats{right:136px;font-size:9px}
+  .touch-mode .meter-block{padding:9px 8px}.touch-mode .meter-label{font-size:8px}.touch-mode #touch-controls button{padding:8px 9px;font-size:9px}
+}
+@media(orientation:landscape) and (max-height:500px){
+  .touch-mode .environment-hud{top:calc(57px + var(--hud-safe-top));font-size:10px;padding:4px 8px}
+  .touch-mode .fishing-panel{left:auto;right:max(16px,var(--hud-safe-right))}
+  .touch-mode .fishing-content{justify-content:flex-end}.touch-mode .action-copy,.touch-mode .meter-block{flex:0 1 220px}
+  .touch-mode .panel-heading{left:auto;right:168px;bottom:64px}.touch-mode .fight-stats{right:228px}
+  .touch-mode .toast{top:calc(96px + var(--hud-safe-top));bottom:auto;left:max(16px,var(--hud-safe-left));transform:none;font-size:10px;max-width:35%}
+  .touch-mode .catch-banner{top:calc(8px + var(--hud-safe-top));bottom:auto;padding:6px 12px;max-width:calc(100% - 320px)}
+  .touch-mode .catch-banner>span{display:none}.touch-mode .catch-banner h2{font-size:16px;margin:3px 0}
+}
