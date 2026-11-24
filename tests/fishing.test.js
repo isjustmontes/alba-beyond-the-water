@@ -16,7 +16,7 @@ test('a bite comes from a real nearby fish of the recorded species',()=>{
   assert.equal(game.target.speciesIndex,fish.speciesIndex);assert.equal(game.target.weight,fish.weight);
   assert.ok(Math.hypot(fish.position.x-game.lure.x,fish.position.z-game.lure.z)<1);
 });
-test('missed bite returns to a castable state',()=>{const {game}=castGame(); advance(game,14); assert.equal(game.state,'ready'); game.press(); assert.equal(game.state,'charging');});
+test('missed bite returns to a castable state',()=>{const {game}=castGame(); awaitBite(game); advance(game,3.2); assert.equal(game.state,'ready'); game.press(); assert.equal(game.state,'charging');});
 test('continuous reeling breaks the line',()=>{ const {game,events}=hookGame(); game.press(); advance(game,7); assert.equal(game.state,'ready'); assert.equal(game.catches.length,0); assert.ok(events.some(e=>e.message?.includes('rompió'))); });
 test('leaving too much slack loses the fish',()=>{ const {game}=hookGame(); advance(game,7); assert.equal(game.state,'ready'); assert.equal(game.catches.length,0); });
 test('balanced reeling captures a fish and resets for another cast',()=>{

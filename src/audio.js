@@ -1,9 +1,16 @@
 // Entirely synthesized: no audio downloads or third-party services.
+export const AUDIO_STORAGE_KEY='alba-audio-v1';
 export class LakeAudio {
-  constructor() { this.enabled = false; }
-  toggle() {
+  constructor({storage}={}) {
+    this.enabled=true;
+    try{this.storage=storage??globalThis.localStorage;const saved=this.storage?.getItem(AUDIO_STORAGE_KEY);this.enabled=!(saved==='false'||saved==='off'||saved==='0');}catch{/* Storage restrictions must not prevent session audio. */}
+  }
+  // Called only from a trusted interaction, never during page initialization.
+  unlock() {
+    if(!this.enabled)return false;
     if (!this.ctx) {
-      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const Context=window.AudioContext || window.webkitAudioContext;if(!Context)return false;
+      this.ctx = new Context();
       this.master = this.ctx.createGain(); this.master.gain.value = 0; this.master.connect(this.ctx.destination);
       const buffer = this.ctx.createBuffer(1,this.ctx.sampleRate*4,this.ctx.sampleRate);
       const data = buffer.getChannelData(0); let last = 0;
@@ -18,7 +25,15 @@ export class LakeAudio {
       const insects=this.ctx.createOscillator();insects.frequency.value=3600;insects.type='sine';
       this.insectGain=this.ctx.createGain();this.insectGain.gain.value=0;insects.connect(this.insectGain).connect(this.master);insects.start();
     }
-    this.ctx.resume(); this.enabled = !this.enabled; this.master.gain.setTargetAtTime(this.enabled ? .5 : 0,this.ctx.currentTime,.2); return this.enabled;
+    if(this.ctx.state!=='running')this.ctx.resume()?.catch(()=>{/* Retry on the next trusted gesture if autoplay was blocked. */});
+    this.master.gain.setTargetAtTime(.5,this.ctx.currentTime,.2);return true;
+  }
+  toggle() {
+    this.enabled=!this.enabled;
+    try{this.storage?.setItem(AUDIO_STORAGE_KEY,String(this.enabled));}catch{/* Keep the preference for this session. */}
+    if(this.enabled)this.unlock();
+    else if(this.master)this.master.gain.setTargetAtTime(0,this.ctx.currentTime,.2);
+    return this.enabled;
   }
   update(environment,time){
     if(!this.enabled||!this.ctx)return;
@@ -30,7 +45,7 @@ export class LakeAudio {
     if(day>.5&&w.rain<.4&&time>=(this.nextBird||0)){this.tone(1900+Math.sin(time)*350,.14,'sine',.018);this.nextBird=time+9+Math.random()*8;}
   }
   tone(frequency,duration = .15,type = 'sine',volume = .15) {
-    if (!this.enabled) return;
+    if (!this.enabled||!this.ctx||this.ctx.state!=='running') return;
     const osc = this.ctx.createOscillator(), gain = this.ctx.createGain(), t = this.ctx.currentTime;
     osc.type = type; osc.frequency.setValueAtTime(frequency,t); osc.frequency.exponentialRampToValueAtTime(frequency*.65,t+duration);
     gain.gain.setValueAtTime(volume,t); gain.gain.exponentialRampToValueAtTime(.001,t+duration);

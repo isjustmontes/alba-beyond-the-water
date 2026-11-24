@@ -128,9 +128,17 @@ function setPaused(value) {
   $('pause').textContent = value ? '▷' : 'Ⅱ';
 }
 function openDialog(id) { if(document.querySelector('dialog[open]'))return;clearHeld(); paused = true;if(id==='equipment-dialog')renderEquipment(); $(id).showModal(); }
-function sound() { try { const enabled = audio.toggle(); $('sound-status').textContent = enabled ? 'ON' : 'OFF'; $('sound').setAttribute('aria-label',enabled ? 'Desactivar sonido' : 'Activar sonido'); } catch { toast('El sonido no está disponible en este navegador.'); } }
+function renderSound() {const label=audio.enabled ? 'Desactivar sonido' : 'Activar sonido';$('sound-status').textContent=audio.enabled ? 'ON' : 'OFF';$('sound').setAttribute('aria-label',label);$('sound').title=`${label} (M)`;}
+function sound() { try { audio.toggle(); } catch { toast('El sonido no está disponible en este navegador.'); } finally {renderSound();} }
 function fullscreen() { const promise = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); promise?.catch(()=>toast('El navegador no permite pantalla completa.')); }
 function controls() {
+  renderSound();
+  const unlockAudio=e=>{
+    // The mute control must toggle once without first starting default-on audio.
+    if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
+    try{audio.unlock();}catch{/* Audio is optional; a later gesture or the sound button can retry. */}
+  };
+  for(const type of ['pointerdown','pointerup','click','keydown'])document.addEventListener(type,unlockAudio,{capture:true});
   input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
     if(command==='sound')sound();
     else if(command==='fullscreen')fullscreen();

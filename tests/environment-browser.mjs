@@ -35,7 +35,7 @@ try{
     await page.screenshot({path:`test-results/living-waters-${weather}.png`});
   }
   await load(page,'?hour=0&weather=clear');assert.ok((await snap(page)).daylight<.01);await page.screenshot({path:'test-results/living-waters-night.png'});
-  await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'ON');await page.waitForTimeout(700);await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'OFF');
+  assert.equal(await page.locator('#sound-status').textContent(),'ON');await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'OFF');await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'ON');await page.waitForTimeout(700);
   await page.close();
   for(const [name,viewport]of [['phone-portrait',{width:390,height:844}],['phone-landscape',{width:844,height:390}],['tablet',{width:1024,height:768}]]){
     const context=await browser.newContext({viewport,hasTouch:true,isMobile:true,deviceScaleFactor:1}),mobile=await context.newPage();watch(mobile);

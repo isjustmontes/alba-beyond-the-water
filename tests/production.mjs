@@ -19,6 +19,8 @@ try{
     assert.equal(await page.locator('#equipment-dialog').isVisible(),true);
     assert.equal(await page.locator('#hands-toggle').isDisabled(),true);assert.equal(await page.locator('#hands-toggle').isChecked(),false);
     await page.locator('#equipment-dialog .close').click();
+    assert.equal(await page.locator('#sound-status').textContent(),'ON');
+    await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'OFF');
     await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'ON');
     await context.close();
   }
