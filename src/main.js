@@ -1,9 +1,11 @@
 import './style.css';
 import './phase3.css';
+import './phase4.css';
+import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
 import { FishingGame, LURES, EQUIPMENT } from './fishing.js';
 import {getLure} from './simulation/config.js';
-import {migrateCatches,personalRecords,exportCatches} from './journal.js';
+import {migrateCatches,personalRecords,exportCatches,captureConditions} from './journal.js';
 import {GameControls} from './input/controller.js';
 import {InputMode} from './input/touch-mode.js';
 import { LakeAudio } from './audio.js';
@@ -35,6 +37,7 @@ function renderJournal() {
     const info = document.createElement('span'); info.textContent = fish.name;
     const date = document.createElement('small'); date.textContent = `${new Date(fish.date).toLocaleString('es-ES')} · ${fish.length} cm`; info.append(date);
     const lure=document.createElement('small');lure.textContent=fish.lureName||'Sin registrar · captura anterior';info.append(lure);
+    const conditions=document.createElement('small');conditions.className='capture-conditions';conditions.textContent=captureConditions(fish);info.append(conditions);
     if(records.get(fish.name)===fish){const badge=document.createElement('small');badge.className='record-badge';badge.textContent='★ RÉCORD PERSONAL';info.append(badge);}
     const weight = document.createElement('strong'); weight.textContent = `${number(fish.weight,2)} kg`; row.append(info,weight); $('log-list').append(row);
   }
@@ -78,7 +81,18 @@ const messages = {
   fighting: ['EL PEZ ESTÁ ENGANCHADO','Cada metro cuenta.','Recoge. Suelta si la tensión sube.','Mantén para recoger'],
   caught: ['CAPTURA REGISTRADA','Un momento para recordar.','Tu captura se ha guardado en el cuaderno.','¡Buena captura!']
 };
+let environmentUIAt=-1;
 function updateUI() {
+  if(game.time>=environmentUIAt){
+    environmentUIAt=game.time+.5;const e=game.environment,w=e.weather;
+    $('lake-time').textContent=formatHour(e.clock.hour);$('environment-time').textContent=formatHour(e.clock.hour);
+    $('environment-icon').textContent=w.state==='clear'&&e.daylight<.2 ? '☾' : WEATHER[w.state].icon;
+    $('environment-weather').textContent=w.name+(w.transition<1 ? ' · cambiando' : '');
+    $('environment-water').textContent=`Agua ${number(e.water.surface,1)} °C`;
+    $('environment-wind').textContent=`Viento ${w.windLabel} · ${number(w.wind*3.6,0)} km/h`;
+    $('environment-period').textContent=e.clock.period;
+    audio.update(e,game.time);
+  }
   const s = game.state, fighting = s === 'fighting', values = [...messages[s]];
   if(s==='waiting'&&game.school.approaching>0)values[2]='Un pez investiga el señuelo. Evita tirones bruscos.';
   if(touchMode)values[3]={ready:'LANZAR · MANTÉN',charging:'SUELTA PARA LANZAR',casting:'LANZANDO…',waiting:'RECOGER',bite:'¡CLAVAR!',fighting:'RECOGER · MANTÉN',caught:'¡CAPTURA!'}[s];
@@ -139,7 +153,17 @@ function controls() {
 }
 try {
   world = new LakeWorld($('scene'));
-  game = new FishingGame({ onEvent:event });
+  const environmentOptions={};
+  // Development-only observation links; ordinary play and production always use the normal clock.
+  if(import.meta.env.DEV){
+    const params=new URLSearchParams(location.search);
+    const read=(key,min,max)=>{const v=params.get(key);return v!==null&&Number.isFinite(+v) ? Math.max(min,Math.min(max,+v)) : undefined;};
+    const day=read('day',20,7200),hour=read('hour',0,23.999),transition=read('transition',2,120);
+    if(day!==undefined)environmentOptions.dayDuration=day;if(hour!==undefined)environmentOptions.startHour=hour;if(transition!==undefined)environmentOptions.weatherTransition=transition;
+  }
+  const environment=new Environment(environmentOptions);
+  if(import.meta.env.DEV){const weather=new URLSearchParams(location.search).get('weather');if(Object.hasOwn(WEATHER,weather))environment.weather.request(weather,{manual:true});}
+  game = new FishingGame({ onEvent:event,environment });
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
     game.catches=migrateCatches(saved);
@@ -161,5 +185,5 @@ try {
   $('loading').style.opacity = '0'; setTimeout(()=>$('loading').hidden=true,800);
   requestAnimationFrame(frame);
   // Expose read-only diagnostics in development, without gameplay shortcuts.
-  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ state:game.state,time:game.time,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,lureId:game.lureId,reeling:game.reeling,touchMode,heldInputs:input.actions.sources.size,casts:game.actionCounts.casts,hooks:game.actionCounts.hooks,cameraYaw:world.yaw,cameraPitch:world.pitch,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };
+  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ state:game.state,time:game.time,environment:game.environment.snapshot(),daylight:game.environment.daylight,rain:game.environment.weather.rain,cloud:game.environment.weather.cloud,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,lureId:game.lureId,reeling:game.reeling,touchMode,heldInputs:input.actions.sources.size,casts:game.actionCounts.casts,hooks:game.actionCounts.hooks,cameraYaw:world.yaw,cameraPitch:world.pitch,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };
 } catch(error) { fatal(error); }

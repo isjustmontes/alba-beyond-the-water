@@ -71,9 +71,13 @@ try {
   assert.equal(await page.locator('.log-entry').count(),1);
   assert.equal(await page.locator('.record-card').count(),1);
   assert.ok((await page.locator('.log-entry').textContent()).includes('Cucharilla'));
+  assert.match(await page.locator('.capture-conditions').textContent(),/\d\d:\d\d.*°C.*m/);
+  const savedEnvironment=await page.evaluate(()=>JSON.parse(localStorage.getItem('alba-catches-v1'))[0].environment);
+  assert.ok(savedEnvironment.depth>0);assert.ok(Number.isFinite(savedEnvironment.temperature));
   await page.keyboard.press('Escape');
   await page.reload(); await page.waitForFunction(()=>window.__alba && document.getElementById('loading').hidden);
   assert.equal((await snapshot()).catchCount,1,'capture persists after reload');
+  await page.keyboard.press('KeyJ');assert.match(await page.locator('.capture-conditions').textContent(),/°C/);await page.keyboard.press('Escape');
   // Mouse launch, pause, cancel, then responsive layout.
   // The previous journal opener retains keyboard focus, so use the landscape.
   await page.mouse.move(700,460); await page.mouse.down(); await page.waitForTimeout(600); await page.mouse.up();

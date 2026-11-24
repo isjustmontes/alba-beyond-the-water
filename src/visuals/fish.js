@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {SPECIES} from '../simulation/config.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const random = seed => () => { seed=(seed*1664525+1013904223)>>>0; return seed/4294967296; };
@@ -6,7 +7,7 @@ const random = seed => () => { seed=(seed*1664525+1013904223)>>>0; return seed/4
 function skinTexture(species) {
   const canvas=document.createElement('canvas'); canvas.width=512; canvas.height=256;
   const ctx=canvas.getContext('2d'), rand=random(1973+species*847);
-  const palettes=[['#334b43','#9daea2','#e0dcc4'],['#414529','#b29b60','#d5c99b'],['#2b4132','#809275','#dddcc1']];
+  const palettes=[['#334b43','#9daea2','#e0dcc4'],['#414529','#b29b60','#d5c99b'],['#2b4132','#809275','#dddcc1'],['#34482b','#98a358','#e4d69b'],['#293a25','#7c8650','#b8b77c']];
   const [back,flank,belly]=palettes[species];
   const gradient=ctx.createLinearGradient(0,0,0,256);
   gradient.addColorStop(0,back); gradient.addColorStop(.24,flank); gradient.addColorStop(.5,belly); gradient.addColorStop(.76,flank); gradient.addColorStop(1,back);
@@ -33,6 +34,7 @@ function skinTexture(species) {
       ctx.fillStyle=`rgba(27,47,27,${.2+rand()*.3})`; ctx.fillRect(x,y-4+rand()*5,8,5+rand()*5);
     }
   }
+  if(species===3){ctx.fillStyle='rgba(24,43,23,.60)';for(let x=55;x<420;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x+22,115);ctx.lineTo(x+32,115);ctx.lineTo(x+48,0);ctx.fill();ctx.fillRect(x,180,25,76);}}
   ctx.strokeStyle='rgba(34,48,35,.45)';ctx.lineWidth=1.6;
   for(const y of [64,192]) {ctx.beginPath();ctx.moveTo(412,y-28);ctx.quadraticCurveTo(440,y,410,y+27);ctx.stroke();}
   const tex=new THREE.CanvasTexture(canvas); tex.colorSpace=THREE.SRGBColorSpace; tex.anisotropy=4; return tex;
@@ -52,7 +54,7 @@ function bodyGeometry(species,rings,sides) {
   const positions=[],uvs=[],indices=[];
   for(let i=0;i<=rings;i++) {
     const u=i/rings, bell=Math.pow(Math.sin(u*Math.PI),.73);
-    const height=(species===1 ? .255 : species===2 ? .195 : .165)*bell+.018;
+    const height=(species===1 ? .255 : species===4 ? .22 : species===3 ? .235 : species===2 ? .195 : .165)*bell+.018;
     const width=(species===1 ? .173 : .143)*bell+.015;
     for(let j=0;j<=sides;j++) {
       const a=j/sides*Math.PI*2;
@@ -76,7 +78,7 @@ export class FishModels {
   constructor() {
     this.clock={value:0};this.assets=[];
     const finMap=finTexture();
-    for(let species=0;species<3;species++) {
+    for(let species=0;species<SPECIES.length;species++) {
       const map=skinTexture(species);
       const variants=Array.from({length:5},(_,i)=>{
         const mat=new THREE.MeshStandardMaterial({map,color:new THREE.Color().setHSL(.10+i*.014,.035+i*.012,.87+i*.018),roughness:.31,metalness:.18,envMapIntensity:.8});
@@ -89,10 +91,10 @@ export class FishModels {
         };
         mat.customProgramCacheKey=()=> 'alba-swimming-fish-v1';return mat;
       });
-      const fins=new THREE.MeshStandardMaterial({map:finMap,color:species===1 ? 0x9d8352 : species===0 ? 0x9e9e8a : 0x778a69,roughness:.5,side:THREE.DoubleSide,transparent:true,opacity:.88,depthWrite:false});
+      const fins=new THREE.MeshStandardMaterial({map:finMap,color:species===3 ? 0xb05b38 : species===4 ? 0x626e38 : species===1 ? 0x9d8352 : species===0 ? 0x9e9e8a : 0x778a69,roughness:.5,side:THREE.DoubleSide,transparent:true,opacity:.88,depthWrite:false});
       const dorsal=finGeometry([[-.34,.1],[-.26,.36],[-.13,.41],[.17,.3],[.26,.13]]);
       const dorsalPoints=dorsal.attributes.position;
-      for(let i=0;i<dorsalPoints.count;i++)dorsalPoints.setY(i,.1+(dorsalPoints.getY(i)-.1)*(species===1 ? .9 : species===0 ? .58 : .72));
+      for(let i=0;i<dorsalPoints.count;i++)dorsalPoints.setY(i,.1+(dorsalPoints.getY(i)-.1)*(species===3 ? 1.2 : species===4 ? .68 : species===1 ? .9 : species===0 ? .58 : .72));
       const anal=finGeometry([[-.38,-.09],[-.34,-.3],[-.09,-.2],[.04,-.12]]);
       const pectoral=finGeometry([[.30,0],[.05,-.23],[-.12,-.21],[.10,.015]]);
       const staticFins=[dorsal,anal];
@@ -107,7 +109,7 @@ export class FishModels {
       const irisGeo=mergeGeometries(iris),pupilGeo=mergeGeometries(pupils);[...iris,...pupils].forEach(g=>g.dispose());
       const mouth=new THREE.TorusGeometry(species===2 ? .046 : .031,.009,6,14);mouth.rotateY(Math.PI/2);mouth.translate(.75,-.015,0);
       this.assets.push({near:bodyGeometry(species,40,20),far:bodyGeometry(species,14,10),variants,fins,mergedFins,tail,irisGeo,pupilGeo,mouth,
-        irisMat:new THREE.MeshStandardMaterial({color:0xb2a56b,roughness:.28,metalness:.3}),eyeMat:new THREE.MeshStandardMaterial({color:0x090e0c,roughness:.12}),mouthMat:new THREE.MeshStandardMaterial({color:0x6a735a,roughness:.6})});
+        irisMat:new THREE.MeshStandardMaterial({color:species===4 ? 0xb67d42 : 0xb2a56b,roughness:.28,metalness:.3}),eyeMat:new THREE.MeshStandardMaterial({color:0x090e0c,roughness:.12}),mouthMat:new THREE.MeshStandardMaterial({color:0x6a735a,roughness:.6})});
     }
   }
   create(species,seed=0) {

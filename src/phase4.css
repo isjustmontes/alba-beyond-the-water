@@ -1,0 +1,12 @@
+.environment-hud{margin-top:22px;pointer-events:none;color:#f0eee1;text-shadow:0 1px 5px #102a25;max-width:340px;font-size:13px;line-height:1.7}
+.environment-hud>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.environment-hud strong{font-weight:500}.environment-hud i{width:3px;height:3px;background:#d8c393;border-radius:50%}
+#environment-icon{color:#e7cf97;font-size:19px}#environment-period{color:#d9c79d;font-size:12px}
+.capture-conditions{color:#a9bda9!important;line-height:1.6}
+.touch-mode .environment-hud{position:fixed;margin-top:0;z-index:3;top:calc(env(safe-area-inset-top) + 72px);left:calc(env(safe-area-inset-left) + 18px);font-size:12px;max-width:300px;background:#142d2799;border:1px solid #d8c39325;border-radius:8px;padding:7px 11px}
+.touch-mode #environment-period{display:none}
+.environment-hud time{display:none}.touch-mode .environment-hud time{display:inline;color:#e7cf97}
+.touch-mode .place-intro{display:contents}.touch-mode .place-intro>:not(.environment-hud){display:none}
+@media(max-width:760px){html:not(.touch-mode) .environment-hud{font-size:12px}}
+@media(orientation:portrait){.touch-mode .environment-hud{top:calc(env(safe-area-inset-top) + 136px);max-width:calc(100vw - 160px)}}
+@media(max-height:560px) and (orientation:landscape){.touch-mode .environment-hud{top:calc(env(safe-area-inset-top) + 64px);font-size:11px;padding:4px 9px;max-width:245px}.touch-mode .environment-hud>div{gap:7px}.touch-mode #environment-icon{font-size:15px}}

@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import {EnvironmentalView,makeEnvironmentSky} from './visuals/environment.js';
+import {SPECIES} from './simulation/config.js';
 import { makeLakeWater, makeLakeBed } from './visuals/water.js';
 import { FishModels } from './visuals/fish.js';
 import { RodRig } from './visuals/rod.js';
@@ -26,8 +28,8 @@ export class LakeWorld {
     this.renderer.info.autoReset=false;
     this.highQuality=true;
     this.scratch={tip:new THREE.Vector3(),endpoint:new THREE.Vector3(),direction:new THREE.Vector3(),target:new THREE.Vector3(),delta:new THREE.Vector3()};
-    this.scene.add(new THREE.HemisphereLight(0xd6e6ef, 0x33483a, 1.5));
-    const sun = new THREE.DirectionalLight(0xffd5a0, 3.6);
+    this.ambient=new THREE.HemisphereLight(0xd6e6ef, 0x33483a, 1.5);this.scene.add(this.ambient);
+    const sun = this.sun = new THREE.DirectionalLight(0xffd5a0, 3.6);
     sun.position.set(-25, 70, -210); sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     Object.assign(sun.shadow.camera, { left: -35, right: 35, top: 35, bottom: -35, near: 1, far: 200 });
@@ -41,30 +43,14 @@ export class LakeWorld {
     environment.dispose();
     this.makeLand(); this.makeWater(); this.makeDock(); this.makeFish(); this.makeRig(); this.makeBirds();
     this.effects=new FishingEffects(this.scene,this.random);
+    this.environmentView=new EnvironmentalView(this);
     this.scene.add(this.camera);
     this.setView();
     this.resize = () => { this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(innerWidth, innerHeight); };
     addEventListener('resize', this.resize);
   }
   makeSky() {
-    const sky = new THREE.Mesh(new THREE.SphereGeometry(600, 40, 24), new THREE.ShaderMaterial({
-      side: THREE.BackSide, depthWrite: false,
-      uniforms: { sun: { value: this.sunDirection } },
-      vertexShader: 'varying vec3 vWorld; void main(){vWorld=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-      fragmentShader: `varying vec3 vWorld; uniform vec3 sun;
-        float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
-        float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}
-        float clouds(vec2 p){float n=0.;float a=.55;for(int i=0;i<4;i++){n+=noise(p)*a;p=p*2.04+3.7;a*=.48;}return n;}
-        void main(){vec3 d=normalize(vWorld);float h=max(0.,d.y);vec3 col=mix(vec3(1.,.72,.43),vec3(.17,.35,.52),pow(h,.48));
-        float cover=smoothstep(.50,.78,clouds(d.xz/max(.16,d.y+.16)*3.));cover*=smoothstep(.03,.22,h)*(1.-smoothstep(.7,.98,h));
-        col=mix(col,vec3(.84,.82,.75),cover*.6);
-        float glow=pow(max(0.,dot(d,sun)),32.);col+=vec3(.6,.29,.07)*glow;
-        float disk=smoothstep(.99984,.99993,dot(d,sun));col=mix(col,vec3(3.5,2.6,1.35),disk);
-        gl_FragColor=vec4(col,1.); #include <tonemapping_fragment> #include <colorspace_fragment> }`
-    }));
-    // Shader chunks need their own line for the GLSL preprocessor.
-    sky.material.fragmentShader = sky.material.fragmentShader.replaceAll(' #include', '\n#include').replace('> }', '>\n}');
-    sky.frustumCulled = false; this.scene.add(sky);
+    this.sky=makeEnvironmentSky(this.sunDirection);this.scene.add(this.sky);
   }
   makeLand() {
     this.landscape=makeLandscape(this.random);
@@ -115,7 +101,7 @@ export class LakeWorld {
     this.fishModels=new FishModels(); this.fishSerial=0;
     this.fish = [];
     for (let i = 0; i < 27; i++) {
-      const speciesIndex = i % 3, mesh = this.createFish(speciesIndex);
+      const speciesIndex = i % SPECIES.length, mesh = this.createFish(speciesIndex);
       const home = new THREE.Vector3((this.random() - .5) * 60, -.5 - this.random() * 1.4, -5 - this.random() * 39);
       const scale = .7 + this.random() * .7; mesh.scale.setScalar(scale); mesh.position.copy(home); this.scene.add(mesh);
       this.fish.push({ id: i, speciesIndex, mesh, home, phase: this.random() * 6.28, speed: .18 + this.random() * .2 });
@@ -191,6 +177,7 @@ export class LakeWorld {
   }
   update(dt, game) {
     const t = game.time;
+    this.environmentView.update(game.environment,t);
     this.fishModels.clock.value=t;
     this.landscape.clock.value=t;
     this.water.material.uniforms.time.value = t;

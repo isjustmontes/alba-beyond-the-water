@@ -93,20 +93,20 @@ function crossedCards(count) {
   const geo=mergeGeometries(planes);planes.forEach(p=>p.dispose());return geo;
 }
 
-function windMaterial(material,clock,amount=.018) {
+function windMaterial(material,clock,wind,amount=.018) {
   material.onBeforeCompile=shader=>{
-    shader.uniforms.foliageTime=clock;
-    shader.vertexShader='uniform float foliageTime;\n'+shader.vertexShader;
+    shader.uniforms.foliageTime=clock;shader.uniforms.foliageWind=wind;
+    shader.vertexShader='uniform float foliageTime; uniform float foliageWind;\n'+shader.vertexShader;
     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
       #ifdef USE_INSTANCING
-        transformed.x+=pow(max(position.y,0.),2.)*${amount}*sin(foliageTime*1.1+instanceMatrix[3].x*.2+instanceMatrix[3].z*.1);
+        transformed.x+=pow(max(position.y,0.),2.)*${amount}*foliageWind*sin(foliageTime*1.1+instanceMatrix[3].x*.2+instanceMatrix[3].z*.1);
       #endif`);
   };
   material.customProgramCacheKey=()=>`alba-wind-${amount}`;return material;
 }
 
 export function makeLandscape(rand) {
-  const group=new THREE.Group(),clock={value:0},texture=stoneTexture();
+  const group=new THREE.Group(),clock={value:0},wind={value:1},texture=stoneTexture();
   const terrainMat=new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.24,vertexColors:true,roughness:1});
   terrainMat.onBeforeCompile=shader=>{
     shader.vertexShader='varying vec3 vLandPosition; varying vec3 vLandNormal;\n'+shader.vertexShader;
@@ -122,7 +122,7 @@ export function makeLandscape(rand) {
   terrainHigh.receiveShadow=true;terrainLow.receiveShadow=true;terrainLow.visible=false;group.add(terrainHigh,terrainLow);
   const treeGroups=[];
   for(let kind=0;kind<3;kind++) {
-    const mat=windMaterial(new THREE.MeshStandardMaterial({map:treeTexture(kind,rand),alphaTest:.43,side:THREE.DoubleSide,roughness:.95,color:0xc5d1bb,emissive:0x152317,emissiveIntensity:.14}),clock);
+    const mat=windMaterial(new THREE.MeshStandardMaterial({map:treeTexture(kind,rand),alphaTest:.43,side:THREE.DoubleSide,roughness:.95,color:0xc5d1bb,emissive:0x152317,emissiveIntensity:.14}),clock,wind);
     const positions=[],count=kind===0 ? 410 : kind===1 ? 190 : 150;
     for(let i=0;i<count;i++) {
       const a=rand()*Math.PI*2,r=1.018+Math.pow(rand(),1.5)*.35,x=Math.cos(a)*82*r,z=-42+Math.sin(a)*108*r;
@@ -166,7 +166,7 @@ export function makeLandscape(rand) {
   for(let i=0;i<bp.count;i++)bp.setX(i,bp.getX(i)+Math.pow(bp.getY(i),2)*.23);
   const blades=[];for(let i=0;i<3;i++){const b=blade.clone();b.rotateY(i*Math.PI/3);blades.push(b);}
   const grassGeo=mergeGeometries(blades);blades.forEach(b=>b.dispose());blade.dispose();
-  const grassMat=windMaterial(new THREE.MeshStandardMaterial({color:0x7b8e55,side:THREE.DoubleSide,roughness:1}),clock,.045);
+  const grassMat=windMaterial(new THREE.MeshStandardMaterial({color:0x7b8e55,side:THREE.DoubleSide,roughness:1}),clock,wind,.045);
   const grass=new THREE.InstancedMesh(grassGeo,grassMat,1800);
   for(let i=0;i<1800;i++) {
     const site=reedSites[i%reedSites.length],a=rand()*Math.PI*2,r=rand()*1.35;
@@ -179,7 +179,7 @@ export function makeLandscape(rand) {
     const site=reedSites[i%24];dummy.position.set(site.x+(rand()-.5),site.y+.8+rand()*.35,site.z+(rand()-.5));dummy.scale.setScalar(.7+rand()*.4);dummy.rotation.set(0,0,(rand()-.5)*.2);dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);
   }
   group.add(reeds);
-  return {group,clock,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
+  return {group,clock,wind,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
     terrainHigh.visible=high;terrainLow.visible=!high;
     for(const {mesh,total,distant} of treeGroups)mesh.count=high ? total : Math.ceil(total*(distant ? .55 : .8));
     grass.count=high ? 1800 : 1000;reeds.count=high ? 160 : 90;

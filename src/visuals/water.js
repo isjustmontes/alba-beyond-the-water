@@ -5,15 +5,18 @@ import {lakeDepth} from '../simulation/lake.js';
 export {lakeDepth} from '../simulation/lake.js';
 
 const waveFunctions = /* glsl */`
+  uniform float windStrength; uniform vec2 windDirection;
   float albaWave(vec2 p, float t) {
-    return sin(dot(p,vec2(.72,.25))-t*1.1)*.032
+    p+=windDirection*t*.04;
+    return windStrength*(sin(dot(p,vec2(.72,.25))-t*1.1)*.032
       + sin(dot(p,vec2(-.32,.51))-t*.79)*.024
-      + sin(dot(p,vec2(.16,.12))-t*.43)*.028;
+      + sin(dot(p,vec2(.16,.12))-t*.43)*.028);
   }
   vec2 albaSlope(vec2 p, float t) {
-    return cos(dot(p,vec2(.72,.25))-t*1.1)*.032*vec2(.72,.25)
+    p+=windDirection*t*.04;
+    return windStrength*(cos(dot(p,vec2(.72,.25))-t*1.1)*.032*vec2(.72,.25)
       + cos(dot(p,vec2(-.32,.51))-t*.79)*.024*vec2(-.32,.51)
-      + cos(dot(p,vec2(.16,.12))-t*.43)*.028*vec2(.16,.12);
+      + cos(dot(p,vec2(.16,.12))-t*.43)*.028*vec2(.16,.12));
   }
 `;
 
@@ -38,7 +41,7 @@ export function makeLakeWater(sunDirection) {
   const mat=water.material;
   Object.assign(mat.uniforms, {
     bobberPosition:{value:new THREE.Vector2()}, rippleStrength:{value:0},
-    reflectionInterval:{value:1/24}
+    reflectionInterval:{value:1/24},windStrength:{value:1},windDirection:{value:new THREE.Vector2(1,0)},rainAmount:{value:0}
   });
   mat.vertexShader=mat.vertexShader
     .replace('void main() {',`${waveFunctions}\nvoid main() {`)
@@ -49,6 +52,7 @@ export function makeLakeWater(sunDirection) {
     .replace('void main() {', /* glsl */`
       uniform vec2 bobberPosition;
       uniform float rippleStrength;
+      uniform float rainAmount;
       ${waveFunctions}
       float albaDepth(vec2 p) {
         float basin=smoothstep(0.,.22,1.-length(vec2(p.x/82.,(p.y+42.)/108.)));
@@ -63,6 +67,10 @@ export function makeLakeWater(sunDirection) {
       float ripple=sin(radius*16.-time*5.5)*envelope;
       vec2 slope=albaSlope(worldPosition.xz,time)+noise.xy*.045;
       slope+=offset/max(radius,.01)*cos(radius*16.-time*5.5)*envelope*.075;
+      vec2 cell=floor(worldPosition.xz*1.6);
+      float dropPhase=fract(sin(dot(cell,vec2(127.1,311.7)))*43758.5+time*1.7);
+      vec2 drop=fract(worldPosition.xz*1.6)-.5;
+      slope+=normalize(drop+vec2(.0001))*cos(length(drop)*35.-dropPhase*12.)*exp(-dropPhase*4.)*rainAmount*.06;
       vec3 surfaceNormal=normalize(vec3(-slope.x,1.,-slope.y));`)
     .replace('float rf0 = 0.3;', 'float rf0 = 0.025;')
     .replace('gl_FragColor = vec4( outgoingLight, alpha );', /* glsl */`

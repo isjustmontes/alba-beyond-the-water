@@ -63,6 +63,7 @@ async function profile({name,viewport,fullGame}) {
       if(held)await touch('touchEnd',1);
       assert.equal((await snap()).catchCount,1);await page.waitForTimeout(500);await page.screenshot({path:`test-results/${name}-catch.png`});
       await tap('#touch-journal');assert.equal(await page.locator('.log-entry').count(),1);assert.equal(await page.locator('.record-card').count(),1);
+      assert.match(await page.locator('.capture-conditions').textContent(),/\d\d:\d\d.*°C.*m/);
       await page.screenshot({path:`test-results/${name}-journal.png`});await tap('#log-dialog .close');
     }
     // Rotation/resize works, and touch menus remain reachable.

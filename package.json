@@ -1,6 +1,6 @@
 {
   "name": "alba-fishing",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,7 +11,9 @@
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --test tests/*.test.js",
     "test:browser": "node tests/browser.mjs",
-    "test:mobile": "node tests/mobile.mjs"
+    "test:mobile": "node tests/mobile.mjs",
+    "test:environment": "node tests/environment-browser.mjs",
+    "test:production": "node tests/production.mjs"
   },
   "dependencies": { "three": "0.180.0" },
   "devDependencies": { "vite": "^7.2.2", "@playwright/test": "^1.56.1" }

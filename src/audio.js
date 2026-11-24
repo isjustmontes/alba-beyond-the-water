@@ -11,8 +11,23 @@ export class LakeAudio {
       const noise = this.ctx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
       const filter = this.ctx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 700;
       const gain = this.ctx.createGain(); gain.gain.value = .25; noise.connect(filter).connect(gain).connect(this.master); noise.start();
+      this.windGain=gain;this.windFilter=filter;
+      const rainFilter=this.ctx.createBiquadFilter();rainFilter.type='highpass';rainFilter.frequency.value=1100;
+      this.rainGain=this.ctx.createGain();this.rainGain.gain.value=0;
+      noise.connect(rainFilter).connect(this.rainGain).connect(this.master);
+      const insects=this.ctx.createOscillator();insects.frequency.value=3600;insects.type='sine';
+      this.insectGain=this.ctx.createGain();this.insectGain.gain.value=0;insects.connect(this.insectGain).connect(this.master);insects.start();
     }
     this.ctx.resume(); this.enabled = !this.enabled; this.master.gain.setTargetAtTime(this.enabled ? .5 : 0,this.ctx.currentTime,.2); return this.enabled;
+  }
+  update(environment,time){
+    if(!this.enabled||!this.ctx)return;
+    const w=environment.weather,t=this.ctx.currentTime,day=environment.daylight;
+    this.windGain.gain.setTargetAtTime(.15+w.wind*.025,t,1);
+    this.windFilter.frequency.setTargetAtTime(400+w.wind*100,t,1);
+    this.rainGain.gain.setTargetAtTime(w.rain*1.2,t,1);
+    this.insectGain.gain.setTargetAtTime((1-day)*(1-w.rain)*(.002+.001*Math.sin(time*15)),t,.3);
+    if(day>.5&&w.rain<.4&&time>=(this.nextBird||0)){this.tone(1900+Math.sin(time)*350,.14,'sine',.018);this.nextBird=time+9+Math.random()*8;}
   }
   tone(frequency,duration = .15,type = 'sine',volume = .15) {
     if (!this.enabled) return;
