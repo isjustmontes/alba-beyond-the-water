@@ -2,6 +2,7 @@ import {SPECIES,LURES,EQUIPMENT,getLure} from './simulation/config.js';
 import {FishSchool} from './simulation/fish-ai.js';
 import {lakeDepth} from './simulation/lake.js';
 import {Environment} from './simulation/environment.js';
+import {CAST_TIMING} from './animation/fishing-motion.js';
 export {SPECIES,LURES,EQUIPMENT};
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 
@@ -15,6 +16,7 @@ export class FishingGame {
     this.reeling=false;this.catches=[];this.lureId='spinner';this.aim={x:0,z:-1};
     this.lure={x:0,y:-.75,z:4};this.lureSpeed=0;this.hookedId=null;
     this.actionCounts={casts:0,hooks:0};
+    this.chargeTime=0;this.castStartedAt=-Infinity;this.castPreparation=0;this.lineReleased=false;this.pullCount=0;
   }
   get lureType(){return getLure(this.lureId);}
   emit(type,data={}){this.onEvent({type,...data});}
@@ -24,12 +26,13 @@ export class FishingGame {
     this.lureId=id;this.emit('equipment');return true;
   }
   press() {
-    if(this.state==='ready'){this.state='charging';this.power=.08;}
+    if(this.state==='ready'){this.state='charging';this.power=.08;this.chargeTime=0;}
     else if(this.state==='bite') {
       this.state='fighting';this.tension=.28;this.stamina=1;this.fightTime=0;this.slackTime=0;this.overloadTime=0;
       this.burstRemaining=.6+this.random();this.surge=true;this.burstForce=.8+this.random()*.4;
       this.fightHeading=Math.atan2(this.aim.x,-this.aim.z);this.baseHeading=this.fightHeading;
       this.reeling=true;this.school.hook(this.hookedId);this.actionCounts.hooks++;
+      this.pullCount=0;
       this.emit('hook',{fish:this.target,fishId:this.hookedId});
     } else if(this.state==='fighting'||this.state==='waiting')this.reeling=true;
   }
@@ -37,6 +40,7 @@ export class FishingGame {
     this.reeling=false;
     if(this.state!=='charging')return;
     this.state='casting';this.distance=9+this.power*31;this.castDistance=this.distance;this.castTime=0;
+    this.castStartedAt=this.time;this.castPreparation=Math.min(1,this.chargeTime/.42);this.lineReleased=false;
     const wind=this.environment.weather;
     this.windOffset.x=wind.windX*this.power*.09;this.windOffset.z=wind.windZ*this.power*.09;
     this.actionCounts.casts++;this.emit('cast',{distance:this.distance});this.updateLure();
@@ -48,6 +52,7 @@ export class FishingGame {
     if(this.hookedId!==null&&this.state!=='caught')this.school.release(this.hookedId);
     this.hookedId=null;this.state='ready';this.power=0;this.tension=0;this.distance=0;this.reeling=false;
     this.lureSpeed=0;this.emit('reset',{message});
+    this.castStartedAt=-Infinity;
   }
   updateLure() {
     const type=this.lureType;
@@ -59,9 +64,11 @@ export class FishingGame {
   update(dt) {
     this.time+=dt;
     this.environment.update(dt);
-    if(this.state==='charging')this.power=Math.min(1,this.power+dt*.58);
+    if(this.state==='charging'){this.power=Math.min(1,this.power+dt*.58);this.chargeTime+=dt;}
     if(this.state==='casting') {
-      this.castTime+=dt;if(this.castTime>=1.1){this.state='waiting';this.waitTime=0;this.emit('splash');}
+      this.castTime+=dt;
+      if(!this.lineReleased&&this.castTime>=CAST_TIMING.release){this.lineReleased=true;this.emit('line-release');}
+      if(this.castTime>=CAST_TIMING.impact){this.state='waiting';this.waitTime=0;this.emit('splash');}
     }
     let jerk=false;
     if(this.state==='waiting') {
@@ -92,7 +99,7 @@ export class FishingGame {
       this.surge=!this.surge;
       this.burstRemaining=(this.surge ? .8+this.random()*1.6 : 1.2+this.random()*2.0)*species.endurance;
       this.burstForce=.75+this.random()*.55;this.fightHeading=this.baseHeading+(this.random()-.5)*.7;
-      if(this.surge)this.emit('pull',{strength:this.burstForce});
+      if(this.surge){this.pullCount++;this.emit('pull',{strength:this.burstForce});}
     }
     const force=species.strength*(.8+this.target.weight/12)*(EQUIPMENT.lineStrengthKg/7.5)**-1,fatigue=.5+this.stamina*.5;
     if(this.reeling) {

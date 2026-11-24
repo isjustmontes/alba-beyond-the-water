@@ -1,7 +1,10 @@
 import * as THREE from 'three';
 import {EnvironmentalView,makeEnvironmentSky} from './visuals/environment.js';
+import {FirstPersonHands} from './visuals/hands.js';
+import {createFishMotion,updateFishMotion} from './animation/fish-motion.js';
+import {CAST_TIMING,rodPose,castFlight,linePoint,smooth,canJump,jumpHeight} from './animation/fishing-motion.js';
 import {SPECIES} from './simulation/config.js';
-import { makeLakeWater, makeLakeBed } from './visuals/water.js';
+import { makeLakeWater, makeLakeBed, waterElevation } from './visuals/water.js';
 import { FishModels } from './visuals/fish.js';
 import { RodRig } from './visuals/rod.js';
 import { makeLandscape } from './visuals/landscape.js';
@@ -42,8 +45,9 @@ export class LakeWorld {
     this.scene.environment=this.environmentTarget.texture; this.scene.environmentIntensity=.35;
     environment.dispose();
     this.makeLand(); this.makeWater(); this.makeDock(); this.makeFish(); this.makeRig(); this.makeBirds();
-    this.effects=new FishingEffects(this.scene,this.random);
+    this.effects=new FishingEffects(this.scene,this.random,this.water.material.uniforms.fishingRipples.value);
     this.environmentView=new EnvironmentalView(this);
+    this.jumpStartedAt=-Infinity;this.jumpCount=0;this.jumpWasAbove=false;this.lastWakeTime=-Infinity;this.effectPoint=new THREE.Vector3();
     this.scene.add(this.camera);
     this.setView();
     this.resize = () => { this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(innerWidth, innerHeight); };
@@ -94,8 +98,8 @@ export class LakeWorld {
       this.scene.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 40, .035, 6, false), ropeMat));
     }
   }
-  createFish(speciesIndex) {
-    return this.fishModels.create(speciesIndex, this.fishSerial++);
+  createFish(speciesIndex,slot=undefined) {
+    return this.fishModels.create(speciesIndex,this.fishSerial++,slot);
   }
   makeFish() {
     this.fishModels=new FishModels(); this.fishSerial=0;
@@ -109,11 +113,10 @@ export class LakeWorld {
   }
   makeRig() {
     this.rodRig=new RodRig(); this.rod=this.rodRig.root; this.camera.add(this.rod);
-    this.tip=this.rodRig.tip;
+    this.tip=this.rodRig.tip;this.hands=new FirstPersonHands(this.camera,this.rodRig);
+    this.pose={};this.flightOrigin=new THREE.Vector3();this.flightTarget=new THREE.Vector3();this.flightStartedAt=null;
+    this.lineOptions={};this.linePoint=new THREE.Vector3();
     const graphite=this.rodRig.graphite;
-    const handMaterial = new THREE.MeshStandardMaterial({ color: 0x9b7756, roughness: .9 });
-    const hand = new THREE.Mesh(new THREE.CapsuleGeometry(.075,.20,5,10), handMaterial); hand.position.set(.07,-.14,.13); hand.rotation.z = -.25; this.rod.add(hand);
-    const sleeve = new THREE.Mesh(new THREE.CylinderGeometry(.11,.15,.48,12), new THREE.MeshStandardMaterial({ color: 0x3b4b39, roughness: 1 })); sleeve.position.set(.17,-.46,.25); sleeve.rotation.z = .3; this.rod.add(sleeve);
     this.bobber = new THREE.Group();
     const floatBody = new THREE.Mesh(new THREE.SphereGeometry(.135,14,10), new THREE.MeshStandardMaterial({ color: 0xf5ecce, roughness: .35 })); floatBody.scale.y = 1.7; this.bobber.add(floatBody);
     const floatTip = new THREE.Mesh(new THREE.CylinderGeometry(.055,.075,.30,10), new THREE.MeshStandardMaterial({ color: 0xe97337, emissive: 0x8a3312, emissiveIntensity: .3 })); floatTip.position.y = .26; this.bobber.add(floatTip);
@@ -121,13 +124,16 @@ export class LakeWorld {
     this.linePositions = new Float32Array(61 * 3);
     const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(this.linePositions,3));
     this.line = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0xe3e7cf, transparent: true, opacity: .65 })); this.line.frustumCulled = false; this.line.renderOrder = 4; this.scene.add(this.line);
+    this.leaderPositions = new Float32Array(6);
+    const leaderGeometry = new THREE.BufferGeometry(); leaderGeometry.setAttribute('position',new THREE.BufferAttribute(this.leaderPositions,3));
+    this.leader = new THREE.Line(leaderGeometry,this.line.material); this.leader.frustumCulled=false; this.scene.add(this.leader);
     this.castDirection = new THREE.Vector3(0,0,-1);
-    this.catchFish = this.createFish(0); this.catchFish.visible = false; this.scene.add(this.catchFish);
+    this.catchFish = this.createFish(0,32); this.catchFish.visible = false; this.scene.add(this.catchFish);
     this.lureVisuals=new THREE.Group();
     const spoon=new THREE.Mesh(new THREE.SphereGeometry(1,10,6),new THREE.MeshStandardMaterial({color:0xd5ba72,metalness:.9,roughness:.18}));spoon.scale.set(.055,.012,.13);
     const wormCurve=new THREE.CatmullRomCurve3([new THREE.Vector3(-.1,0,0),new THREE.Vector3(0,.03,.025),new THREE.Vector3(.11,0,-.025)]);
     const worm=new THREE.Mesh(new THREE.TubeGeometry(wormCurve,10,.018,6,false),new THREE.MeshStandardMaterial({color:0x8b5046,roughness:.65}));
-    const minnow=this.createFish(2);minnow.scale.setScalar(.12);
+    const minnow=this.createFish(2,33);minnow.scale.setScalar(.12);
     this.lureVisuals.add(spoon,worm,minnow);this.scene.add(this.lureVisuals);
   }
   makeBirds() {
@@ -140,7 +146,7 @@ export class LakeWorld {
   }
   setView() { this.camera.rotation.order = 'YXZ'; this.camera.rotation.set(this.pitch,this.yaw,0); }
   look(dx, dy) { this.yaw = THREE.MathUtils.clamp(this.yaw - dx * .002,-.8,.8); this.pitch = THREE.MathUtils.clamp(this.pitch - dy*.002,-.48,.25); this.setView(); }
-  cast() { this.camera.getWorldDirection(this.castDirection); this.castDirection.y = 0; this.castDirection.normalize(); }
+  cast() { this.flightStartedAt=null;this.castStartPitch=this.rod.rotation.x;this.camera.getWorldDirection(this.castDirection); this.castDirection.y = 0; this.castDirection.normalize(); }
   nearby() { return this.fish.filter(f => f.mesh.position.distanceTo(this.bobber.position) < 9); }
   hookFish(speciesIndex,id) {
     this.hookedFish = this.fish.find(f=>f.id===id) || this.fish.filter(f=>f.speciesIndex===speciesIndex).sort((a,b)=>a.mesh.position.distanceTo(this.bobber.position)-b.mesh.position.distanceTo(this.bobber.position))[0];
@@ -148,7 +154,29 @@ export class LakeWorld {
   onCatch(fish) {
     this.scene.remove(this.catchFish);
     // GPU assets are pooled across live fish and catch displays; do not dispose shared assets.
-    this.catchFish = this.createFish(fish.speciesIndex);this.catchSize=.5 + Math.cbrt(fish.weight)*.1; this.catchFish.scale.setScalar(this.catchSize); this.scene.add(this.catchFish);
+    this.catchFish = this.createFish(fish.speciesIndex,32);this.catchSize=.5 + Math.cbrt(fish.weight)*.1; this.catchFish.scale.setScalar(this.catchSize); this.scene.add(this.catchFish);
+  }
+  onPull(game) {
+    if(canJump(game)&&game.time-this.jumpStartedAt>6){this.jumpStartedAt=game.time;this.jumpCount++;this.jumpWasAbove=false;}
+  }
+  updateFish(dt,game) {
+    if(game.state!=='fighting'){this.jumpWasAbove=false;this.jumpStartedAt=-Infinity;}
+    for(const fish of this.fish){
+      const agent=game.school.fish[fish.id];if(!agent)continue;
+      if(!fish.motion)fish.motion=createFishMotion(agent);
+      const m=updateFishMotion(fish.motion,agent,dt),age=game.time-this.jumpStartedAt;
+      const jumping=game.state==='fighting'&&fish.id===game.hookedId&&age>=0&&age<=1;
+      const lift=jumping ? jumpHeight(age)*(1.05+Math.min(.15,agent.weight*.025)) : 0;
+      if(fish.agentWeight!==agent.weight){fish.agentWeight=agent.weight;fish.mesh.scale.setScalar(.55+Math.cbrt(agent.weight)*.35);}
+      fish.mesh.position.set(m.x,m.y+lift,m.z);fish.mesh.rotation.set(m.bank,m.heading,m.pitch+(jumping ? Math.sin(age*Math.PI*2)*.4 : 0),'YXZ');
+      fish.mesh.visible=!(game.state==='caught'&&fish.id===game.hookedId);
+      if(fish.id===game.hookedId){
+        const above=fish.mesh.position.y>0;
+        if(above!==this.jumpWasAbove&&(jumping||this.jumpWasAbove)){this.effectPoint.set(m.x,0,m.z);this.effects.emit(this.effectPoint,above ? .4 : .65);}
+        this.jumpWasAbove=above;
+      }
+      this.fishModels.animate(fish.mesh,game.time,this.camera,m.phase,m.speed);
+    }
   }
   setQuality(high) {
     this.highQuality=high;
@@ -168,9 +196,11 @@ export class LakeWorld {
       triangles:this.renderer.info.render.triangles,
       geometries:this.renderer.info.memory.geometries,
       textures:this.renderer.info.memory.textures,
-      rodBend:this.rodRig.bend.value,
+      handsAvailable:this.hands.available,handsEnabled:this.hands.enabled,rodBend:this.rodRig.bend.value,rodPitch:this.rod.rotation.x,castPhase:this.pose.phase,
+      flightReleased:this.flightStartedAt!==null,flightOrigin:this.flightOrigin.toArray(),bobber:this.bobber.position.toArray(),
+      rotorAngle:this.rodRig.rotor.rotation.z,reelRate:this.rodRig.reelRate,
       lineTipError:this.line.visible ? lineStart.distanceTo(tip) : 0,
-      rippleStrength:this.water.material.uniforms.rippleStrength.value,
+      rippleStrength:this.water.material.uniforms.rippleStrength.value,rippleCount:this.effects.rippleCount,jumpCount:this.jumpCount,fishSwimPhase:this.fish[0]?.motion?.phase??0,fishSwimSpeed:this.fish[0]?.motion?.speed??0,
       fishCount:this.fish.length,
       reflectionHz:Math.round(1/this.water.material.uniforms.reflectionInterval.value)
     };
@@ -183,31 +213,52 @@ export class LakeWorld {
     this.water.material.uniforms.time.value = t;
     this.water.material.uniforms.rippleStrength.value=['waiting','bite','fighting'].includes(game.state) ? (game.state==='fighting' ? 1.5 : .4+Math.min(1,game.school.nearLure*.2)) : 0;
     const state = game.state;
-    this.rod.rotation.x = THREE.MathUtils.damp(this.rod.rotation.x, state === 'charging' ? -.5 - game.power*.4 : state === 'fighting' ? -.13 + Math.sin(t*7)*.018 : state === 'casting' ? .25 : 0, 7, dt);
-    this.rod.rotation.z = Math.sin(t*.9)*.009;
-    if(state==='bite'){this.rod.rotation.z+=Math.sin(t*42)*.012;this.rod.rotation.x+=Math.sin(t*37)*.009;}
-    this.rodRig.update(dt,state==='fighting' ? game.tension : 0,t,game.reeling);
-    const active = ['casting','waiting','bite','fighting','caught'].includes(state);
-    this.bobber.visible = active && state !== 'caught'; this.line.visible = active;
-    if (active) {
-      const dist = state === 'casting' ? game.distance * Math.min(1, game.castTime/1.1) : game.distance;
-      this.bobber.position.copy(this.castDirection).multiplyScalar(dist).add(new THREE.Vector3(0,0,4));
-      this.bobber.position.y = .12 + Math.sin(t*2.5)*.045;
-      if (state === 'casting') this.bobber.position.y += Math.sin(Math.min(1,game.castTime/1.1)*Math.PI)*4;
-      if (state === 'bite') this.bobber.position.y = -.18 + Math.sin(t*15)*.11;
-      if (state === 'fighting') { this.bobber.position.x += Math.sin(t*2)*Math.min(1.5,game.distance*.05); this.bobber.position.y += Math.sin(t*13)*.06; }
-      if(state!=='casting'&&game.lure){this.bobber.position.x=game.lure.x;this.bobber.position.z=game.lure.z;}
-      this.bobber.rotation.z = Math.sin(t*3)*.12;
-    }
+    this.updateFish(dt,game);
+    const pose=rodPose(game,this.pose),casting=state==='casting';
+    if(casting&&game.castTime<CAST_TIMING.loadEnd)pose.pitch=THREE.MathUtils.lerp(this.castStartPitch,1.28,smooth(game.castTime/CAST_TIMING.loadEnd));
+    const blend=1-Math.exp(-dt*12);
+    this.rod.rotation.x=casting ? pose.pitch : THREE.MathUtils.lerp(this.rod.rotation.x,pose.pitch,blend);
+    this.rod.rotation.y=casting ? pose.yaw : THREE.MathUtils.lerp(this.rod.rotation.y,pose.yaw,blend);
+    this.rod.rotation.z=casting ? pose.roll : THREE.MathUtils.lerp(this.rod.rotation.z,pose.roll,blend);
+    const reelRate=game.reeling ? (state==='fighting' ? .65+.35*(1-game.stamina) : game.lureType.retrieveSpeed/1.4) : 0;
+    const drag=state==='fighting'&&!game.reeling&&game.surge ? game.stamina : 0;
+    this.rodRig.update(dt,state==='fighting' ? game.tension : 0,t,game.reeling,pose.load,reelRate,drag);
+    this.hands.update(dt,game);
     this.camera.updateMatrixWorld();
+    const tip=this.tip.getWorldPosition(this.scratch.tip);
+    const active=['charging','casting','waiting','bite','fighting','caught'].includes(state);
+    this.bobber.visible=active&&state!=='caught';this.line.visible=active;
+    if(state==='charging'||(casting&&!game.lineReleased)){
+      this.bobber.position.copy(tip);this.bobber.position.y-=.28;
+    }else if(casting){
+      if(this.flightStartedAt===null){this.flightOrigin.copy(tip);this.flightOrigin.y-=.28;this.flightStartedAt=game.castTime;}
+      this.flightTarget.set(game.lure.x,.12,game.lure.z);
+      castFlight(this.flightOrigin,this.flightTarget,(game.castTime-this.flightStartedAt)/Math.max(.01,CAST_TIMING.impact-this.flightStartedAt),game.power,this.bobber.position);
+    }else if(active){
+      this.bobber.position.set(game.lure.x,.12+waterElevation(game.lure.x,game.lure.z,t,game.environment.weather),game.lure.z);
+      if(state==='bite')this.bobber.position.y=-.14+Math.sin(t*12)*.065;
+      if(state==='fighting')this.bobber.position.y+=Math.sin(t*9)*.025;
+    }
+    this.bobber.rotation.z=Math.sin(t*2.1)*.07;
     this.water.material.uniforms.bobberPosition.value.set(this.bobber.position.x,this.bobber.position.z);
-    const tip = this.tip.getWorldPosition(this.scratch.tip);
-    const endpoint = this.scratch.endpoint.copy(this.bobber.position);
-    if(state==='fighting')endpoint.set(game.lure.x,game.lure.y,game.lure.z);
+    const endpoint=this.scratch.endpoint.copy(this.bobber.position);
+    if(state==='fighting'){
+      const visual=this.hookedFish?.mesh;
+      if(visual){visual.updateMatrixWorld();endpoint.set(.74,-.015,0).applyMatrix4(visual.matrixWorld);}
+      else endpoint.set(game.lure.x,game.lure.y,game.lure.z);
+    }
     this.catchFish.visible = state === 'caught';
-    this.lureVisuals.visible=['waiting','bite','fighting'].includes(state);
+    this.lureVisuals.visible=['charging','casting','waiting','bite','fighting'].includes(state);
     this.lureVisuals.position.set(game.lure.x,game.lure.y,game.lure.z);
+    if(state==='charging'||casting){this.lureVisuals.position.copy(this.bobber.position);this.lureVisuals.position.y-=.25;}
+    if(state==='fighting')this.lureVisuals.position.copy(endpoint);
+    this.leader.visible=this.lureVisuals.visible&&state!=='fighting';
+    if(this.leader.visible){
+      this.bobber.position.toArray(this.leaderPositions,0);this.lureVisuals.position.toArray(this.leaderPositions,3);
+      this.leader.geometry.attributes.position.needsUpdate=true;
+    }
     this.lureVisuals.rotation.y=t*(game.reeling ? 5 : 1.2);
+    this.fishModels.animate(this.lureVisuals.children[2],t,this.camera,undefined,game.lureSpeed);
     const lureIndex=['spinner','worm','minnow'].indexOf(game.lureId);
     this.lureVisuals.children.forEach((child,i)=>{child.visible=i===lureIndex;});
     if (state === 'caught') {
@@ -218,29 +269,20 @@ export class LakeWorld {
         const halfHeight=3.9*Math.tan(this.camera.fov*Math.PI/360);
         endpoint.set(-.52*halfHeight*this.camera.aspect,.46*halfHeight,-3.9).applyMatrix4(this.camera.matrixWorld);
       }
-      this.catchFish.position.copy(endpoint).add(new THREE.Vector3(0,-.45,0)); this.catchFish.rotation.set(0,Math.sin(t*.8)*.3,Math.PI/2 + Math.sin(t*7)*.045);
+      this.catchFish.position.copy(endpoint);this.catchFish.position.y-=.45;this.catchFish.rotation.set(0,Math.sin(t*.8)*.3,Math.PI/2 + Math.sin(t*7)*.045);
     }
     if (active) {
-      const sag = state === 'fighting' ? .08 : Math.min(1.3, game.distance*.035);
-      for (let i = 0; i <= 60; i++) {
-        const f = i / 60;
-        this.linePositions[i*3]=THREE.MathUtils.lerp(tip.x,endpoint.x,f);
-        this.linePositions[i*3+1]=THREE.MathUtils.lerp(tip.y,endpoint.y,f)-Math.sin(f*Math.PI)*sag;
-        this.linePositions[i*3+2]=THREE.MathUtils.lerp(tip.z,endpoint.z,f);
+      const weather=game.environment.weather,options=this.lineOptions;
+      options.tension=state==='fighting' ? game.tension : game.reeling ? .35 : 0;
+      options.windX=weather.windX;options.windZ=weather.windZ;options.time=t;options.casting=casting;
+      for(let i=0;i<=60;i++){
+        const p=linePoint(tip,endpoint,i/60,options,this.linePoint),k=i*3;
+        this.linePositions[k]=p.x;this.linePositions[k+1]=p.y;this.linePositions[k+2]=p.z;
       }
-      this.line.geometry.attributes.position.needsUpdate = true;
-    }
-    for (const fish of this.fish) {
-      const agent=game.school.fish[fish.id];
-      if(!agent)continue;
-      if(fish.agentWeight!==agent.weight){fish.agentWeight=agent.weight;fish.mesh.scale.setScalar(.55+Math.cbrt(agent.weight)*.35);}
-      fish.mesh.position.set(agent.position.x,agent.position.y,agent.position.z);
-      fish.mesh.visible=!(state==='caught'&&fish.id===game.hookedId);
-      const turn=Math.atan2(Math.sin(agent.heading-fish.mesh.rotation.y),Math.cos(agent.heading-fish.mesh.rotation.y));
-      fish.mesh.rotation.y+=turn*(1-Math.exp(-dt*3));
-      this.fishModels.animate(fish.mesh,t,this.camera);
+      this.line.geometry.attributes.position.needsUpdate=true;
     }
     if(state==='caught') this.fishModels.animate(this.catchFish,t,this.camera);
+    if(game.reeling&&['waiting','fighting'].includes(state)&&t-this.lastWakeTime>.32){this.effects.ripple(this.bobber.position,state==='fighting' ? .25 : .12);this.lastWakeTime=t;}
     this.effects.update(dt);
     this.birds.forEach((bird,i) => { bird.position.set(Math.sin(t*.018+i*.4)*95,32+i*1.9,-115+Math.cos(t*.018+i*.4)*20); bird.rotation.z = Math.sin(t*3+i)*.1; });
     this.renderer.info.reset();

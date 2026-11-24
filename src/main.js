@@ -1,6 +1,7 @@
 import './style.css';
 import './phase3.css';
 import './phase4.css';
+import './phase5.css';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
 import { FishingGame, LURES, EQUIPMENT } from './fishing.js';
@@ -43,6 +44,8 @@ function renderJournal() {
   }
 }
 function renderEquipment() {
+  $('hands-toggle').checked=world.hands.enabled;$('hands-toggle').disabled=!world.hands.available;
+  $('hands-status').textContent=world.hands.available ? 'Modelo validado. Ajuste opcional.' : 'Sin modelo validado. Desactivado.';
   $('equipment-toggle').textContent=`${game.lureType.name} ▾`;
   $('rod-name').textContent=EQUIPMENT.rod;$('rod-action').textContent=EQUIPMENT.action;
   $('line-name').textContent=EQUIPMENT.line;$('line-strength').textContent=`Resistencia: ${number(EQUIPMENT.lineStrengthKg,1)} kg`;
@@ -59,7 +62,8 @@ function renderEquipment() {
 }
 function event(e) {
   audio.event(e.type);
-  if(e.type==='splash'||e.type==='pull')world.effects.emit(game.lure,e.type==='pull' ? .6 : 1);
+  if(e.type==='splash'||e.type==='pull'||e.type==='bite')world.effects.emit(game.lure,e.type==='bite' ? .25 : e.type==='pull' ? .4 : .45+game.power*.45);
+  if(e.type==='pull')world.onPull(game);
   if(e.type==='equipment'){renderEquipment();try{localStorage.setItem('alba-equipment-v1',game.lureId);}catch{/* Session equipment still works. */}}
   if (e.type === 'cast') {world.cast();game.setAim(world.castDirection.x,world.castDirection.z);}
   if (e.type === 'bite') toast('¡La boya se ha hundido! Pulsa para clavar.');
@@ -142,6 +146,7 @@ function controls() {
   $('sound').onclick = sound; $('fullscreen').onclick = fullscreen;
   $('quality').onclick = ()=>{ highQuality = !highQuality; world.setQuality(highQuality); $('quality').textContent = `GRÁFICOS: ${highQuality ? 'ALTO' : 'BAJO'}`;$('equipment-quality').textContent=`Gráficos: ${highQuality ? 'alto' : 'bajo'}`; };
   $('equipment-quality').onclick=()=>$('quality').click();
+  $('hands-toggle').onchange=()=>{$('hands-toggle').checked=world.hands.setEnabled($('hands-toggle').checked);};
   inputMode=new InputMode(enabled=>{
     touchMode=enabled;world.touchMode=enabled;document.documentElement.classList.toggle('touch-mode',enabled);
     $('touch-controls').hidden=!enabled;$('orientation-hint').hidden=!enabled;updateUI();

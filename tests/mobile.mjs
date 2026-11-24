@@ -32,6 +32,7 @@ async function profile({name,viewport,fullGame}) {
     // Touching a menu must not move the camera or cast.
     const initial=await snap();await tap('#touch-equipment');
     assert.equal(await page.locator('#equipment-dialog').isVisible(),true);assert.equal((await snap()).cameraYaw,initial.cameraYaw);
+    assert.equal(await page.locator('#hands-toggle').isDisabled(),true);assert.equal(await page.locator('#hands-toggle').isChecked(),false);
     await tap('#equipment-quality');assert.equal((await snap()).quality,'low');
     await tap('[data-lure="worm"]');assert.equal((await snap()).lureId,'worm');
     // The panel scrolls normally; holding a fishing control captures gestures only there.

@@ -17,6 +17,7 @@ try{
     assert.ok(await page.evaluate(()=>!document.getElementById('scene').getContext('webgl2').isContextLost()));
     if(mobile)await page.locator('#touch-equipment').tap();else await page.keyboard.press('KeyE');
     assert.equal(await page.locator('#equipment-dialog').isVisible(),true);
+    assert.equal(await page.locator('#hands-toggle').isDisabled(),true);assert.equal(await page.locator('#hands-toggle').isChecked(),false);
     await page.locator('#equipment-dialog .close').click();
     await page.locator('#sound').click();assert.equal(await page.locator('#sound-status').textContent(),'ON');
     await context.close();

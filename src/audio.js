@@ -37,6 +37,7 @@ export class LakeAudio {
     osc.connect(gain).connect(this.master); osc.start(); osc.stop(t+duration);
   }
   event(type) {
+    if(type==='line-release')this.tone(180,.18,'triangle',.035);
     if (type === 'bite') this.tone(880,.4,'sine',.3);
     if (type === 'hook') this.tone(330,.2,'triangle');
     if (type === 'splash') this.tone(110,.5,'triangle',.3);

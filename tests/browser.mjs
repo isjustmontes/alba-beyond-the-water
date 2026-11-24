@@ -23,6 +23,7 @@ try {
   assert.equal((await snapshot()).touchMode,false);assert.equal(await page.locator('#touch-controls').isVisible(),false);
   await page.keyboard.press('KeyE');
   assert.equal(await page.locator('#equipment-dialog').isVisible(),true);
+  assert.equal(await page.locator('#hands-toggle').isDisabled(),true);assert.equal(await page.locator('#hands-toggle').isChecked(),false);
   await page.locator('[data-lure="worm"]').click();
   assert.ok((await page.locator('#equipment-toggle').textContent()).includes('Lombriz'));
   await page.locator('#equipment-dialog .close').click();await page.reload();

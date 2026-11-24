@@ -3,6 +3,11 @@ import { Water } from 'three/addons/objects/Water.js';
 
 import {lakeDepth} from '../simulation/lake.js';
 export {lakeDepth} from '../simulation/lake.js';
+// Same waves and wind advection as albaWave, sampled for the float on the CPU.
+export function waterElevation(x,z,t,weather){
+  x+=weather.windX*t*.04;z+=weather.windZ*t*.04;
+  return (.65+weather.wind*.2)*(Math.sin(x*.72+z*.25-t*1.1)*.032+Math.sin(-x*.32+z*.51-t*.79)*.024+Math.sin(x*.16+z*.12-t*.43)*.028);
+}
 
 const waveFunctions = /* glsl */`
   uniform float windStrength; uniform vec2 windDirection;
@@ -41,6 +46,7 @@ export function makeLakeWater(sunDirection) {
   const mat=water.material;
   Object.assign(mat.uniforms, {
     bobberPosition:{value:new THREE.Vector2()}, rippleStrength:{value:0},
+    fishingRipples:{value:Array.from({length:4},()=>new THREE.Vector4(0,0,-100,0))},
     reflectionInterval:{value:1/24},windStrength:{value:1},windDirection:{value:new THREE.Vector2(1,0)},rainAmount:{value:0}
   });
   mat.vertexShader=mat.vertexShader
@@ -53,6 +59,7 @@ export function makeLakeWater(sunDirection) {
       uniform vec2 bobberPosition;
       uniform float rippleStrength;
       uniform float rainAmount;
+      uniform vec4 fishingRipples[4];
       ${waveFunctions}
       float albaDepth(vec2 p) {
         float basin=smoothstep(0.,.22,1.-length(vec2(p.x/82.,(p.y+42.)/108.)));
@@ -71,6 +78,14 @@ export function makeLakeWater(sunDirection) {
       float dropPhase=fract(sin(dot(cell,vec2(127.1,311.7)))*43758.5+time*1.7);
       vec2 drop=fract(worldPosition.xz*1.6)-.5;
       slope+=normalize(drop+vec2(.0001))*cos(length(drop)*35.-dropPhase*12.)*exp(-dropPhase*4.)*rainAmount*.06;
+      for(int i=0;i<4;i++){
+        vec4 impact=fishingRipples[i];float age=time-impact.z;
+        if(age>0.&&age<2.8&&impact.w>0.){
+          vec2 delta=worldPosition.xz-impact.xy;float r=length(delta),ring=r-age*1.55;
+          float fade=exp(-ring*ring*4.5-age*1.3)*impact.w;
+          slope+=delta/max(r,.01)*cos(ring*17.)*fade*.035;
+        }
+      }
       vec3 surfaceNormal=normalize(vec3(-slope.x,1.,-slope.y));`)
     .replace('float rf0 = 0.3;', 'float rf0 = 0.025;')
     .replace('gl_FragColor = vec4( outgoingLight, alpha );', /* glsl */`

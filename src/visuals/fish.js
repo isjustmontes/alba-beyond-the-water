@@ -82,14 +82,7 @@ export class FishModels {
       const map=skinTexture(species);
       const variants=Array.from({length:5},(_,i)=>{
         const mat=new THREE.MeshStandardMaterial({map,color:new THREE.Color().setHSL(.10+i*.014,.035+i*.012,.87+i*.018),roughness:.31,metalness:.18,envMapIntensity:.8});
-        mat.onBeforeCompile=shader=>{
-          shader.uniforms.swimTime=this.clock;shader.uniforms.swimPhase={value:i*1.7};
-          shader.vertexShader='uniform float swimTime; uniform float swimPhase;\n'+shader.vertexShader;
-          shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-            float tailWeight=pow(clamp((.7-position.x)/1.45,0.,1.),2.);
-            transformed.z+=sin(position.x*7.-swimTime*5.5+swimPhase)*tailWeight*.065;`);
-        };
-        mat.customProgramCacheKey=()=> 'alba-swimming-fish-v1';return mat;
+        return mat;
       });
       const fins=new THREE.MeshStandardMaterial({map:finMap,color:species===3 ? 0xb05b38 : species===4 ? 0x626e38 : species===1 ? 0x9d8352 : species===0 ? 0x9e9e8a : 0x778a69,roughness:.5,side:THREE.DoubleSide,transparent:true,opacity:.88,depthWrite:false});
       const dorsal=finGeometry([[-.34,.1],[-.26,.36],[-.13,.41],[.17,.3],[.26,.13]]);
@@ -108,13 +101,29 @@ export class FishModels {
       }
       const irisGeo=mergeGeometries(iris),pupilGeo=mergeGeometries(pupils);[...iris,...pupils].forEach(g=>g.dispose());
       const mouth=new THREE.TorusGeometry(species===2 ? .046 : .031,.009,6,14);mouth.rotateY(Math.PI/2);mouth.translate(.75,-.015,0);
-      this.assets.push({near:bodyGeometry(species,40,20),far:bodyGeometry(species,14,10),variants,fins,mergedFins,tail,irisGeo,pupilGeo,mouth,
+      this.assets.push({actors:new Map(),near:bodyGeometry(species,40,20),far:bodyGeometry(species,14,10),variants,fins,mergedFins,tail,irisGeo,pupilGeo,mouth,
         irisMat:new THREE.MeshStandardMaterial({color:species===4 ? 0xb67d42 : 0xb2a56b,roughness:.28,metalness:.3}),eyeMat:new THREE.MeshStandardMaterial({color:0x090e0c,roughness:.12}),mouthMat:new THREE.MeshStandardMaterial({color:0x6a735a,roughness:.6})});
     }
   }
-  create(species,seed=0) {
+  create(species,seed=0,slot=Math.abs(seed)%32) {
     const a=this.assets[species],group=new THREE.Group(),lod=new THREE.LOD();
-    const material=a.variants[Math.abs(seed)%5];
+    slot=Math.max(0,Math.min(33,slot));
+    let actor=a.actors.get(slot);
+    if(!actor){
+      actor={phase:{value:seed*1.7},amplitude:{value:.05},material:a.variants[Math.abs(seed)%5].clone()};
+      actor.material.onBeforeCompile=shader=>{
+        shader.uniforms.swimPhase=actor.phase;shader.uniforms.swimAmplitude=actor.amplitude;
+        shader.vertexShader='uniform float swimPhase;uniform float swimAmplitude;\n'+shader.vertexShader;
+        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+          float tailWeight=pow(clamp((.7-position.x)/1.45,0.,1.),2.);
+          transformed.z+=sin(position.x*7.-swimPhase)*tailWeight*swimAmplitude;`);
+        shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+          float tailNormal=clamp((.7-position.x)/1.45,0.,1.);
+          objectNormal.x-=(7.*cos(position.x*7.-swimPhase)*tailNormal*tailNormal-2.*sin(position.x*7.-swimPhase)*tailNormal/1.45)*swimAmplitude*objectNormal.z;`);
+      };
+      actor.material.customProgramCacheKey=()=> 'alba-swimming-fish-v2';a.actors.set(slot,actor);
+    }
+    const material=actor.material;
     const detailed=new THREE.Group(),distant=new THREE.Group();
     detailed.add(new THREE.Mesh(a.near,material),new THREE.Mesh(a.mergedFins,a.fins),new THREE.Mesh(a.irisGeo,a.irisMat),new THREE.Mesh(a.pupilGeo,a.eyeMat),new THREE.Mesh(a.mouth,a.mouthMat));
     distant.add(new THREE.Mesh(a.far,material));
@@ -123,11 +132,12 @@ export class FishModels {
       const tail=new THREE.Mesh(a.tail,a.fins);tail.position.set(-.7,.005,0);target.add(tail);tails.push(tail);
     }
     lod.addLevel(detailed,0);lod.addLevel(distant,22);group.add(lod);
-    group.userData={tails,lod,phase:seed*1.7};return group;
+    group.userData={tails,lod,phase:seed*1.7,actor};return group;
   }
-  animate(fish,time,camera) {
+  animate(fish,time,camera,phase=undefined,speed=1) {
     fish.userData.lod.update(camera);
-    const phase=fish.userData.phase;
-    for(const tail of fish.userData.tails) tail.rotation.y=Math.sin(time*5.5+phase)*.32;
+    phase=phase??time*5.5+fish.userData.phase;
+    const actor=fish.userData.actor;actor.phase.value=phase;actor.amplitude.value=.025+Math.min(4,speed)*.018;
+    for(const tail of fish.userData.tails)tail.rotation.y=Math.sin(-phase-4.9)*(.10+Math.min(4,speed)*.07);
   }
 }

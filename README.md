@@ -1,6 +1,8 @@
 # ALBA · Beyond the Water · Fishing experience
 
-**v0.3.0 — Living Waters (Pre-Alpha).** Ciclo de día/noche, clima y viento progresivos, temperatura por profundidad, actividad y memoria de los peces, perca y tenca, condiciones en el cuaderno y ambiente sonoro procedural. [Guía de la fase 4, controles, pruebas y limitaciones](LIVING_WATERS.md).
+**v0.4.0 — The Art of Fishing (en desarrollo, Pre-Alpha).** Lanzamiento overhead sincronizado, flexión amortiguada, carrete y sedal mejorados, nado progresivo y nuevas interacciones con el agua. [Guía de la fase 5, arquitectura, pruebas y limitaciones](THE_ART_OF_FISHING.md).
+
+La base publicada **v0.3.0 — Living Waters** incorpora ciclo de día/noche, clima y viento progresivos, temperatura por profundidad, actividad y memoria de los peces, perca y tenca, condiciones en el cuaderno y ambiente sonoro procedural. [Guía de la fase 4](LIVING_WATERS.md).
 
 <p align="center">
   <img src="alba%20-%20banner.webp"
@@ -8,7 +10,7 @@
        width="900">
 </p>
 
-Simulador de pesca 3D para navegador, con ambiente dinámico y ecosistema de la **fase 4**, conservando la simulación avanzada, los controles táctiles y los gráficos anteriores. Three.js, JavaScript modular, HTML y CSS. Los modelos, texturas y sonidos se generan por código; no necesita claves API, cuentas ni servicios de pago. Tras instalar las dependencias, funciona sin conexión a Internet.
+Simulador de pesca 3D para navegador, con animaciones de la **fase 5** y ambiente dinámico de Living Waters, conservando la simulación avanzada, los controles táctiles y los gráficos anteriores. Three.js, JavaScript modular, HTML y CSS. Los modelos, texturas y sonidos se generan por código; no necesita claves API, cuentas ni servicios de pago. Tras instalar las dependencias, funciona sin conexión a Internet.
 
 ## Fase 3: simulación y entrada compartida
 
