@@ -147,5 +147,5 @@ try {
   $('loading').style.opacity = '0'; setTimeout(()=>$('loading').hidden=true,800);
   requestAnimationFrame(frame);
   // Expose read-only diagnostics in development, without gameplay shortcuts.
-  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ state:game.state,time:game.time,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,webgl:world.renderer.capabilities.isWebGL2,drawCalls:world.renderer.info.render.calls }) };
+  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ state:game.state,time:game.time,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };
 } catch(error) { fatal(error); }

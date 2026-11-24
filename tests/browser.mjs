@@ -29,11 +29,14 @@ try {
   await page.keyboard.down('Space'); await page.waitForTimeout(420); await page.keyboard.up('Space');
   console.log('Released',await snapshot());
   await page.waitForFunction(()=>window.__alba.snapshot().state==='waiting',null,{timeout:60000});
+  assert.ok((await snapshot()).rippleStrength>0,'bobber should perturb the water');
   console.log('Landed',await snapshot());
   await page.waitForFunction(()=>window.__alba.snapshot().state==='bite',null,{timeout:90000,polling:50});
   assert.equal(await page.locator('#bite-alert').isVisible(),true);
   await page.keyboard.down('Space');
   await page.waitForFunction(()=>window.__alba.snapshot().state==='fighting');
+  await page.waitForFunction(()=>window.__alba.snapshot().rodBend>.02);
+  assert.ok((await snapshot()).lineTipError<.001,'line must remain attached to the flexing rod tip');
   await page.screenshot({path:'test-results/fighting.png'});
   let held=true; const started=Date.now();
   while(Date.now()-started<90000) {
@@ -66,8 +69,15 @@ try {
   await page.setViewportSize({width:390,height:844}); await page.waitForTimeout(500);
   await page.screenshot({path:'test-results/lake-mobile.png'});
   const panel=await page.locator('.fishing-panel').boundingBox(); assert.ok(panel.x>=0 && panel.x+panel.width<=390);
+  // Load a phase-1 save verbatim; visual upgrades must not invalidate existing progress.
+  await page.evaluate(()=>localStorage.setItem('alba-catches-v1',JSON.stringify([
+    {speciesIndex:0,name:'Trucha arcoíris',weight:1.25,length:44,date:'2026-11-23T18:00:00.000Z'}
+  ])));
+  await page.reload();await page.waitForFunction(()=>window.__alba && document.getElementById('loading').hidden);
+  assert.equal((await snapshot()).catchCount,1);
+  assert.ok((await page.locator('#last-catch').textContent()).includes('Trucha arcoíris'));
   assert.deepEqual(errors,[],'no JavaScript or WebGL errors');
-  console.log('PASS: WebGL render, keyboard and mouse casts, bite, balanced reeling, capture, journal, persistence, pause, reset, responsive UI.');
+  console.log('PASS: WebGL, keyboard and mouse casts, bite, balanced reeling, capture, journal, persistence, phase-1 saves, pause, reset, responsive UI, water ripples, rod flex and attached line.');
 } catch(error) {
   console.error('Browser state:',await snapshot().catch(()=>null),'Errors:',errors);
   await page.screenshot({path:'test-results/failure.png'}).catch(()=>{});
