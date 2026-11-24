@@ -63,8 +63,6 @@ El jugador permanece en el muelle, por lo que no hay joystick de desplazamiento.
 
 ## Fase 2: mejoras visuales
 
-El punto de restauración anterior a los cambios es el commit **`d98231d`** (`chore: checkpoint playable ALBA before phase 2 visual upgrades`). Puedes consultar esa versión con `git show d98231d:src/world.js` o compararla con `git diff d98231d` sin cambiar tu carpeta actual.
-
 - **Agua:** tres ondas suaves con desplazamiento geométrico y normales analíticas, detalles de superficie, reflexión dinámica del escenario y ondas locales que modifican las normales alrededor de la boya. La transparencia depende de la profundidad aproximada del fondo y del ángulo de observación. El fondo y el shader utilizan la misma batimetría procedural; esta aproximación evita un pase adicional de profundidad. Los peces próximos siguen visibles.
 - **Luz:** amanecer cálido, nubes procedurales, iluminación ambiental del cielo mediante PMREM, reflejos sobre los materiales y niebla atmosférica. Las sombras del escenario se calculan al inicio y al cambiar de calidad, ya que el sol y el muelle permanecen fijos.
 - **Peces:** cuerpos perfilados por especie, escamas, manchas de trucha, franjas laterales, branquias, ojos, boca y aletas con radios. Hay variaciones de tamaño y tono; la cola y el cuerpo ondulan y los giros se interpolan. A partir de 22 metros se usa una geometría simplificada. Las capturas y los peces del lago comparten recursos de GPU.
