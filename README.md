@@ -1,4 +1,10 @@
-# ALBA · Fishing experience
+# ALBA · Beyond the Water · Fishing experience
+
+<p align="center">
+  <img src="alba-banner.webp"
+       alt="ALBA — Beyond the Water"
+       width="900">
+</p>
 
 Simulador de pesca 3D para navegador, ahora con las mejoras visuales de la **fase 2**. Three.js, JavaScript modular, HTML y CSS. Los modelos, texturas y sonidos se generan por código; no necesita claves API, cuentas ni servicios de pago. Tras instalar las dependencias, funciona sin conexión a Internet.
 
