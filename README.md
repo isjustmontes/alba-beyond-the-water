@@ -1,7 +1,7 @@
 # ALBA · Beyond the Water · Fishing experience
 
 <p align="center">
-  <img src="alba-banner.webp"
+  <img src="alba%20-%20banner.webp"
        alt="ALBA — Beyond the Water"
        width="900">
 </p>
