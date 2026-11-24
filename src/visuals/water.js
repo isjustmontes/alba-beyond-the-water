@@ -1,13 +1,8 @@
 import * as THREE from 'three';
 import { Water } from 'three/addons/objects/Water.js';
 
-// The same bathymetry drives the lake-bed mesh and the water's optical depth.
-export function lakeDepth(x, z) {
-  const shore = Math.hypot(x / 82, (z + 42) / 108);
-  const basin = THREE.MathUtils.smoothstep(1 - shore, 0, .22);
-  const offshore = THREE.MathUtils.smoothstep(Math.hypot(x * .8, z - 7), 0, 45);
-  return .18 + basin * (.65 + offshore * 4.5);
-}
+import {lakeDepth} from '../simulation/lake.js';
+export {lakeDepth} from '../simulation/lake.js';
 
 const waveFunctions = /* glsl */`
   float albaWave(vec2 p, float t) {

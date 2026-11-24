@@ -1,0 +1,46 @@
+/* Phase 3 additions. Desktop layout and existing controls retain their styles. */
+#equipment-toggle{margin-left:auto;border:1px solid #e4d5ab45;color:var(--cream);background:#ffffff08;border-radius:5px;padding:4px 8px;font-size:9px;letter-spacing:.1px;white-space:nowrap}
+.panel-heading #distance{margin-left:8px;white-space:nowrap}
+.equipment-specs{display:grid;grid-template-columns:1fr 1fr;gap:16px;border-bottom:1px solid #ffffff20;padding-bottom:20px}
+.equipment-specs small{font-size:8px;letter-spacing:1.6px;color:var(--cream)}
+.equipment-specs p{font-size:12px;margin:10px 0 5px}.equipment-specs span{font-size:10px;color:#a9bda9}
+.lure-heading{font-size:14px;font-weight:500;margin:24px 0 14px}
+#equipment-quality{margin-top:14px;min-height:42px;padding:8px 13px;border:1px solid #d9d6b63b;background:#ffffff06;border-radius:6px;color:#d6dfc8;font-size:11px;touch-action:manipulation}
+.touch-guide{display:none}.touch-mode .touch-guide{display:block}.touch-mode .pc-guide{display:none}
+#lure-options{display:grid;gap:10px}.lure-option{text-align:left;border:1px solid #c9d5ba30;border-radius:9px;background:#ffffff05;padding:15px;display:grid;gap:7px}
+.lure-option[aria-pressed=true]{border-color:#e6d2a1;background:#ecd3a312}.lure-option strong{font-size:13px;color:#f0dfbb;font-weight:500}.lure-option span{font-size:11px;line-height:1.6;color:#cad4c4}.lure-option small{font-size:10px;color:#a8c1a8}.lure-option em{font-size:10px;font-style:normal;color:#f0dfbbbd}.lure-option:disabled{cursor:default;opacity:.7}
+#records-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:20px 0}.record-card{background:#ffffff06;border:1px solid #ffffff12;border-radius:8px;padding:12px 9px}.record-card small{display:block;font-size:8px;color:#c3d0bc;line-height:1.5}.record-card strong{display:block;font-size:18px;font-weight:400;color:var(--cream);margin-top:7px}.log-entry .record-badge{color:#ebd6a5;font-size:8px;letter-spacing:.6px}
+dialog{max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+#touch-controls{position:absolute;bottom:max(10px,env(safe-area-inset-bottom));left:max(16px,env(safe-area-inset-left));right:max(16px,env(safe-area-inset-right));display:flex;align-items:center;justify-content:space-between;gap:12px}
+#touch-controls button{min-height:48px;padding:10px 17px;font-size:10px;letter-spacing:.8px;background:#183930e8;border:1px solid #d3dcb83d;border-radius:9px;color:var(--cream);touch-action:manipulation}
+#touch-controls>span{font-size:9px;color:#d8e2cd;text-align:center}
+#orientation-hint{position:absolute;top:81px;left:50%;transform:translateX(-50%);width:max-content;max-width:90%;font-size:8px;text-align:center;color:#f0dfba;background:#193c329c;padding:7px 11px;border-radius:20px;pointer-events:none}
+@media(max-width:680px){.panel-heading{flex-wrap:wrap;row-gap:8px}.panel-heading #phase-label{flex:1}#equipment-toggle{font-size:8px;padding:5px 7px}.panel-heading #distance{margin-left:0}.equipment-specs{gap:10px}.equipment-specs p{font-size:11px}}
+.touch-mode #scene,.touch-mode #action{touch-action:none}
+.touch-mode .topbar,.touch-mode .fishing-panel,.touch-mode #touch-controls{user-select:none;-webkit-user-select:none}
+.touch-mode .topbar{top:max(14px,env(safe-area-inset-top));left:max(18px,env(safe-area-inset-left));right:max(18px,env(safe-area-inset-right))}
+.touch-mode .topbar nav{gap:6px}.touch-mode .icon-button{min-width:44px;min-height:44px}.touch-mode #fullscreen{display:none}
+.touch-mode .fishing-panel{bottom:calc(70px + env(safe-area-inset-bottom));width:min(860px,calc(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right)));padding:15px 18px}
+.touch-mode .fishing-content{gap:17px}.touch-mode #action{min-height:52px;font-size:12px;min-width:184px;justify-content:center;touch-action:none}.touch-mode .mouse-icon{display:none}
+.touch-mode .fishing-panel .panel-heading{font-size:8px;letter-spacing:.8px}.touch-mode #equipment-toggle{min-height:32px;padding:6px 10px}
+.touch-mode footer{display:none}.touch-mode .toast{bottom:calc(245px + env(safe-area-inset-bottom))}
+.touch-mode dialog{padding:30px 24px;width:min(540px,calc(100% - 28px - env(safe-area-inset-left) - env(safe-area-inset-right)));max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+.touch-mode .close{min-width:46px;min-height:46px;right:7px;top:6px}.touch-mode .secondary-button{min-height:48px}.touch-mode .lure-option{min-height:100px}
+#orientation-hint{display:none}
+@media(orientation:portrait){.touch-mode #orientation-hint{display:block}}
+@media(max-width:680px){
+  .touch-mode .brand>span{font-size:23px}.touch-mode .brand svg{width:29px}.touch-mode .location{display:none}
+  .touch-mode .place-intro{top:132px;left:20px;max-width:calc(100% - 145px)}.touch-mode .place-intro h1{font-size:23px;letter-spacing:-.9px}.touch-mode .place-intro>p{display:none}.touch-mode .weather{font-size:8px;margin-top:12px;flex-wrap:wrap;gap:5px}
+  .touch-mode .session-card{top:136px;right:16px;width:109px;padding:12px}.touch-mode .session-card>button{display:none}
+  .touch-mode .fishing-panel{padding:13px 14px}.touch-mode .fishing-content{gap:14px}.touch-mode .action-copy{flex-basis:52%}.touch-mode .action-copy h2{font-size:17px}.touch-mode .action-copy p{font-size:10px;line-height:1.5}.touch-mode .meter-block{width:41%}.touch-mode #action{width:100%;min-height:54px}
+  .touch-mode .panel-heading #phase-label{font-size:7px;flex-basis:62%}.touch-mode #equipment-toggle{font-size:8px;margin-left:auto}.touch-mode .panel-heading #distance{margin-left:auto}
+  #touch-controls>span{max-width:100px;font-size:8px}#touch-controls button{font-size:9px;padding:10px 12px}.touch-mode .fight-stats{font-size:8px;gap:7px;flex-wrap:wrap}
+  .touch-mode .bite-alert{top:36%;font-size:26px}.touch-mode .catch-banner{top:33%}.touch-mode .toast{bottom:calc(300px + env(safe-area-inset-bottom))}
+}
+@media(orientation:landscape) and (max-height:600px){
+  .touch-mode .topbar{top:max(8px,env(safe-area-inset-top))}.touch-mode .brand>span{font-size:21px}.touch-mode .brand svg{height:31px}.touch-mode .brand small{font-size:6px;margin-top:6px}.touch-mode .location,.touch-mode .compass{display:none}
+  .touch-mode .place-intro{top:85px;left:max(20px,env(safe-area-inset-left))}.touch-mode .place-intro h1,.touch-mode .place-intro>p,.touch-mode .place-intro .eyebrow{display:none}.touch-mode .weather{margin:0;font-size:9px}
+  .touch-mode .session-card{top:75px;right:max(18px,env(safe-area-inset-right));width:120px;padding:10px}.touch-mode .session-card .eyebrow{font-size:7px}.touch-mode .session-numbers{margin:5px 0 0;gap:8px}.touch-mode .session-numbers strong{font-size:27px}.touch-mode .session-numbers>span{font-size:9px}.touch-mode .session-numbers small{font-size:7px}.touch-mode .last-catch,.touch-mode .session-card>button{display:none}
+  .touch-mode .fishing-panel{bottom:calc(66px + env(safe-area-inset-bottom));padding:10px 16px}.touch-mode .fishing-content{margin-top:8px;flex-wrap:nowrap;gap:18px}.touch-mode .action-copy{min-width:0;flex:1}.touch-mode .action-copy h2{font-size:17px}.touch-mode .action-copy p{font-size:9px}.touch-mode .meter-block{width:150px;flex-shrink:0}.touch-mode #action{width:190px;flex-shrink:0}.touch-mode .panel-heading{flex-wrap:nowrap}.touch-mode .fight-stats{margin-top:8px;padding-top:8px;font-size:9px}.touch-mode #equipment-toggle{min-height:28px}
+  .touch-mode .bite-alert{top:31%;padding:12px 22px;font-size:24px}.touch-mode .catch-banner{top:21%;padding:17px 35px}.touch-mode .catch-banner h2{font-size:24px;margin:10px 0 6px}.touch-mode .toast{bottom:calc(225px + env(safe-area-inset-bottom));font-size:10px;padding:8px 15px}
+}

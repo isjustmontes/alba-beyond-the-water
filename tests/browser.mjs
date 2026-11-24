@@ -20,7 +20,23 @@ try {
   await page.waitForFunction(()=>window.__alba && document.getElementById('loading').hidden,{},{timeout:30000});
   assert.equal(await page.locator('#fatal').isVisible(),false);
   assert.ok((await snapshot()).drawCalls>0,'scene must be rendered');
+  assert.equal((await snapshot()).touchMode,false);assert.equal(await page.locator('#touch-controls').isVisible(),false);
+  await page.keyboard.press('KeyE');
+  assert.equal(await page.locator('#equipment-dialog').isVisible(),true);
+  await page.locator('[data-lure="worm"]').click();
+  assert.ok((await page.locator('#equipment-toggle').textContent()).includes('Lombriz'));
+  await page.locator('#equipment-dialog .close').click();await page.reload();
+  await page.waitForFunction(()=>window.__alba&&document.getElementById('loading').hidden);
+  assert.equal((await snapshot()).lureId,'worm','equipment survives reload');await page.keyboard.press('KeyE');
+  await page.locator('[data-lure="spinner"]').click();
+  await page.locator('#equipment-dialog .close').click();
   await page.screenshot({path:'test-results/lake-desktop.png'});
+  await page.mouse.move(680,420);await page.mouse.down({button:'right'});await page.mouse.move(700,430,{steps:4});await page.mouse.up({button:'right'});
+  assert.ok(Math.abs((await snapshot()).cameraYaw+.04)<.00001,'desktop camera keeps its original sensitivity');
+  await page.mouse.down({button:'right'});await page.mouse.move(680,420,{steps:4});await page.mouse.up({button:'right'});
+  await page.keyboard.down('Space');await page.waitForTimeout(100);await page.evaluate(()=>dispatchEvent(new Event('blur')));
+  assert.equal((await snapshot()).paused,true);assert.equal((await snapshot()).heldInputs,0);assert.equal((await snapshot()).casts,0);
+  await page.keyboard.up('Space');await page.locator('#resume').click();
   // Real keyboard input, followed by an actual timed fish encounter.
   console.log('Initial',await snapshot());
   // Software WebGL can run slowly; reduce pixel count after the first reference image.
@@ -53,6 +69,8 @@ try {
   await page.keyboard.press('KeyJ');
   assert.equal(await page.locator('#log-dialog').isVisible(),true);
   assert.equal(await page.locator('.log-entry').count(),1);
+  assert.equal(await page.locator('.record-card').count(),1);
+  assert.ok((await page.locator('.log-entry').textContent()).includes('Cucharilla'));
   await page.keyboard.press('Escape');
   await page.reload(); await page.waitForFunction(()=>window.__alba && document.getElementById('loading').hidden);
   assert.equal((await snapshot()).catchCount,1,'capture persists after reload');
@@ -69,6 +87,7 @@ try {
   await page.setViewportSize({width:390,height:844}); await page.waitForTimeout(500);
   await page.screenshot({path:'test-results/lake-mobile.png'});
   const panel=await page.locator('.fishing-panel').boundingBox(); assert.ok(panel.x>=0 && panel.x+panel.width<=390);
+  assert.equal((await snapshot()).touchMode,false,'narrow desktop still has desktop input');
   // Load a phase-1 save verbatim; visual upgrades must not invalidate existing progress.
   await page.evaluate(()=>localStorage.setItem('alba-catches-v1',JSON.stringify([
     {speciesIndex:0,name:'Trucha arcoíris',weight:1.25,length:44,date:'2026-11-23T18:00:00.000Z'}
@@ -76,6 +95,7 @@ try {
   await page.reload();await page.waitForFunction(()=>window.__alba && document.getElementById('loading').hidden);
   assert.equal((await snapshot()).catchCount,1);
   assert.ok((await page.locator('#last-catch').textContent()).includes('Trucha arcoíris'));
+  await page.keyboard.press('KeyJ');assert.ok((await page.locator('.log-entry').textContent()).includes('Sin registrar'));await page.keyboard.press('Escape');
   assert.deepEqual(errors,[],'no JavaScript or WebGL errors');
   console.log('PASS: WebGL, keyboard and mouse casts, bite, balanced reeling, capture, journal, persistence, phase-1 saves, pause, reset, responsive UI, water ripples, rod flex and attached line.');
 } catch(error) {
