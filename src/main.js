@@ -3,6 +3,8 @@ import './phase3.css';
 import './phase4.css';
 import './phase5.css';
 import './mobile-hud.css';
+import './exploration.css';
+import {Exploration,ExplorationControls,WALK} from './input/exploration.js';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
 import { FishingGame, LURES, EQUIPMENT } from './fishing.js';
@@ -17,6 +19,7 @@ const number = (n, places = 0) => n.toLocaleString('es-ES',{ minimumFractionDigi
 const audio = new LakeAudio();
 const storageKey = 'alba-catches-v1';
 let world, game, input, inputMode, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
+const exploration=new Exploration();let walkControls;
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('visible'),5000); }
 function fatal(error) { console.error(error); $('loading').hidden = true; $('fatal').hidden = false; $('fatal-message').textContent = `Este juego necesita un navegador con WebGL 2 y aceleración gráfica. ${error.message}`; }
 function renderJournal() {
@@ -122,7 +125,7 @@ function updateUI() {
   $('action').disabled = ['casting','caught'].includes(s);
   $('action').style.opacity = $('action').disabled ? '.6' : '1';
 }
-function clearHeld() { input?.clear(); }
+function clearHeld() { input?.clear();walkControls?.clear();if(document.pointerLockElement)document.exitPointerLock(); }
 function setPaused(value) {
   if (paused === value) return;
   clearHeld(); paused = value;
@@ -144,13 +147,28 @@ function sound() { try { audio.toggle(); } catch { toast('El sonido no está dis
 function fullscreen() { const promise = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); promise?.catch(()=>toast('El navegador no permite pantalla completa.')); }
 function controls() {
   renderSound();
+  const modeButton=document.createElement('button');modeButton.id='mode-toggle';modeButton.textContent='Explorar · V';modeButton.setAttribute('aria-pressed','false');document.body.append(modeButton);
+  const walkHint=document.createElement('div');walkHint.id='exploration-hint';walkHint.hidden=true;document.body.append(walkHint);
+  const joystick=document.createElement('div');joystick.id='walk-stick';joystick.setAttribute('role','group');joystick.setAttribute('aria-label','Joystick para caminar');joystick.append(document.createElement('span'));document.body.append(joystick);
+  const toggleMode=()=>{
+    if(paused)return;
+    const error=exploration.toggle(game.state,world.yaw,world.pitch);
+    if(error){toast(error);return;}
+    clearHeld();world.exploring=exploration.mode==='exploring';world.rod.visible=!world.exploring;
+    document.documentElement.dataset.playerMode=exploration.mode;
+    modeButton.textContent=world.exploring ? 'Pescar en el puesto · V' : 'Explorar · V';modeButton.setAttribute('aria-pressed',String(world.exploring));
+    walkHint.hidden=!world.exploring;
+    if(world.exploring)toast('Camina por el muelle. Vuelve al puesto inicial y mira al lago para pescar.');
+  };
+  document.documentElement.dataset.playerMode=exploration.mode;modeButton.onclick=toggleMode;
+  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,toggle:toggleMode,isPaused:()=>paused});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
     if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
     try{audio.unlock();}catch{/* Audio is optional; a later gesture or the sound button can retry. */}
   };
   for(const type of ['pointerdown','pointerup','click','keydown'])document.addEventListener(type,unlockAudio,{capture:true});
-  input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
+  input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isExploring:()=>world.exploring,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
     if(command==='sound')sound();
     else if(command==='fullscreen')fullscreen();
     else openDialog({journal:'log-dialog',help:'help-dialog',equipment:'equipment-dialog'}[command]);
@@ -168,6 +186,7 @@ function controls() {
   $('equipment-quality').onclick=()=>$('quality').click();
   $('hands-toggle').onchange=()=>{$('hands-toggle').checked=world.hands.setEnabled($('hands-toggle').checked);};
   inputMode=new InputMode(enabled=>{
+    walkControls.clear();
     touchMode=enabled;world.touchMode=enabled;document.documentElement.classList.toggle('touch-mode',enabled);
     $('touch-controls').hidden=!enabled;$('orientation-hint').hidden=!enabled;updateUI();
   });
@@ -202,6 +221,14 @@ try {
       // Small simulation steps keep tension stable without slowing gameplay at low FPS.
       let remaining=dt;
       while (remaining>0) { const step=Math.min(remaining,1/60); game.update(step); remaining-=step; }
+      exploration.update(dt,world.yaw);
+    }
+    world.camera.position.x=exploration.x;world.camera.position.z=exploration.z;
+    const eye=world.exploring ? WALK.floor+WALK.eye : 3;
+    world.camera.position.y+=(eye-world.camera.position.y)*(1-Math.exp(-(paused ? 0 : dt)*10));
+    if(world.exploring){
+      const distance=Math.hypot(exploration.x,exploration.z-7);
+      $('exploration-hint').textContent=`${touchMode ? 'Joystick: caminar · Arrastra: mirar' : 'WASD: caminar · Clic: capturar ratón · Esc: liberar'} · Puesto: ${distance.toFixed(1)} m · V / botón: pescar`;
     }
     world.update(paused ? 0 : dt,game); updateUI();
     requestAnimationFrame(frame);
@@ -210,5 +237,5 @@ try {
   $('loading').style.opacity = '0'; setTimeout(()=>$('loading').hidden=true,800);
   requestAnimationFrame(frame);
   // Expose read-only diagnostics in development, without gameplay shortcuts.
-  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ state:game.state,time:game.time,environment:game.environment.snapshot(),daylight:game.environment.daylight,rain:game.environment.weather.rain,cloud:game.environment.weather.cloud,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,lureId:game.lureId,reeling:game.reeling,touchMode,heldInputs:input.actions.sources.size,casts:game.actionCounts.casts,hooks:game.actionCounts.hooks,cameraYaw:world.yaw,cameraPitch:world.pitch,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };
+  if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ playerMode:exploration.mode,playerPosition:world.camera.position.toArray(),walkingKeys:exploration.keys.size,walkStick:{...exploration.stick},state:game.state,time:game.time,environment:game.environment.snapshot(),daylight:game.environment.daylight,rain:game.environment.weather.rain,cloud:game.environment.weather.cloud,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,lureId:game.lureId,reeling:game.reeling,touchMode,heldInputs:input.actions.sources.size,casts:game.actionCounts.casts,hooks:game.actionCounts.hooks,cameraYaw:world.yaw,cameraPitch:world.pitch,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };
 } catch(error) { fatal(error); }

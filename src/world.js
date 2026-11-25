@@ -141,7 +141,11 @@ export class LakeWorld {
     this.fauna=new AmbientFauna(this.scene);
   }
   setView() { this.camera.rotation.order = 'YXZ'; this.camera.rotation.set(this.pitch,this.yaw,0); }
-  look(dx, dy) { this.yaw = THREE.MathUtils.clamp(this.yaw - dx * .002,-.8,.8); this.pitch = THREE.MathUtils.clamp(this.pitch - dy*.002,-.48,.25); this.setView(); }
+  look(dx, dy) {
+    const yaw=this.yaw-dx*.002;
+    this.yaw=this.exploring ? Math.atan2(Math.sin(yaw),Math.cos(yaw)) : THREE.MathUtils.clamp(yaw,-.8,.8);
+    this.pitch=THREE.MathUtils.clamp(this.pitch-dy*.002,this.exploring ? -1.15 : -.48,this.exploring ? 1.15 : .25);this.setView();
+  }
   cast() { this.flightStartedAt=null;this.castStartPitch=this.rod.rotation.x;this.camera.getWorldDirection(this.castDirection); this.castDirection.y = 0; this.castDirection.normalize(); }
   nearby() { return this.fish.filter(f => f.mesh.position.distanceTo(this.bobber.position) < 9); }
   hookFish(speciesIndex,id) {

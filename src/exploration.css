@@ -1,0 +1,11 @@
+#mode-toggle{position:fixed;right:max(24px,env(safe-area-inset-right));top:100px;z-index:12;min-height:46px;padding:10px 16px;border:1px solid #d6c59b66;border-radius:9px;color:#f1e7cf;background:#17382fee;cursor:pointer}
+#exploration-hint{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10;max-width:calc(100% - 30px);padding:10px 15px;background:#17382fee;border:1px solid #d6c59b44;border-radius:9px;color:#f1e7cf;font-size:12px;text-align:center;pointer-events:none}
+#walk-stick{display:none;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;z-index:15;width:114px;height:114px;border:1px solid #e4d5ac66;border-radius:50%;background:#16372e88;left:max(16px,env(safe-area-inset-left));bottom:calc(74px + env(safe-area-inset-bottom))}
+#walk-stick span{display:block;position:absolute;width:44px;height:44px;left:34px;top:34px;border-radius:50%;background:#ddceaa88;transform:translate(var(--stick-x,0px),var(--stick-y,0px));pointer-events:none}
+.touch-mode[data-player-mode=exploring] #walk-stick{display:block}
+[data-player-mode=exploring] :is(.fishing-panel,.session-card,.compass,footer,#touch-hud-info){display:none!important}
+.touch-mode #mode-toggle{top:calc(100px + env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font-size:11px;padding:8px 12px}
+.touch-mode #exploration-hint{bottom:calc(195px + env(safe-area-inset-bottom));font-size:11px;width:max-content;max-width:calc(100% - 32px)}
+.touch-mode[data-player-mode=exploring] .toast{top:calc(155px + env(safe-area-inset-top));bottom:auto;max-width:calc(100% - 32px)}
+@media(orientation:landscape) and (max-height:500px){.touch-mode #mode-toggle{top:calc(58px + env(safe-area-inset-top))}.touch-mode #exploration-hint{bottom:calc(70px + env(safe-area-inset-bottom));left:auto;right:12px;transform:none;max-width:55%}.touch-mode #walk-stick{width:100px;height:100px}.touch-mode #walk-stick span{left:27px;top:27px}}
+@media(orientation:landscape) and (max-height:500px){.touch-mode[data-player-mode=exploring] .toast{top:calc(96px + env(safe-area-inset-top));max-width:40%}}

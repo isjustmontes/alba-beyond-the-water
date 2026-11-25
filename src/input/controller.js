@@ -3,15 +3,15 @@ import {TOUCH_SENSITIVITY} from './touch-mode.js';
 const MAX_TOUCH_DELTA=40;
 
 export class GameControls {
-  constructor({canvas,button,game,world,isPaused,onPause,onCommand}) {
-    this.actions=new FishingActions(game,{isBlocked:isPaused});this.cameraPointer=null;
+  constructor({canvas,button,game,world,isPaused,onPause,onCommand,isExploring=()=>false}) {
+    this.actions=new FishingActions(game,{isBlocked:()=>isPaused()||isExploring()});this.cameraPointer=null;
     this.canvas=canvas;this.cleanup=[];
     const listen=(el,type,handler,options)=>{el.addEventListener(type,handler,options);this.cleanup.push(()=>el.removeEventListener(type,handler,options));};
     const stopCamera=id=>{if(this.cameraPointer===id)this.cameraPointer=null;};
     for(const el of [canvas,button]) {
       listen(el,'pointerdown',e=>{
         if(isPaused())return;
-        if(el===canvas&&(e.pointerType==='touch'||e.button===2)) {
+        if(el===canvas&&(e.pointerType==='touch'||e.button===2||isExploring())) {
           if(this.cameraPointer!==null)return;
           this.cameraPointer=e.pointerId;this.previousX=e.clientX;this.previousY=e.clientY;this.cameraTouch=e.pointerType==='touch';
           el.setPointerCapture(e.pointerId);e.preventDefault();return;
@@ -25,6 +25,7 @@ export class GameControls {
       listen(el,'contextmenu',e=>e.preventDefault());
     }
     listen(canvas,'pointermove',e=>{
+      if(document.pointerLockElement===canvas)return;
       if(this.cameraPointer!==e.pointerId||isPaused())return;
       let dx=e.clientX-this.previousX,dy=e.clientY-this.previousY;
       this.previousX=e.clientX;this.previousY=e.clientY;
@@ -37,7 +38,7 @@ export class GameControls {
       if(e.code==='Space'){if(!isPaused()){e.preventDefault();if(!e.repeat)this.actions.hold('space');}return;}
       if(e.repeat)return;
       if(e.code==='KeyP'&&!document.querySelector('dialog[open]:not(#pause-dialog)'))onPause(!isPaused());
-      if(e.code==='KeyR'&&!isPaused()){this.clear();game.reset();}
+      if(e.code==='KeyR'&&!isPaused()&&!isExploring()){this.clear();game.reset();}
       const commands={KeyM:'sound',KeyF:'fullscreen',KeyJ:'journal',KeyH:'help',KeyE:'equipment'};
       const command=commands[e.code];
       if(command&&(!isPaused()||command==='sound'||command==='fullscreen'))onCommand(command);
