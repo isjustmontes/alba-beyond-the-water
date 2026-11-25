@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import {VEGETATION_PROFILES,vegetationMaterial,padVegetationBounds,seedVegetationPhases} from './vegetation-wind.js';
 
 const smooth=(a,b,x)=>THREE.MathUtils.smoothstep(x,a,b);
 function noise(x,y) {
@@ -87,26 +88,15 @@ function treeTexture(kind,rand) {
   const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=4;return tex;
 }
 
-function crossedCards(count) {
+function crossedCards(count,distant=false) {
   const planes=[];
-  for(let i=0;i<count;i++) {const p=new THREE.PlaneGeometry(.55,1);p.translate(0,.5,0);p.rotateY(i*Math.PI/count);planes.push(p);}
+  for(let i=0;i<count;i++) {const p=new THREE.PlaneGeometry(.55,1,1,distant ? 1 : 2);p.translate(0,.5,0);p.rotateY(i*Math.PI/count);planes.push(p);}
   const geo=mergeGeometries(planes);planes.forEach(p=>p.dispose());return geo;
 }
 
-function windMaterial(material,clock,wind,amount=.018) {
-  material.onBeforeCompile=shader=>{
-    shader.uniforms.foliageTime=clock;shader.uniforms.foliageWind=wind;
-    shader.vertexShader='uniform float foliageTime; uniform float foliageWind;\n'+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-      #ifdef USE_INSTANCING
-        transformed.x+=pow(max(position.y,0.),2.)*${amount}*foliageWind*sin(foliageTime*1.1+instanceMatrix[3].x*.2+instanceMatrix[3].z*.1);
-      #endif`);
-  };
-  material.customProgramCacheKey=()=>`alba-wind-${amount}`;return material;
-}
-
 export function makeLandscape(rand) {
-  const group=new THREE.Group(),clock={value:0},wind={value:1},texture=stoneTexture();
+  const group=new THREE.Group(),clock={value:0},wind={value:new THREE.Vector2(1.1,0)},detail={value:1},texture=stoneTexture();
+  const uniforms={time:clock,flow:wind,detail};
   const terrainMat=new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.24,vertexColors:true,roughness:1});
   terrainMat.onBeforeCompile=shader=>{
     shader.vertexShader='varying vec3 vLandPosition; varying vec3 vLandNormal;\n'+shader.vertexShader;
@@ -122,7 +112,8 @@ export function makeLandscape(rand) {
   terrainHigh.receiveShadow=true;terrainLow.receiveShadow=true;terrainLow.visible=false;group.add(terrainHigh,terrainLow);
   const treeGroups=[];
   for(let kind=0;kind<3;kind++) {
-    const mat=windMaterial(new THREE.MeshStandardMaterial({map:treeTexture(kind,rand),alphaTest:.43,side:THREE.DoubleSide,roughness:.95,color:0xc5d1bb,emissive:0x152317,emissiveIntensity:.14}),clock,wind);
+    const profile=VEGETATION_PROFILES[['pine','spruce','birch'][kind]];
+    const mat=vegetationMaterial(new THREE.MeshStandardMaterial({map:treeTexture(kind,rand),alphaTest:.43,side:THREE.DoubleSide,roughness:.95,color:0xc5d1bb,emissive:0x152317,emissiveIntensity:.14}),uniforms,profile);
     const positions=[],count=kind===0 ? 410 : kind===1 ? 190 : 150;
     for(let i=0;i<count;i++) {
       const a=rand()*Math.PI*2,r=1.018+Math.pow(rand(),1.5)*.35,x=Math.cos(a)*82*r,z=-42+Math.sin(a)*108*r;
@@ -130,9 +121,10 @@ export function makeLandscape(rand) {
     }
     for(const distant of [false,true]) {
       const trees=positions.filter(p=>(Math.hypot(p.x,p.z-7)>155)===distant).sort((a,b)=>Math.hypot(a.x,a.z-7)-Math.hypot(b.x,b.z-7));
-      const instanced=new THREE.InstancedMesh(crossedCards(distant ? 2 : 3),mat,trees.length),dummy=new THREE.Object3D();
+      const instanced=new THREE.InstancedMesh(crossedCards(distant ? 2 : 3,distant),mat,trees.length),dummy=new THREE.Object3D();
+      instanced.name=`vegetation-tree-${kind}-${distant ? 'far' : 'near'}`;
       trees.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.scale.set(p.height,p.height,p.height);dummy.rotation.y=p.angle;dummy.updateMatrix();instanced.setMatrixAt(i,dummy.matrix);instanced.setColorAt(i,new THREE.Color().setHSL(.23+rand()*.08,.06,.75+rand()*.2));});
-      instanced.computeBoundingSphere();group.add(instanced);treeGroups.push({mesh:instanced,total:trees.length,distant});
+      seedVegetationPhases(instanced,profile);padVegetationBounds(instanced,profile,kind===2 ? 10 : 13);group.add(instanced);treeGroups.push({mesh:instanced,total:trees.length,distant});
     }
   }
   const rockGeo=new THREE.SphereGeometry(1,14,10),pos=rockGeo.attributes.position;
@@ -164,22 +156,31 @@ export function makeLandscape(rand) {
   const blade=new THREE.PlaneGeometry(.045,.9,1,4),bp=blade.attributes.position;
   blade.translate(0,.45,0);
   for(let i=0;i<bp.count;i++)bp.setX(i,bp.getX(i)+Math.pow(bp.getY(i),2)*.23);
+  blade.computeVertexNormals();
   const blades=[];for(let i=0;i<3;i++){const b=blade.clone();b.rotateY(i*Math.PI/3);blades.push(b);}
   const grassGeo=mergeGeometries(blades);blades.forEach(b=>b.dispose());blade.dispose();
-  const grassMat=windMaterial(new THREE.MeshStandardMaterial({color:0x7b8e55,side:THREE.DoubleSide,roughness:1}),clock,wind,.045);
+  const grassMat=vegetationMaterial(new THREE.MeshStandardMaterial({color:0x7b8e55,side:THREE.DoubleSide,roughness:1}),uniforms,VEGETATION_PROFILES.grass);
   const grass=new THREE.InstancedMesh(grassGeo,grassMat,1800);
+  grass.name='vegetation-grass';
   for(let i=0;i<1800;i++) {
     const site=reedSites[i%reedSites.length],a=rand()*Math.PI*2,r=rand()*1.35;
     dummy.position.set(site.x+Math.cos(a)*r,site.y,site.z+Math.sin(a)*r);dummy.scale.setScalar(.45+rand()*1.1);dummy.rotation.set(0,rand()*Math.PI,0);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);
     grass.setColorAt(i,new THREE.Color().setHSL(.17+rand()*.10,.22+rand()*.2,.35+rand()*.2));
   }
-  grass.computeBoundingSphere();group.add(grass);
-  const reeds=new THREE.InstancedMesh(new THREE.CapsuleGeometry(.035,.19,3,5),new THREE.MeshStandardMaterial({color:0x685333,roughness:1}),160);
+  seedVegetationPhases(grass,VEGETATION_PROFILES.grass);padVegetationBounds(grass,VEGETATION_PROFILES.grass,1.55);group.add(grass);
+  // Existing seed heads gain a lightweight stem, merged into the same draw call.
+  const reedHead=new THREE.CapsuleGeometry(.035,.19,3,5);reedHead.translate(0,1,0);
+  const reedStem=new THREE.CylinderGeometry(.008,.012,1,4,2);reedStem.translate(0,.5,0);
+  const reedGeometry=mergeGeometries([reedHead,reedStem]);reedHead.dispose();reedStem.dispose();
+  const reeds=new THREE.InstancedMesh(reedGeometry,vegetationMaterial(new THREE.MeshStandardMaterial({color:0x685333,roughness:1}),uniforms,VEGETATION_PROFILES.reed),160);
+  reeds.name='vegetation-reeds';
   for(let i=0;i<160;i++) {
-    const site=reedSites[i%24];dummy.position.set(site.x+(rand()-.5),site.y+.8+rand()*.35,site.z+(rand()-.5));dummy.scale.setScalar(.7+rand()*.4);dummy.rotation.set(0,0,(rand()-.5)*.2);dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);
+    const site=reedSites[i%24],x=site.x+(rand()-.5),height=.8+rand()*.35,z=site.z+(rand()-.5),width=.7+rand()*.4;
+    dummy.position.set(x,site.y,z);dummy.scale.set(width,height,width);dummy.rotation.set(0,0,(rand()-.5)*.2);dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);
   }
-  group.add(reeds);
+  seedVegetationPhases(reeds,VEGETATION_PROFILES.reed);padVegetationBounds(reeds,VEGETATION_PROFILES.reed,1.15);group.add(reeds);
   return {group,clock,wind,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
+    detail.value=high ? 1 : 0;
     terrainHigh.visible=high;terrainLow.visible=!high;
     for(const {mesh,total,distant} of treeGroups)mesh.count=high ? total : Math.ceil(total*(distant ? .55 : .8));
     grass.count=high ? 1800 : 1000;reeds.count=high ? 160 : 90;

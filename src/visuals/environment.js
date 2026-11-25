@@ -62,7 +62,7 @@ export class EnvironmentalView {
     water.sunDirection.value.copy(w.sunDirection);water.sunColor.value.copy(w.sun.color).multiplyScalar(.15+day*.85);
     water.waterColor.value.setRGB(.018,.065,.09).lerp(this.waterColor.setRGB(.05,.28,.23),day);
     water.windStrength.value=.65+weather.wind*.2;water.windDirection.value.set(weather.windX,weather.windZ);water.rainAmount.value=weather.rain;
-    w.landscape.wind.value=.45+weather.wind*.35;
+    w.landscape.wind.value.set(weather.windX,weather.windZ);
     this.rain.visible=weather.rain>.005;
     this.rain.geometry.setDrawRange(0,(w.touchMode||!w.highQuality ? 110 : 420)*2);
     this.rain.material.uniforms.time.value=time;this.rain.material.uniforms.rain.value=weather.rain;this.rain.material.uniforms.wind.value.set(weather.windX,weather.windZ);
