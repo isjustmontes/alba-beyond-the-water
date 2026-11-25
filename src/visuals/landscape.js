@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import {VEGETATION_PROFILES,vegetationMaterial,padVegetationBounds,seedVegetationPhases} from './vegetation-wind.js';
+import {shorelineMaterial} from './atmosphere.js';
 
 const smooth=(a,b,x)=>THREE.MathUtils.smoothstep(x,a,b);
 function noise(x,y) {
@@ -95,7 +96,7 @@ function crossedCards(count,distant=false) {
 }
 
 export function makeLandscape(rand) {
-  const group=new THREE.Group(),clock={value:0},wind={value:new THREE.Vector2(1.1,0)},detail={value:1},texture=stoneTexture();
+  const group=new THREE.Group(),clock={value:0},wind={value:new THREE.Vector2(1.1,0)},detail={value:1},rain={value:0},texture=stoneTexture();
   const uniforms={time:clock,flow:wind,detail};
   const terrainMat=new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.24,vertexColors:true,roughness:1});
   terrainMat.onBeforeCompile=shader=>{
@@ -108,6 +109,7 @@ export function makeLandscape(rand) {
       diffuseColor.rgb*=mix(vec3(.64),vec3(1.34),stone);`);
   };
   terrainMat.customProgramCacheKey=()=> 'alba-triplanar-terrain-v1';
+  shorelineMaterial(terrainMat,rain);
   const terrainHigh=new THREE.Mesh(terrainGeometry(256,64),terrainMat),terrainLow=new THREE.Mesh(terrainGeometry(128,32),terrainMat);
   terrainHigh.receiveShadow=true;terrainLow.receiveShadow=true;terrainLow.visible=false;group.add(terrainHigh,terrainLow);
   const treeGroups=[];
@@ -133,7 +135,7 @@ export function makeLandscape(rand) {
     pos.setXYZ(i,x*r,y*r,z*r);
   }
   rockGeo.computeVertexNormals();
-  const rockMat=new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.17,color:0x858a76,roughness:.96});
+  const rockMat=shorelineMaterial(new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.17,color:0x858a76,roughness:.96}),rain);
   const rocks=new THREE.InstancedMesh(rockGeo,rockMat,130),dummy=new THREE.Object3D(),reedSites=[];
   for(let i=0;i<130;i++) {
     let x,z,y,size;
@@ -150,7 +152,7 @@ export function makeLandscape(rand) {
   rocks.receiveShadow=true;rocks.castShadow=true;group.add(rocks);
   // Raised, mossy foreground banks keep the casting corridor open.
   for(const side of [-1,1]) {
-    const bank=new THREE.Mesh(rockGeo,new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.3,color:0x63724a,roughness:1}));
+    const bank=new THREE.Mesh(rockGeo,shorelineMaterial(new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.3,color:0x63724a,roughness:1}),rain));
     bank.position.set(side*23,-.8,-4);bank.scale.set(12,1.1,23);bank.receiveShadow=true;group.add(bank);
   }
   const blade=new THREE.PlaneGeometry(.045,.9,1,4),bp=blade.attributes.position;
@@ -179,7 +181,7 @@ export function makeLandscape(rand) {
     dummy.position.set(x,site.y,z);dummy.scale.set(width,height,width);dummy.rotation.set(0,0,(rand()-.5)*.2);dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);
   }
   seedVegetationPhases(reeds,VEGETATION_PROFILES.reed);padVegetationBounds(reeds,VEGETATION_PROFILES.reed,1.15);group.add(reeds);
-  return {group,clock,wind,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
+  return {group,clock,wind,rain,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
     detail.value=high ? 1 : 0;
     terrainHigh.visible=high;terrainLow.visible=!high;
     for(const {mesh,total,distant} of treeGroups)mesh.count=high ? total : Math.ceil(total*(distant ? .55 : .8));

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {atmosphere} from './atmosphere.js';
 
 export function makeEnvironmentSky(sun) {
   const material=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,
@@ -31,7 +32,7 @@ export function makeEnvironmentSky(sun) {
 // One draw call, analytic falling streaks. No particle objects or CPU particle updates.
 export class EnvironmentalView {
   constructor(world){
-    this.world=world;this.color=new THREE.Color();this.waterColor=new THREE.Color();this.lastShadow=-Infinity;this.lastHour=-1;
+    this.world=world;this.color=new THREE.Color();this.waterColor=new THREE.Color();this.atmosphere={};this.lastShadow=-Infinity;this.lastHour=-1;
     this.moon=new THREE.DirectionalLight(0x93afe0,.18);world.scene.add(this.moon);
     const count=420,data=new Float32Array(count*6),ends=new Float32Array(count*2);
     for(let i=0;i<count;i++){const x=world.random()*36-18,y=world.random()*18,z=world.random()*42-30;data.set([x,y,z,x,y,z],i*6);ends[i*2+1]=1;}
@@ -49,20 +50,24 @@ export class EnvironmentalView {
     const w=this.world,e=environment,weather=e.weather,day=e.daylight,hour=e.clock.hour,angle=(hour-6)/24*Math.PI*2;
     w.sunDirection.set(-Math.cos(angle),Math.sin(angle),-.32).normalize();
     w.sun.position.copy(w.sunDirection).multiplyScalar(220);this.moon.position.copy(w.sun.position).multiplyScalar(-1);this.moon.intensity=(1-day)*.22;
-    const warm=1-THREE.MathUtils.smoothstep(Math.abs(Math.sin(angle)),.05,.7);
+    const view=atmosphere(hour,day,weather,this.atmosphere),warm=view.warm;
     w.sun.color.setRGB(1,.96-warm*.23,.87-warm*.40);
-    w.sun.intensity=day*3.3*(1-weather.cloud*.65);
-    w.ambient.intensity=.65+day*.85*(1-weather.cloud*.25);
-    w.ambient.color.setRGB(.4+day*.43,.52+day*.38,.72+day*.23);
-    w.scene.environmentIntensity=.08+day*.27;
+    w.sun.intensity=view.sun;
+    w.ambient.intensity=view.ambient;
+    w.ambient.color.setRGB(.4+day*.43+warm*.035,.52+day*.38,.72+day*.23-warm*.09);
+    w.ambient.groundColor.setRGB(.035+day*.055,.055+day*.065,.045+day*.035);
+    w.scene.environmentIntensity=view.reflection;
     this.color.setRGB(.045,.07,.11).lerp(this.waterColor.setRGB(.60,.70,.70),day);
-    w.scene.fog.color.copy(this.color);w.scene.fog.density=.0035+weather.cloud*.0013+weather.rain*.003;
+    this.color.lerp(this.waterColor.setRGB(.76,.63,.49),warm*.28);
+    this.color.lerp(this.waterColor.setRGB(.43,.51,.55),weather.rain*day*.25);
+    w.scene.fog.color.copy(this.color);w.scene.fog.density=view.fogDensity;
     const u=w.sky.material.uniforms;u.daylight.value=day;u.cloudCover.value=weather.cloud;u.rainAmount.value=weather.rain;u.skyTime.value=time;u.wind.value.set(weather.windX,weather.windZ);
     const water=w.water.material.uniforms;
     water.sunDirection.value.copy(w.sunDirection);water.sunColor.value.copy(w.sun.color).multiplyScalar(.15+day*.85);
     water.waterColor.value.setRGB(.018,.065,.09).lerp(this.waterColor.setRGB(.05,.28,.23),day);
     water.windStrength.value=.65+weather.wind*.2;water.windDirection.value.set(weather.windX,weather.windZ);water.rainAmount.value=weather.rain;
     w.landscape.wind.value.set(weather.windX,weather.windZ);
+    w.landscape.rain.value=weather.rain;
     this.rain.visible=weather.rain>.005;
     this.rain.geometry.setDrawRange(0,(w.touchMode||!w.highQuality ? 110 : 420)*2);
     this.rain.material.uniforms.time.value=time;this.rain.material.uniforms.rain.value=weather.rain;this.rain.material.uniforms.wind.value.set(weather.windX,weather.windZ);
