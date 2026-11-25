@@ -1,0 +1,13 @@
+# Historial de entregas
+
+| Hito | Revisión | Entrega y evidencia |
+| --- | --- | --- |
+| M01 | d98231d | Checkpoint jugable previo a mejoras visuales, sin tag propio. |
+| M02 | 6144732 · v0.1.0 | Geometría, materiales y paisaje procedural. |
+| M03 | db6fd45 · v0.2.0 | Simulación avanzada y entrada táctil. |
+| M04 | ccee43f · v0.3.0 | Clima, ciclo y ecología en [Living Waters](history/PHASE_04_LIVING_WATERS.md). |
+| M05 | 86212cb · v0.4.0 | Lanzamiento y animación en [The Art of Fishing](history/PHASE_05_THE_ART_OF_FISHING.md). |
+| M05 | c41f6e6 / 6500994 | 0.4.1 individualiza decisiones y activa sonido por defecto; 0.4.2 compacta el HUD móvil. |
+| M06 | d0bfc8b → cdc7728 → 544b7e1 | Viento en vegetación, atmósfera/orilla y cierre de A World Alive. |
+
+GitHub registra siete prepublicaciones entre v0.1.0 y v0.5.0. El tag v0.5.0 resuelve a `544b7e1182279ee1b3b50f7de0a1f654e97fde1b`. Las notas indican la retirada de fauna visible provisional y manos experimentales desactivadas. [Notas oficiales de v0.5.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.5.0) · [Archivo histórico](history/README.md)
