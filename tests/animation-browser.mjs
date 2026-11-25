@@ -7,7 +7,7 @@ const browser=await chromium.launch({headless:true,executablePath,args:['--enabl
 await mkdir('test-results',{recursive:true});
 try{
   for(const [name,viewport]of [['desktop',{width:1280,height:800}],['portrait',{width:390,height:844}],['landscape',{width:844,height:390}]]){
-    const page=await browser.newPage({viewport,deviceScaleFactor:1});
+    const page=await browser.newPage({viewport,deviceScaleFactor:1,hasTouch:name!=='desktop',isMobile:name!=='desktop'});
     page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});
     // Deterministic visual fixture: suppress only the original game's RAF, then
     // drive the production renderer and simulation at fixed steps on another canvas.
@@ -22,6 +22,22 @@ try{
       const step=seconds=>{let left=seconds;while(left>1e-8){const dt=Math.min(1/60,left);game.update(dt);world.update(dt,game);left-=dt;}};
       window.motionFixture={world,game,step,events};world.update(0,game);
     });
+    const gripCheck=await page.evaluate(()=>{
+      const rig=window.motionFixture.world.rodRig;
+      const grip=rig.root.children.find(m=>m.geometry?.type==='CylinderGeometry'&&m.geometry.parameters.height===.57);
+      const butt=rig.root.children.find(m=>m.geometry?.type==='CylinderGeometry'&&m.geometry.parameters.height===.065);
+      rig.root.updateMatrixWorld(true);
+      const front=grip.localToWorld(grip.position.clone().set(0,.57/2,0));
+      const back=grip.localToWorld(grip.position.clone().set(0,-.57/2,0));
+      const capFront=butt.localToWorld(butt.position.clone().set(0,.065/2,0));
+      return {scale:grip.scale.toArray(),roughness:grip.material.roughness,textured:!!grip.material.map,
+        jointError:front.distanceTo(rig.root.localToWorld(rig.curve.getPointAt(0))),capError:back.distanceTo(capFront),
+        socketError:rig.gripSocket.position.distanceTo(grip.position),rigScale:rig.root.scale.toArray(),
+        hands:window.motionFixture.world.diagnostics().handsAvailable};
+    });
+    assert.deepEqual(gripCheck.scale,[.46,.60,.46]);assert.deepEqual(gripCheck.rigScale,[1,1,1]);
+    assert.equal(gripCheck.roughness,.94);assert.equal(gripCheck.textured,true);assert.equal(gripCheck.hands,false);
+    assert.ok(gripCheck.jointError<1e-6);assert.ok(gripCheck.capError<1e-6);assert.equal(gripCheck.socketError,0);
     const snapshot=()=>page.evaluate(()=>{const {world:w,game:g,events}=window.motionFixture;const p=w.tip.getWorldPosition(w.scratch.tip);return {...w.diagnostics(),state:g.state,castTime:g.castTime,tip:p.toArray(),distance:g.distance,power:g.power,events:[...events]};});
     const frame=async(label,seconds)=>{await page.evaluate(dt=>window.motionFixture.step(dt),seconds);const s=await snapshot();await page.screenshot({path:`test-results/art-${name}-${label}.png`});report.push({profile:name,label,...s});return s;};
     const rest=await frame('idle',.3);await page.evaluate(()=>window.motionFixture.game.press());const prepared=await frame('prepare',1);

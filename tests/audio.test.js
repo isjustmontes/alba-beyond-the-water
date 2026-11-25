@@ -5,8 +5,8 @@ import {LakeAudio,AUDIO_STORAGE_KEY} from '../src/audio.js';
 function setup(t,{saved=null,blocked=false}={}){
   const writes=[],contexts=[];
   const storage={getItem:key=>{assert.equal(key,AUDIO_STORAGE_KEY);return saved;},setItem:(key,value)=>writes.push([key,value])};
-  class Param {constructor(){this.value=0;this.targets=[];}setTargetAtTime(v){this.targets.push(v);}setValueAtTime(){}exponentialRampToValueAtTime(){}}
-  const node=()=>({gain:new Param(),frequency:new Param(),connect(){return this;},start(){},stop(){}});
+  class Param {constructor(){this.value=0;this.targets=[];}setTargetAtTime(v){this.targets.push(v);}setValueAtTime(){}exponentialRampToValueAtTime(){}linearRampToValueAtTime(){}}
+  const node=()=>({gain:new Param(),frequency:new Param(),connect(){return this;},disconnect(){},start(){},stop(){}});
   class Context {
     constructor(){contexts.push(this);this.state='suspended';this.sampleRate=8;this.currentTime=0;this.destination={};this.resumes=0;}
     createGain(){return node();}createBiquadFilter(){return node();}createBufferSource(){return node();}createOscillator(){return node();}
@@ -62,4 +62,36 @@ test('storage failures and browsers without Web Audio do not break sound control
   assert.equal(audio.enabled,true);assert.equal(audio.toggle(),false);assert.equal(audio.toggle(),true);
   globalThis.window={};const unsupported=new LakeAudio({storage:{getItem:()=>null}});
   assert.equal(unsupported.unlock(),false);unsupported.event('bite');assert.equal(unsupported.toggle(),false);
+});
+
+test('ambient calls vary with daylight and rain, with bounded independent schedules',t=>{
+  const {audio}=setup(t);audio.unlock();const calls=[];
+  audio.ambientCall=(kind,strength)=>calls.push({kind,strength});
+  const e={clock:{hour:6.5},daylight:1,weather:{wind:1,rain:0}};
+  audio.nextBird=0;audio.nextInsect=0;audio.update(e,10);
+  assert.deepEqual(calls.map(c=>c.kind),['bird']);assert.ok(audio.nextBird>=12&&audio.nextBird<51);
+  audio.update(e,10.5);assert.equal(calls.length,1,'no calls on every update');
+  e.clock.hour=0;e.daylight=0;audio.ctx.currentTime=100;audio.update(e,11);
+  assert.equal(calls.at(-1).kind,'insect');assert.equal(calls.length,2);
+  e.weather.rain=1;audio.ctx.currentTime=200;audio.update(e,12);assert.equal(calls.length,2,'no calls in heavy rain');
+  audio.toggle();audio.ctx.currentTime=300;audio.update(e,13);assert.equal(calls.length,2,'mute prevents new calls');
+});
+
+test('tree rustle follows wind, shares master mute and reuses its noise nodes',t=>{
+  const {audio}=setup(t);audio.unlock();const node=audio.rustleGain,filter=audio.rustleFilter;
+  const e={clock:{hour:12},daylight:1,weather:{wind:0,rain:0}};
+  audio.update(e,2);assert.equal(node.gain.targets.at(-1),0);
+  e.weather.wind=5;audio.update(e,2);assert.ok(node.gain.targets.at(-1)>0);assert.ok(node.gain.targets.at(-1)<.1);
+  audio.update(e,3);assert.equal(audio.rustleGain,node);assert.equal(audio.rustleFilter,filter);
+  audio.toggle();assert.equal(audio.master.gain.targets.at(-1),0);
+});
+
+test('short ambient voices use master gain, stop and disconnect without timers',t=>{
+  const {audio}=setup(t);audio.unlock();const voices=[],gains=[];
+  audio.ctx.createOscillator=()=>{const voice={frequency:{setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(n){this.target=n;return n;},start(){this.started=true;},stop(time){this.stopTime=time;},disconnect(){this.disconnected=true;}};voices.push(voice);return voice;};
+  audio.ctx.createGain=()=>{const gain={gain:{setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}},connect(n){this.target=n;return n;},disconnect(){this.disconnected=true;}};gains.push(gain);return gain;};
+  audio.ambientCall('bird',.5);audio.ambientCall('insect',.5);
+  assert.equal(voices.length,2);
+  voices.forEach((voice,i)=>{assert.equal(voice.target,gains[i]);assert.equal(gains[i].target,audio.master);assert.equal(voice.started,true);assert.ok(voice.stopTime>.18&&voice.stopTime<.6);voice.onended();assert.equal(voice.disconnected,true);assert.equal(gains[i].disconnected,true);});
+  audio.toggle();audio.ambientCall('bird',1);assert.equal(voices.length,2);
 });

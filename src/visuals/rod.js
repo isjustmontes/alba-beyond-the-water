@@ -47,8 +47,15 @@ export class RodRig {
       shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>','#include <beginnormal_vertex>\nobjectNormal.z-=pow(rodFraction,1.4)*rodBend*.78*objectNormal.y;');
     };
     blank.customProgramCacheKey=()=> 'alba-flexing-rod-v1';this.root.add(new THREE.Mesh(tube,blank));
-    const grip=new THREE.Mesh(new THREE.CylinderGeometry(.043,.048,.57,20),cork);grip.rotation.x=-.5;grip.position.set(.04,-.16,.17);this.root.add(grip);
-    const butt=new THREE.Mesh(new THREE.CylinderGeometry(.052,.052,.065,20),black);butt.position.set(.04,-.44,.32);butt.rotation.x=-.5;this.root.add(butt);
+    // Validated cork proportions: align the grip's front with the blank root.
+    // Keep the rod/reel rig scale and all animated pivots unchanged.
+    const gripAxis=this.curve.getTangentAt(0).normalize(),gripLength=.57*.60;
+    const grip=new THREE.Mesh(new THREE.CylinderGeometry(.043,.048,.57,20),cork);
+    grip.scale.set(.46,.60,.46);grip.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),gripAxis);
+    grip.position.copy(gripAxis).multiplyScalar(-gripLength/2);this.root.add(grip);
+    const butt=new THREE.Mesh(new THREE.CylinderGeometry(.052,.052,.065,20),black);
+    butt.scale.set(.46,.4,.46);butt.quaternion.copy(grip.quaternion);
+    butt.position.copy(gripAxis).multiplyScalar(-gripLength-.065*.4/2);this.root.add(butt);
     this.guides=[];
     for(let i=1;i<=9;i++) {
       const u=.10+i*.096,point=this.curve.getPointAt(u),radius=.032*(1-u*.7);
@@ -82,7 +89,7 @@ export class RodRig {
     this.handle=new THREE.Group();this.handle.position.set(.15,-.14,-.18);
     const arm=new THREE.Mesh(new THREE.CylinderGeometry(.012,.012,.16,8),silver);arm.position.y=-.08;this.handle.add(arm);
     const knob=new THREE.Mesh(new THREE.CapsuleGeometry(.032,.055,5,10),black);knob.rotation.z=Math.PI/2;knob.position.set(.03,-.16,0);this.handle.add(knob);this.root.add(this.handle);
-    this.gripSocket=new THREE.Object3D();this.gripSocket.name='RodGrip_R';this.gripSocket.position.set(.04,-.16,.17);this.root.add(this.gripSocket);
+    this.gripSocket=new THREE.Object3D();this.gripSocket.name='RodGrip_R';this.gripSocket.position.copy(grip.position);this.root.add(this.gripSocket);
     this.crankSocket=new THREE.Object3D();this.crankSocket.name='ReelGrip_L';this.crankSocket.position.copy(knob.position);this.handle.add(this.crankSocket);
     this.guidePositions=new Float32Array(12*3);
     const guideGeo=new THREE.BufferGeometry();guideGeo.setAttribute('position',new THREE.BufferAttribute(this.guidePositions,3));

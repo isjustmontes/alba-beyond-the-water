@@ -71,7 +71,7 @@ export class EnvironmentalView {
     this.rain.visible=weather.rain>.005;
     this.rain.geometry.setDrawRange(0,(w.touchMode||!w.highQuality ? 110 : 420)*2);
     this.rain.material.uniforms.time.value=time;this.rain.material.uniforms.rain.value=weather.rain;this.rain.material.uniforms.wind.value.set(weather.windX,weather.windZ);
-    w.birds.forEach(bird=>{bird.visible=day>.2&&weather.rain<.65;});
+    w.fauna.update(e,time,w.touchMode||!w.highQuality);
     // Static scene shadows remain cached; refresh only when the light moves appreciably.
     if(time-this.lastShadow>3&&Math.abs(hour-this.lastHour)>.18){w.renderer.shadowMap.needsUpdate=true;this.lastShadow=time;this.lastHour=hour;}
   }

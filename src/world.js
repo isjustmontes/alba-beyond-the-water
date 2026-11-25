@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {EnvironmentalView,makeEnvironmentSky} from './visuals/environment.js';
+import {AmbientFauna} from './visuals/fauna.js';
 import {FirstPersonHands} from './visuals/hands.js';
 import {createFishMotion,updateFishMotion} from './animation/fish-motion.js';
 import {CAST_TIMING,rodPose,castFlight,linePoint,smooth,canJump,jumpHeight} from './animation/fishing-motion.js';
@@ -137,12 +138,7 @@ export class LakeWorld {
     this.lureVisuals.add(spoon,worm,minnow);this.scene.add(this.lureVisuals);
   }
   makeBirds() {
-    this.birds = [];
-    const mat = new THREE.LineBasicMaterial({ color: 0x354a44 });
-    for (let i = 0; i < 9; i++) {
-      const bird = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-.7,.2,0),new THREE.Vector3(),new THREE.Vector3(.7,.2,0)]), mat);
-      this.birds.push(bird); this.scene.add(bird);
-    }
+    this.fauna=new AmbientFauna(this.scene);
   }
   setView() { this.camera.rotation.order = 'YXZ'; this.camera.rotation.set(this.pitch,this.yaw,0); }
   look(dx, dy) { this.yaw = THREE.MathUtils.clamp(this.yaw - dx * .002,-.8,.8); this.pitch = THREE.MathUtils.clamp(this.pitch - dy*.002,-.48,.25); this.setView(); }
@@ -284,7 +280,6 @@ export class LakeWorld {
     if(state==='caught') this.fishModels.animate(this.catchFish,t,this.camera);
     if(game.reeling&&['waiting','fighting'].includes(state)&&t-this.lastWakeTime>.32){this.effects.ripple(this.bobber.position,state==='fighting' ? .25 : .12);this.lastWakeTime=t;}
     this.effects.update(dt);
-    this.birds.forEach((bird,i) => { bird.position.set(Math.sin(t*.018+i*.4)*95,32+i*1.9,-115+Math.cos(t*.018+i*.4)*20); bird.rotation.z = Math.sin(t*3+i)*.1; });
     this.renderer.info.reset();
     this.renderer.render(this.scene,this.camera);
   }
