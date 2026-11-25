@@ -1,0 +1,16 @@
+# Documentación de ALBA
+
+Base documental de la prepublicación v0.5.0, commit `544b7e1`, 25 de noviembre de 2026. Los documentos de dominio describen este checkout. Las fichas históricas conservan el contexto de su época y las propuestas se identifican en la hoja de ruta.
+
+[Estado y próxima tarea](project/STATUS.md) · [Flujo para colaborar](sdd/WORKFLOW.md) · [Mapa de archivos](project/DOCUMENTATION_MAP.md)
+
+- [Arquitectura del cliente](architecture/README.md)
+- [Desarrollo y distribución](engineering/README.md)
+- [Diseño de Lago Sereno](game-design/README.md)
+- [Hitos reconstruidos](milestones/README.md)
+- [Producto y alcance](product/README.md)
+- [Dirección del proyecto](project/README.md)
+- [Estrategia de calidad](quality/README.md)
+- [Historial de entregas](releases/README.md)
+- [Desarrollo guiado por especificaciones](sdd/README.md)
+- [Pescar desde el muelle](user-guide/README.md)
