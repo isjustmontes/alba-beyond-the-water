@@ -4,6 +4,8 @@ Se crearon AGENTS.md y los archivos de docs/ enumerados a continuación. Se rees
 
 [Registro por documento y sección](DOCUMENTATION_MIGRATION.md) · [Navegación por tema](../README.md)
 
+Ampliación posterior a la migración: [M07 · First Steps](../milestones/M07-first-steps/README.md) incorpora `README.md`, `spec.md`, `design.md`, `tasks.md`, `acceptance.md` y `evidence.md` para la Etapa A de v0.6.0 validada. El árbol siguiente conserva el inventario original de adopción SDD sobre v0.5.0.
+
 ```text
 docs/
 ├── architecture/

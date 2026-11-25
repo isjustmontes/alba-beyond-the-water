@@ -1,9 +1,14 @@
 # Trazabilidad de requisitos
 
+M07 incorpora retrospectivamente el alcance de la Etapa A autorizado y validado por el propietario. Su verificación se limita al muelle y a los perfiles declarados; [evidencia M07](../milestones/M07-first-steps/evidence.md).
+
 Cada fila define un criterio acotado. El origen de los requisitos funcionales es la ingeniería inversa del módulo citado y su prueba; los de M00 proceden del encargo documental. NFR-COMPAT-001 y NFR-PERF-001 son criterios de aceptación propuestos, pendientes de acuerdo sobre equipos. Los resultados de regresión pertenecen al SHA auditado.
 
 | ID | Hito | Prioridad | Comportamiento | Criterio | Implementación | Prueba | Estado | Límite |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQ-EXP-001 | M07-A | P1 | Caminar suavemente por el muelle | Normalizar diagonal y entrada analógica, mantener límites a 20/60/120 fps | [exploration.js](../../src/input/exploration.js) | [exploration.test.js](../../tests/exploration.test.js) | VERIFIED | No incluye terreno exterior |
+| REQ-EXP-002 | M07-A | P1 | Separar exploración y pesca | Bloquear cambio con aparejo activo; volver al puesto mirando al lago y lanzar una sola vez | [main.js](../../src/main.js) | [exploration-browser.mjs](../../tests/exploration-browser.mjs) y unitarias de entrada/pesca | VERIFIED | Pesca sólo desde puesto original; navegador previo al merge, código idéntico |
+| REQ-EXP-003 | M07-A | P1 | Cámara y joystick contextuales | PC y tres perfiles táctiles: mirar, soltar ratón con Esc, cancelar joystick y limpiar resize sin disparar pesca | [exploration.js](../../src/input/exploration.js) | [exploration-browser.mjs](../../tests/exploration-browser.mjs) | VERIFIED | Emulación, sin móviles físicos ni certificación de todas las interrupciones |
 | NFR-MAINT-001 | M00 | P1 | Conservar los documentos originales | Recuperar todas las secciones y referencias desde el registro | [DOCUMENTATION_MIGRATION.md](../project/DOCUMENTATION_MIGRATION.md) | [README.md](evidence/README.md) | VERIFIED | Tres originales en Git |
 | NFR-MAINT-002 | M00 | P1 | Adoptar el ciclo SDD | Navegar desde el contrato hasta requisito, tarea, criterio y evidencia | [AGENTS.md](../../AGENTS.md) | [README.md](evidence/README.md) | VERIFIED | La aceptación del propietario queda abierta |
 | NFR-MAINT-003 | M00 | P1 | Establecer baseline reproducible | Ejecutar los comandos disponibles y registrar también fallos y límites | [README.md](evidence/README.md) | [README.md](evidence/README.md) | VERIFIED | Un solo equipo |

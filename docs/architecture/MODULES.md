@@ -33,4 +33,13 @@
 | [water.js](../../src/visuals/water.js) | Vincula reflejo planar, normales, ondas locales y geometría del lecho. | waterElevation, makeLakeWater, makeLakeBed | `three`, `three/addons/objects/Water.js`, `../simulation/lake.js` |
 | [world.js](../../src/world.js) | Construye el contexto WebGL, vincula poses y dibuja la escena. | LakeWorld | `three`, `./visuals/environment.js`, `./visuals/fauna.js`, `./visuals/hands.js`, `./animation/fish-motion.js`, `./animation/fishing-motion.js`, `./simulation/config.js`, `./visuals/water.js`, `./visuals/fish.js`, `./visuals/rod.js`, `./visuals/landscape.js`, `./visuals/effects.js` |
 
-[HTML y diálogos](../../index.html). main.js importa las cinco hojas CSS en orden; la última adapta el HUD móvil.
+[HTML y diálogos](../../index.html). `main.js` importa las cinco hojas CSS de la base y añade `exploration.css` para la presentación contextual de M07-A.
+
+### M07-A · módulos añadidos
+
+| Archivo | Responsabilidad | Exportaciones / contrato | Dependencias |
+| --- | --- | --- | --- |
+| [exploration.js](../../src/input/exploration.js) | Posición y velocidad dentro del muelle; joystick, WASD, cambio de modo y Pointer Lock opcional | WALK, Exploration, ExplorationControls | Lógica sin renderer; adaptador DOM del navegador |
+| [exploration.css](../../src/exploration.css) | Botón de modo, instrucciones y joystick contextual con áreas seguras | Estilos por modo y entrada táctil | HUD existente |
+
+`main.js` incorpora ambos módulos y aplica posición/altura; `controller.js` recibe `isExploring` para bloquear acciones de pesca; `world.js` amplía los límites de mirada sólo al explorar. No se alteran dependencias de paquetes ni interfaces de simulación o persistencia. [Diseño](../milestones/M07-first-steps/design.md).

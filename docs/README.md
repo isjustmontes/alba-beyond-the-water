@@ -1,6 +1,6 @@
 # Documentación de ALBA
 
-Base documental de la prepublicación v0.5.0, commit `544b7e1`, 25 de noviembre de 2026. Los documentos de dominio describen este checkout. Las fichas históricas conservan el contexto de su época y las propuestas se identifican en la hoja de ruta.
+Base publicada: prepublicación v0.5.0, commit `544b7e1`, 25 de noviembre de 2026. Este checkout incorpora [M07 · First Steps, Etapa A](milestones/M07-first-steps/README.md), validada en `4b23cdcc` y aún sin publicar. Las fichas históricas conservan el contexto de su época y las propuestas se identifican en la hoja de ruta.
 
 [Estado y próxima tarea](project/STATUS.md) · [Flujo para colaborar](sdd/WORKFLOW.md) · [Mapa de archivos](project/DOCUMENTATION_MAP.md)
 

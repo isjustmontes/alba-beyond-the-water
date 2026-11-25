@@ -9,3 +9,4 @@ Las fichas agrupan especificación, diseño, tareas, aceptación y evidencia. M0
 - [M04 · Living Waters](M04-living-waters/README.md)
 - [M05 · The Art of Fishing](M05-the-art-of-fishing/README.md)
 - [M06 · A World Alive](M06-a-world-alive/README.md)
+- [M07 · First Steps · v0.6.0 Etapa A validada, sin publicar](M07-first-steps/README.md)

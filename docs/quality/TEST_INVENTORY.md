@@ -2,6 +2,8 @@
 
 | Archivo | Comando | Unidad de recuento | Casos o propósito |
 | --- | --- | --- | --- |
+| [exploration.test.js](../../tests/exploration.test.js) | node --test tests/exploration.test.js | 6 | Movimiento, límites del muelle, diagonal, joystick, tasas 20/60/120 fps, guardas de modo y limpieza de estado |
+| [exploration-browser.mjs](../../tests/exploration-browser.mjs) | node tests/exploration-browser.mjs | 1 guion / 4 perfiles | Escritorio, teléfono vertical/horizontal y tablet; movimiento, ratón capturado/Esc, joystick/cancelación/resize, retorno al puesto y lanzamiento único. [Registro M07](../milestones/M07-first-steps/evidence.md) |
 | [advanced.test.js](../../tests/advanced.test.js) | npm test | 5 | a biting fish stays at the actual bait throughout the hook window; lures have different real depth and retrieve motion; equipment cannot change in water; bait affinity affects whether a real carp attacks; critical tension has a short recovery window and fighting causes fatigue and direction changes; two input sources hook only once and capture records store the equipped bait |
 | [ai.test.js](../../tests/ai.test.js) | npm test | 3 | empty water never produces a timer-generated bite; fish investigate actual lure coordinates, attack nearby and recover after escape; nearby cautious fish flee abrupt lure movement, distant fish ignore it |
 | [animation-browser.mjs](../../tests/animation-browser.mjs) | npm run test:animation | 1 guion | Gesto completo, caña, sedal, líder y salto en tres viewports |
