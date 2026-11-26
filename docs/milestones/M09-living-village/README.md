@@ -1,5 +1,9 @@
 # M09 · A Living Village · v0.8.0
 
+**Accepted maintenance extension: v0.8.1 — Movement & Navigation.** The owner confirms movement, jumping, maps and mobile-camera controls as validated and authorizes publication. [Final acceptance/evidence](navigation-0.8.1.md): implementation `3f1c484`, 76/76 final relevant tests, successful build; six-profile browser evidence retained. Physical/WebKit/sustained limitations stay partial. The v0.8.0 visual milestone acceptance is unchanged; earlier pending states below are historical.
+
+**Extensión menor local posterior a publicación:** [Movimiento/salto/mapa y joystick de cámara · candidato v0.8.1](navigation-0.8.1.md). Movimiento/mapa aceptados por el propietario; cámara móvil con doble joystick implementada y pendiente de su validación. Última comprobación: 35/35 relevantes, build y seis perfiles PC/móviles/tablet emulados correctos. Sin commit/publicación; se conserva la aceptación de M09/v0.8.0 y sus límites físicos/sostenidos.
+
 **Cierre vigente · 26/11/2026:** el propietario declara validados los cambios pendientes, incluida E, y autoriza expresamente cerrar M09 y publicar v0.8.0. MVP visual A–E aceptado para **Pre-Alpha**; T01–T04/T06 y REQ-LVI-001–005 VERIFIED en su alcance. A/B/C se conservan en `585e1dc` / `333ebb6` / `43d4587`; D/E en `351da15`. Comprobación final: **60/60 pruebas relevantes**, build correcto (aviso conocido >500 kB). T05, AC-LVI-04/05 y NFR-LVI-001/002 siguen PARTIAL por hardware físico, WebKit y rendimiento sostenido pendientes. No se añaden funciones ni se certifican esos límites por la aceptación visual. [Decisión](acceptance.md) · [Evidencia final](evidence.md). Publicación autorizada por fast-forward y tag anotado; su resultado se verifica en GitHub. Todos los estados pendientes inferiores son registro histórico, sustituidos por este cierre.
 
 ## Registro histórico de las etapas

@@ -13,3 +13,4 @@ Las fichas agrupan especificación, diseño, tareas, aceptación y evidencia. M0
 - [M08 · The Angler's Village · v0.7.0 MVP cerrado y aceptado, publicación autorizada](M08-anglers-village/README.md)
 
 - [M09 · A Living Village · v0.8.0 · MVP A–E cerrado y aceptado, publicación autorizada; NFR físicos/sostenidos parciales](M09-living-village/README.md)
+- [M09 maintenance · v0.8.1 — Movement & Navigation · accepted release scope and evidence](M09-living-village/navigation-0.8.1.md)

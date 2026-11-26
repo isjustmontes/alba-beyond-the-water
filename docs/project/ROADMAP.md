@@ -1,5 +1,11 @@
 # Hoja de ruta propuesta
 
+**Current delivery:** v0.8.1 — Movement & Navigation is accepted and authorized for Pre-Alpha publication. [Scope and final evidence](../milestones/M09-living-village/navigation-0.8.1.md). No next milestone or feature is opened; physical mobile/WebKit and sustained performance remain follow-up validation work. Earlier pending approvals below are historical.
+
+**Siguiente validación autorizada:** cámara móvil con doble joystick en el candidato v0.8.1. Movimiento/mapa ya aceptados; falta aceptar esta ampliación, sin commit ni publicación todavía. [Alcance](../milestones/M09-living-village/navigation-0.8.1.md).
+
+**Ajuste menor autorizado posterior a v0.8.0:** [movimiento y navegación](../milestones/M09-living-village/navigation-0.8.1.md), candidato v0.8.1 sólo tras aceptación manual. Implementación/pruebas locales completadas; siguiente acción: validación del propietario, sin commit ni publicación todavía. No abre un hito nuevo ni amplía zonas/RPG.
+
 **Vigente:** M09 · A Living Village cerrado y aceptado para v0.8.0 Pre-Alpha por autorización final del propietario, incluidas D/E. [Cierre](../milestones/M09-living-village/acceptance.md). Sin nuevo hito autorizado; quedan pruebas físicas/WebKit y rendimiento sostenido como limitaciones abiertas. Publicación autorizada sujeta a comprobación remota segura. Las etapas pendientes inferiores conservan sólo el historial de planificación.
 
 **M09-E:** pulido visual adicional autorizado e implementado, pendiente de aceptación. D se conserva local sin inferir aceptación; no se confirma ni publica D/E. Sin NPC, zonas, mecánicas o RPG nuevos. [M09](../milestones/M09-living-village/README.md).

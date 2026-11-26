@@ -1,5 +1,11 @@
 # Arquitectura del cliente
 
+### Ajuste menor de navegación posterior a v0.8.0
+
+`input/camera-stick.js` es un adaptador de entrada táctil: captura propia, deadzone radial, velocidad proporcional y amortiguación exponencial integrada por tiempo, sin asignaciones por frame. Llama a `world.look` y conserva sus límites. ExplorationControls actualiza el adaptador antes del movimiento y separa la liberación del dedo izquierdo de la limpieza global: cada joystick cancela sólo su captura; menús, resize, blur y modo de entrada limpian ambos. CSS común conserva aspecto/medidas del izquierdo; derecho simétrico al explorar y separado de acción/HUD al pescar. No cambia Pointer Lock, sensibilidad PC, escenas ni guardados.
+
+`input/exploration.js` conserva colisión horizontal a subpasos y añade impulso/gravedad relativos al suelo: sólo explora, sin doble salto, y prohíbe equipar en el aire. `main.js` aplica altura a cámara y requiere suelo al viajar. `zone-map.js` presenta Canvas 2D al abrir modal pausado, derivando agua/puestos/caminos/casas/salidas de los módulos existentes, sin simulación nueva ni cambios de guardado. M abre/cierra mapa, N conserva sonido, Espacio se enruta a salto o pesca según modo. [Contrato y evidencia](../milestones/M09-living-village/navigation-0.8.1.md).
+
 ### M09-E · horizonte rural
 
 `visuals/village-horizon.js` genera una malla de colinas lejanas y dos lotes de arbolado distante, sólo dentro de `VillageView`. Reutiliza mapa de suelo, materiales/atlas arbóreos y niebla/luz de la escena rural; geometrías y buffers de instancias propios. La calidad reduce conteos por el bucle de plantas existente; no modifica árboles actuales, suelo transitable, escenas del lago ni navegación. Sin nueva simulación/persistencia; [diseño/evidencia M09](../milestones/M09-living-village/design.md).

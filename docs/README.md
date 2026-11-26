@@ -1,5 +1,11 @@
 # Documentación de ALBA
 
+**Current release scope: v0.8.1 — Movement & Navigation (Pre-Alpha).** The owner has accepted faster movement, PC jumping, zone maps and dual mobile joysticks and authorized publication. [Final SDD acceptance and evidence](milestones/M09-living-village/navigation-0.8.1.md): 76/76 relevant tests and production build passed. Physical mobile/WebKit/sustained performance remain explicit limitations. Earlier pending-acceptance entries below are historical.
+
+**Ampliación local vigente:** movimiento/mapa validados; [joystick derecho de cámara](milestones/M09-living-village/navigation-0.8.1.md) implementado, pendiente de validación móvil. Sin commit/publicación; PC, joystick izquierdo y controles previos conservados.
+
+**Trabajo local vigente:** [ajuste menor de movimiento y navegación](milestones/M09-living-village/navigation-0.8.1.md), candidato v0.8.1 posterior a v0.8.0 publicada. Velocidad, salto PC y mapa PC/móvil implementados; pruebas/build correctos, pendiente validación manual. Sin commit ni publicación autorizados para este ajuste.
+
 **Vigente: v0.8.0 — A Living Village, Pre-Alpha.** [M09 cerrado y aceptado](milestones/M09-living-village/acceptance.md) por autorización final del propietario, incluidas D/E. 60/60 pruebas relevantes y build correctos; vegetación, terreno, materiales, atmósfera y horizonte rural mejorados sin nuevas mecánicas. NFR físicos/WebKit/sostenidos parciales; publicación autorizada tras verificación Git segura. Los estados pendientes inferiores son registro histórico.
 
 **Horizonte M09-E:** colinas y bosque distante exclusivos de aldea, árboles actuales y Lago Sereno intactos; 12/12 relevantes/build correctos. [Revisión visual pendiente](milestones/M09-living-village/README.md). Sin commit ni publicación.

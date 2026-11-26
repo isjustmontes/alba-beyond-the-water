@@ -2,11 +2,18 @@
 
 ![ALBA — Beyond the Water](alba%20-%20banner.webp)
 
-**v0.8.0 — A Living Village · Pre-Alpha.** Discover a more natural Galician-inspired village, with Atlantic vegetation, refined rural materials, weather-responsive lighting and a deeper rolling landscape. Explore, visit its fishing tackle shop and return to Lago Sereno with your equipped tackle. Existing fishing, environmental simulation, audio and saved catches are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
+**v0.8.1 — Movement & Navigation · Pre-Alpha.** Explore Lago Sereno and its Galician-inspired village with faster movement, PC jumping, zone maps and dual virtual joysticks on mobile. Existing fishing, environmental simulation, commerce, audio and saved progress are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
 
-[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.8.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0)
+[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.8.1 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.1)
 
 *Every water has a story.*
+
+## Movement & Navigation
+
+- **Faster exploration:** walk at 2.8 m/s (+27%) and run at 4.0 m/s (+21%), with the existing smooth acceleration and collision boundaries.
+- **PC jumping:** press Space while exploring for a moderate jump with gravity and automatic landing. Double jumping is prevented; Space keeps its fishing action in fishing mode. Land before equipping tackle or travelling.
+- **Current-zone maps:** press M or tap MAPA to see your position, orientation, existing paths and points of interest in Lago Sereno or the village. The map pauses the session; close it with M, Esc or ×. Sound now uses N or the existing sound button.
+- **Dual mobile joysticks:** move with the left stick and hold the right stick off-centre for continuous, proportional camera control. Independent fingers, a central dead zone and smooth turning preserve the existing camera limits. Menus clear held input; layouts adapt to portrait, landscape and smaller screens.
 
 ## A Living Village
 
@@ -30,7 +37,7 @@
 - First-person exploration with keyboard and mouse on PC, or a touch joystick and camera gestures on mobile.
 - A walkable dock-to-shore connection, shoreline paths and two additional fishing areas, with basic terrain, water and obstacle boundaries.
 - Fishing from safe shoreline positions using the player's current position and direction. Improved casting validation rejects land and real obstacles; fish inhabit valid areas throughout the lake.
-- Smooth rod equip/unequip transitions, and exploration-only sprint at 1.5× walking speed.
+- Smooth rod equip/unequip transitions, and exploration-only sprint at 4.0 m/s, with walking at 2.8 m/s.
 - Connected-zone architecture introduced in First Steps now supports travel between Lago Sereno and the village.
 
 Casting, bites, tension, fights, lures, equipment and the persistent journal remain available. Living Waters supplies day/night, weather, wind and depth-dependent temperature. A World Alive adds wind-responsive vegetation, morning mist, refined lighting and shorelines, environmental wildlife sounds and the refined cork grip.
@@ -43,15 +50,16 @@ Human hands remain disabled. Provisional visual wildlife is not available in gam
 
 - **V / mode button:** switch between exploration and fishing. Recover active tackle before exploring; face safe open water to equip for shore fishing.
 - **T / contextual button:** travel near a zone exit or open ARTES DE PESCA near its door. The prompt disappears outside interaction range; fishing is available at the lake, not inside the village.
-- **WASD:** walk; **Shift:** hold to sprint while exploring. Mouse movement controls exploration view; **Esc** releases captured mouse input. Fishing retains right-button drag to aim.
-- **Left mouse / Space:** hold and release to cast, press during a bite to set the hook, and hold to retrieve. Release periodically to manage fight tension.
-- **R:** recover tackle; **E:** equipment; **J:** journal; **P:** pause; **H:** help; **M:** sound; **F:** fullscreen.
+- **WASD:** walk; **Shift:** hold to sprint while exploring; **Space:** jump while exploring, with automatic landing and no double jump. Mouse movement controls exploration view; **Esc** releases captured mouse input. Fishing retains right-button drag to aim.
+- **Left mouse / Space in fishing mode:** hold and release to cast, press during a bite to set the hook, and hold to retrieve. Release periodically to manage fight tension.
+- **R:** recover tackle; **E:** equipment; **J:** journal; **P:** pause; **H:** help; **M:** open/close the current-zone map; **N:** sound; **F:** fullscreen.
 
 ### Mobile
 
-- Use the mode button to explore or fish. In exploration, use the joystick, drag clear scenery to look, and toggle **CORRER** to sprint.
+- Use the mode button to explore or fish. In exploration, use the left joystick to move and the matching right joystick to look continuously while tilted; both work with independent fingers. Toggle **CORRER** to sprint. The right joystick also works in fishing mode, within the existing camera limits; scenery dragging remains available.
 - Tap the contextual travel/shop button when it appears near an exit or the shop door. Choose an item to buy, select a lure or mount replacement line; close the panel to continue exploring.
 - In fishing mode, hold **LANZAR** and release to cast. The contextual action changes to **CLAVAR** during a bite and **RECOGER** for retrieval and fighting.
+- **MAPA** opens the current-zone map; close it with × to resume. Jump is currently a PC keyboard action.
 - **EQUIPO** opens equipment and lures; **CUADERNO** opens catches and records. Compact contextual indicators, safe areas and portrait/landscape layouts remain supported.
 
 Audio starts after a browser-permitted interaction and respects saved mute preferences. Exploration position and environmental time/weather are not persisted between sessions. Money, inventory, purchase receipts and equipped tackle are saved locally; catch storage and existing preferences are preserved. Commerce errors do not erase previous saves. These local saves are not cloud-synchronized.
@@ -87,6 +95,7 @@ All releases remain **Pre-Alpha**.
 | [v0.6.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.6.0) | First Steps: exploration, shoreline fishing, sprint and initial connected-zone architecture. |
 | [v0.7.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.7.0) | The Angler's Village: Galician-inspired village, two-way travel, contextual shop, basic currency and persistent inventory/equipped tackle. |
 | [v0.8.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0) | A Living Village: Atlantic vegetation, natural terrain and paths, refined rural materials, weather-responsive lighting and distant rolling hills. |
+| [v0.8.1](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.1) | Movement & Navigation: faster walking/running, PC jumping, zone maps and dual mobile joysticks. |
 
 ## Development
 
@@ -97,6 +106,8 @@ Consult the [project status](docs/project/STATUS.md), [roadmap](docs/project/ROA
 [Archived English v0.5.0 guide](https://github.com/isjustmontes/alba-beyond-the-water/blob/2d5ca938df5987867092774478dbd8a6df3bb0b3/README.md)
 
 [M09 evidence and acceptance](docs/milestones/M09-living-village/README.md) record the accepted v0.8.0 visual scope. The final relevant logic suite passed 60/60 and the production build succeeded, with the existing large-bundle warning. Prior desktop and emulated mobile/tablet checks cover village views, weather, travel and commerce. Short headless measurements show stable resources across five round trips; they do not certify sustained or physical-device performance. Physical Android/iOS and WebKit validation remain pending.
+
+[v0.8.1 SDD acceptance and evidence](docs/milestones/M09-living-village/navigation-0.8.1.md) record the accepted movement and navigation update. The final relevant suite passed 76/76 and the production build succeeded. Existing browser evidence covers six desktop/mobile/tablet profiles, independent two-finger controls, maps and fishing. The 688.39 kB JavaScript chunk (191.84 kB gzip) retains the known >500 kB warning; no dependency or bundling refactor was added. Physical mobile, WebKit and sustained performance checks remain pending.
 
 ## Future direction — planned, not implemented
 
