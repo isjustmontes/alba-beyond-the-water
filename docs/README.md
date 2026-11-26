@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Planificación vigente v0.8.0 — A Living Village:** [M09 · Etapa A](milestones/M09-living-village/README.md), sólo SDD pendiente de aprobación. Base v0.7.0 publicada en `5793ffb`, release y Pages verificados al publicar. B terreno/caminos/vegetación; C materiales/arquitectura; D luz/clima/optimización. Sin implementación ni validación técnica M09. Las notas inferiores conservan el historial.
+
 **Entrega v0.7.0 — The Angler's Village:** [M08 cerrado y aceptado](milestones/M08-anglers-village/acceptance.md), publicación autorizada; implementación A–D conservada, D en `92d2548`. 35/35 relevantes y build final correctos. Dispositivos físicos/WebKit/rendimiento sostenido pendientes, sin certificarlos por emulación. Las notas inferiores son históricas; resultado de publicación se verifica en tag/release remotos.
 
 **M08-D:** C aceptada en `19d31c5`; persistencia compatible y uso de cebo/sedal comprado implementados localmente, pendientes de validación del propietario. [Criterios y evidencia](milestones/M08-anglers-village/README.md). Sin commit D ni publicación; los estados inferiores son históricos.
