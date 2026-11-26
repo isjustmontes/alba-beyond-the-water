@@ -1,5 +1,9 @@
 # M10 · Stories of the Village · v0.9.0
 
+**Aceptaci?n B:** el propietario confirma la validaci?n visual y autoriza su commit local al encargar la Etapa C. T07 VERIFIED en su alcance de interfaz aislada; los l?mites de assets/licencia y pruebas f?sicas permanecen abiertos. Las notas anteriores de aceptaci?n pendiente quedan como historial.
+
+**Vigente B · interfaz ilustrada, pendiente de validación visual:** A aceptada y guardada en `49f54c3`. Panel HTML/CSS reutilizable con retrato/pergamino aportados, texto y opciones reales, foco/cierre/scroll y adaptación PC/móvil. Previsualización aislada: `http://127.0.0.1:5177/dialogue-preview.html` → **Ver diálogo de Manuel**. Opciones de muestra, sin guion completo, NPC, proximidad ni cambios jugables. Seis perfiles emulados y build correctos; [evidencia y pesos reales](evidence.md). Sin commit B ni publicación. El alcance B actual sustituye la secuencia B/C inicialmente propuesta abajo; detenerse para revisión del propietario.
+
 **A validada por el propietario:** el encargo de Etapa B confirma el plan y autoriza su commit local. La implementación de B se documentará como alcance posterior; las notas de aprobación pendiente inferiores conservan la entrega original. Los recursos aportados para B quedan fuera del commit de planificación.
 
 **Etapa A — sólo planificación SDD, pendiente de validación.** El propietario autoriza crear M10 y aprueba la dirección visual: pergamino envejecido, retrato narrativo en acuarela a la izquierda y nombre, diálogo y opciones a la derecha; colores tierra y acabado artesanal gallego, adaptable a PC/móvil. Esta aprobación visual no autoriza todavía producir recursos ni implementar B–E.

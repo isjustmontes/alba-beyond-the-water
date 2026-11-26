@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Vigente M10-B:** [interfaz ilustrada y previsualización aislada de Manuel](milestones/M10-stories-of-the-village/README.md). A validada en `49f54c3`; B implementada con recursos aportados, seis perfiles de navegador/build correctos y aceptación visual pendiente. Sin NPC/conversación completa ni cambios jugables; no commit B/publicación. Los estados A inferiores son históricos.
+
 **Vigente: M10 · Stories of the Village · v0.9.0, Etapa A sólo SDD.** [Plan de Manuel y conversación 2D](milestones/M10-stories-of-the-village/README.md), desde v0.8.1 publicada y main verificado. Dirección artística aprobada; plan pendiente de validación del propietario. Sin código, assets, pruebas, build, commit ni publicación. Las entregas anteriores y sus limitaciones conservan su historial.
 
 **Current release scope: v0.8.1 — Movement & Navigation (Pre-Alpha).** The owner has accepted faster movement, PC jumping, zone maps and dual mobile joysticks and authorized publication. [Final SDD acceptance and evidence](milestones/M09-living-village/navigation-0.8.1.md): 76/76 relevant tests and production build passed. Physical mobile/WebKit/sustained performance remain explicit limitations. Earlier pending-acceptance entries below are historical.

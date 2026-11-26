@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M10-B · presentación implementada, aislada del juego
+
+`ui/dialogue-panel.js`/`.css` forman un panel DOM reutilizable por datos de identidad, retrato, texto y opciones/callbacks; modal nativo y selectores encapsulados, sin grafo de conversación ni estado de progreso. Foco inicial visible, cierre/Esc y restauración de foco, aviso de scroll por eventos/ResizeObserver, fallback de imagen y dispose del observador. Entrada independiente `dialogue-preview.html` → `previews/dialogue-preview.js`, protegida para desarrollo, sin import desde main/index ni nueva entrada de build. WebP independientes en public se cargan al abrir; Vite los copia a dist, pero la experiencia jugable no los solicita. No se conectan todavía proximidad, pausa ni controles del juego. [Diseño/evidencia](../milestones/M10-stories-of-the-village/design.md). La planificación inferior del grafo/interacción sigue sin implementar.
+
 ### M10 · planificación de conversación 2D (no implementada)
 
 La [Etapa A de Stories of the Village](../milestones/M10-stories-of-the-village/design.md) propone un grafo local de diálogo y un panel HTML/CSS con WebP independientes, sin sistema de NPC 3D. Reutilizar pausa/modal/limpieza de entradas y proximidad contextual de la aldea, preservando tienda, viaje, mapa, ambos joysticks y controles PC. No persistir elecciones ni modificar contratos de progreso en este MVP. Los módulos nuevos sólo se planifican; el inventario de módulos implementados no cambia. B–E requieren autorización posterior.

@@ -2,6 +2,8 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [ui/dialogue-panel.js](../../src/ui/dialogue-panel.js) | Presentación ilustrada reusable de identidad/texto/opciones; modal/foco/cierre, sin grafo ni conexión jugable | DialoguePanel | DOM/ResizeObserver, CSS asociado |
+| [previews/dialogue-preview.js](../../src/previews/dialogue-preview.js) | Entrada de desarrollo aislada con contenido de muestra, fuera del bundle de juego | Inicialización local de preview, sin exports | DialoguePanel, dialogue-panel.css |
 | [shop.js](../../src/shop.js) | Catálogo compatible, saldo/inventario local y compras idempotentes con persistencia previa a mutación | VillageShop, SHOP_CATALOG, SHOP_STORAGE_KEY, INITIAL_COINS | config.js existente |
 | [shop-panel.js](../../src/shop-panel.js) | Catálogo modal, selección actual y protección de doble clic/toque | ShopPanel | shop.js, DOM |
 | [village-layout.js](../../src/village-layout.js) | Huellas y altura compartidas de aldea, casas, árboles y obstáculos | VILLAGE_HOUSES, VILLAGE_TREES, villageHeight, villageWalkHeight | — |

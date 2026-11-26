@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M10-B vigente:** propietario acepta A y autoriza la interfaz ilustrada con assets aportados, sin guion completo ni proximidad. Panel y preview aislada implementados/comprobados, pendientes de validación visual; [alcance y evidencia](../milestones/M10-stories-of-the-village/README.md). El nuevo encargo adelanta sólo presentación de C respecto al plan original: no autoriza conversaciones completas, NPC ni integración D. Presupuesto/variantes/licencia para publicación y límites físicos siguen pendientes; no se publica ni se confirma B todavía.
+
 **Plan vigente, sólo SDD:** [M10 · Stories of the Village · v0.9.0](../milestones/M10-stories-of-the-village/README.md). A documenta el primer habitante Manuel, acuarela 2D/pergamino y diálogo ramificado; B propone guion/arte WebP, C panel accesible, D interacción contextual, E validación/pulido. Dirección visual aprobada; plan A pendiente de validación y ninguna implementación posterior autorizada. No NPC 3D, nuevas zonas ni funciones RPG adicionales. Base v0.8.1 publicada; la propuesta histórica «M10 Experiencia» queda futura sin ID asignado, sin renumerar fichas reales.
 
 **Current delivery:** v0.8.1 — Movement & Navigation is accepted and authorized for Pre-Alpha publication. [Scope and final evidence](../milestones/M09-living-village/navigation-0.8.1.md). No next milestone or feature is opened; physical mobile/WebKit and sustained performance remain follow-up validation work. Earlier pending approvals below are historical.

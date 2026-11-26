@@ -1,5 +1,9 @@
 # Aceptación propuesta · Stories of the Village
 
+**Aceptaci?n B:** el propietario confirma la validaci?n visual y autoriza su commit local al encargar la Etapa C. T07 VERIFIED en su alcance de interfaz aislada; los l?mites de assets/licencia y pruebas f?sicas permanecen abiertos. Las notas anteriores de aceptaci?n pendiente quedan como historial.
+
+**B vigente:** presentación de AC-NAR-01 y adaptación/controles de AC-NAR-05 implementadas localmente, pendientes de aceptación visual. AC-NAR-04 sólo tiene evidencia de modal independiente (foco/Esc/cierre), no de pausa/entrada dentro del juego. AC-NAR-02/03 y conversaciones/proximidad siguen NOT_STARTED; AC-NAR-06 no se declara verificado por una previsualización aislada. Seis perfiles, reutilización y fallback de imagen correctos; build de juego conservado. T07 IMPLEMENTED_UNVERIFIED, T02/T03 PARTIAL. La autorización usa los WebP suministrados tal cual: presupuesto A y documentación de licencia pública aún no cumplidos; NFR-NAR-001 permanece PARTIAL, sin bloquear este uso local expresamente solicitado. No commit B ni publicación.
+
 **Decisión sobre A:** el propietario confirma M10 validado al encargar «Etapa B: interfaz ilustrada de diálogos» y solicita guardar la planificación. A VERIFIED en su alcance documental. La autorización de B sustituye su secuencia original sólo para la interfaz/previsualización solicitada; no acepta todavía arte integrado ni autoriza NPC/conversaciones completas. Las decisiones inferiores son históricas.
 
 **Criterio de A** — Alcance pequeño, diseño aprobado reflejado fielmente, trazabilidad completa y compatibilidad explícita, sin cambios fuera de docs. Entrega documental pendiente de validación del propietario; aprobar A no implementa el producto.

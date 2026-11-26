@@ -1,5 +1,7 @@
 # Especificación · Stories of the Village
 
+**Alcance B vigente por encargo explícito:** A validada y conservada en `49f54c3`. Implementar exclusivamente interfaz ilustrada reutilizable y previsualización de desarrollo aislada con los dos WebP aportados (`manuel-portrait.webp`, `dialogue-parchment.webp`). Integra parte visual de T02/T03/REQ-NAR-001 y NFR-NAR-002, sin completar guion/ramas REQ-NAR-002 ni interacción contextual REQ-NAR-003. Textos/opciones de muestra, no conversaciones completas. No tocar la experiencia jugable ni crear NPC/mecánicas. Verificar layout, eventos/foco y build; detener para validación visual, sin commit B ni publicación. El orden B/C original inferior se ajusta a esta autorización.
+
 **Problema del jugador** — La aldea ofrece exploración y comercio, pero carece de una voz humana que conecte su paisaje con la pesca. Presentar a Manuel de forma narrativa y artesanal, sin el coste ni las limitaciones de un personaje 3D provisional.
 
 **Requisito estable y origen** — Solicitud v0.9.0 Etapa A del propietario, 26/11/2026. Diseño visual expresamente aprobado; requisitos de producto siguientes **NOT_STARTED**. Esta ficha es planificación, no evidencia de implementación.
