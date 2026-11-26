@@ -1,5 +1,20 @@
 # Especificación · First Steps · Etapa A
 
+## Etapa C · pesca libre en la orilla existente · autorizada 26/11/2026
+
+**Ampliación acotada:** REQ-EXP-009: carrera suave 1,5× únicamente en exploración (Shift PC, botón táctil compacto), con colisiones y limpieza al cambiar modo, cancelar o perder foco. REQ-EXP-008: revisar picadas alejadas y añadir regresión de presencia real/ausencia de peces, sin elevar probabilidades ni forzar ataques. Mantener C pendiente de aceptación.
+
+**Corrección autorizada tras prueba real:** REQ-EXP-006 debe admitir sobrevolar la pendiente seca inicial antes del primer tramo de agua, sin atravesar terreno ni obstáculos, y situar el final de recogida en agua accesible. La referencia espacial es siempre jugador/dirección actuales. Se amplía el alcance acotado a distribución y límites de peces: REQ-EXP-008, mantener 27 agentes y especies actuales, hogares variados en aguas válidas fuera del muelle, movimiento sin cruzar la ribera/rocas y sin teletransportes hacia el cebo. Conservar decisiones individuales, profundidad y respuesta ambiental. C sigue pendiente de aceptación.
+
+Etapa B aceptada por el propietario y conservada en `00208d9`. Se mantienen REQ-EXP-004/005 como trazabilidad histórica.
+
+| ID | Prioridad | Criterio observable |
+| --- | --- | --- |
+| REQ-EXP-006 | P1 | Equipar desde cualquier suelo navegable de la ribera existente con acceso seguro al lago, sin radio de puesto; conservar posición/orientación, rechazar tierra, obstáculos y agua fuera de la cuenca o sin acceso de recogida. Validar de nuevo al soltar con potencia/dirección actuales. |
+| REQ-EXP-007 | P1 | Explorar → pescar → explorar sin saltos de cámara al cambiar límites; equipar/guardar caña y carrete progresivamente. No lanzar accidentalmente durante la transición o por entradas mantenidas. |
+
+No se amplía el mapa ni se alteran decisiones individuales, fuerzas de combate, clima, audio, HUD o guardados. El ajuste posterior autorizado comprende hábitat/distribución de peces y límites espaciales de llegada; se mantienen especies y 27 entidades. El muelle conserva su puesto histórico. Evidencia técnica PC/móvil emulado y build; aceptación de C pendiente del propietario.
+
 **Problema del jugador** — Poder dar los primeros pasos en primera persona y observar el lago sin alterar la pesca existente.
 
 **Requisito estable y origen** — Encargo del propietario «v0.6.0 — First Steps. Etapa A» y confirmación posterior de validación visual y funcional, registrados en la sesión del 25 de noviembre de 2026.

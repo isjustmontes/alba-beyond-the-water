@@ -4,6 +4,7 @@ import {Environment,GameClock,WeatherSystem,WEATHER,ENVIRONMENT_CONFIG,dayPeriod
 import {FishingGame,SPECIES,LURES} from '../src/fishing.js';
 import {FishSchool} from '../src/simulation/fish-ai.js';
 import {lakeDepth} from '../src/simulation/lake.js';
+import {fishWater,habitatDepth} from '../src/simulation/lake-habitat.js';
 import {migrateCatches,captureConditions,exportCatches} from '../src/journal.js';
 
 test('independent clock wraps a 60-minute day and respects different speeds',()=>{
@@ -39,7 +40,7 @@ test('species have distinct daily and weather responses; hot trout seek bounded 
 test('fish retain threat memory, recover gradually and never cross the lake bed or water boundary',()=>{
   const e=new Environment({startHour:12}),school=new FishSchool({random:seededRandom(11)});e.water.surface=24;
   const f=school.fish[0];school.release(f.id);assert.equal(f.memory,35);assert.equal(f.alert,1);
-  for(let i=0;i<600;i++){school.update(.1,{environment:e});for(const a of school.fish){assert.ok(a.position.y<0);assert.ok(a.position.y>-lakeDepth(a.position.x,a.position.z));assert.ok(Math.hypot(a.position.x/78,(a.position.z+42)/100)<=.931);}}
+  for(let i=0;i<600;i++){school.update(.1,{environment:e});for(const a of school.fish){assert.ok(a.position.y<0);assert.ok(a.position.y>-habitatDepth(a.position.x,a.position.z));assert.ok(fishWater(a.position.x,a.position.z));}}
   assert.equal(f.memory,0);assert.equal(f.alert,0);assert.ok(f.targetDepth>1);assert.ok(['resting','feeding','searching','exploring'].includes(f.activity));
 });
 test('bite model is spatial, behavioural and bounded, with several contributing factors',()=>{

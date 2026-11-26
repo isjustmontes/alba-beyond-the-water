@@ -150,11 +150,12 @@ function controls() {
   const modeButton=document.createElement('button');modeButton.id='mode-toggle';modeButton.textContent='Explorar · V';modeButton.setAttribute('aria-pressed','false');document.body.append(modeButton);
   const walkHint=document.createElement('div');walkHint.id='exploration-hint';walkHint.hidden=true;document.body.append(walkHint);
   const joystick=document.createElement('div');joystick.id='walk-stick';joystick.setAttribute('role','group');joystick.setAttribute('aria-label','Joystick para caminar');joystick.append(document.createElement('span'));document.body.append(joystick);
+  const runButton=document.createElement('button');runButton.id='walk-run';runButton.textContent='CORRER';runButton.setAttribute('aria-label','Alternar carrera, velocidad 1,5×');runButton.setAttribute('aria-pressed','false');document.body.append(runButton);
   const toggleMode=()=>{
     if(paused)return;
     const error=exploration.toggle(game.state,world.yaw,world.pitch,()=>[.08,.45,1].some(power=>world.canCastFromBank(exploration.x,exploration.z,world.yaw,power,game.environment.weather)));
     if(error){toast(error);return;}
-    clearHeld();world.exploring=exploration.mode==='exploring';world.rod.visible=!world.exploring;
+    clearHeld();world.setExploring(exploration.mode==='exploring');
     if(!world.exploring){
       const spot=exploration.spot;
       world.fishingYaw=spot.yaw;world.fishingLook=spot.look;
@@ -162,19 +163,19 @@ function controls() {
       else game.setOrigin(exploration.x-3*Math.sin(world.yaw),exploration.z-3*Math.cos(world.yaw));
     }
     document.documentElement.dataset.playerMode=exploration.mode;
-    modeButton.textContent=world.exploring ? 'Pescar en el puesto · V' : 'Explorar · V';modeButton.setAttribute('aria-pressed',String(world.exploring));
+    modeButton.textContent=world.exploring ? 'Pescar · V' : 'Explorar · V';modeButton.setAttribute('aria-pressed',String(world.exploring));
     walkHint.hidden=!world.exploring;
-    if(world.exploring)toast('Sal por detrás del muelle y sigue el sendero. Pesca en el muelle o las dos calas mirando al lago.');
+    if(world.exploring)toast('Camina por la ribera y apunta hacia agua libre para pescar. Recupera el aparejo antes de explorar.');
   };
   document.documentElement.dataset.playerMode=exploration.mode;
-  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,modeButton,toggle:toggleMode,isPaused:()=>paused});
+  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,modeButton,runButton,toggle:toggleMode,isPaused:()=>paused});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
     if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
     try{audio.unlock();}catch{/* Audio is optional; a later gesture or the sound button can retry. */}
   };
   for(const type of ['pointerdown','pointerup','click','keydown'])document.addEventListener(type,unlockAudio,{capture:true});
-  input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isExploring:()=>world.exploring,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
+  input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isExploring:()=>world.exploring,isFishingReady:()=>world.equipment.ready,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
     if(command==='sound')sound();
     else if(command==='fullscreen')fullscreen();
     else openDialog({journal:'log-dialog',help:'help-dialog',equipment:'equipment-dialog'}[command]);
@@ -214,12 +215,13 @@ try {
   }
   const environment=new Environment(environmentOptions);
   if(import.meta.env.DEV){const weather=new URLSearchParams(location.search).get('weather');if(Object.hasOwn(WEATHER,weather))environment.weather.request(weather,{manual:true});}
-  game = new FishingGame({ onEvent:event,environment });
+  game = new FishingGame({ onEvent:event,environment,waterObstacles:world.landscape.waterObstacles });
   game.canCast=power=>{
-    if(exploration.spot.id==='dock')return true;
+    if(exploration.spot.id==='dock'){game.landingDistance=2.6;return true;}
     if(!world.canCastFromBank(exploration.x,exploration.z,world.yaw,power,game.environment.weather)){
       toast('Lanzamiento bloqueado por tierra u obstáculos. Apunta al agua o ajusta la potencia.');return false;
     }
+    game.landingDistance=world.bankLandingDistance;
     game.setOrigin(exploration.x-3*Math.sin(world.yaw),exploration.z-3*Math.cos(world.yaw));return true;
   };
   try {

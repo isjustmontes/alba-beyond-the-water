@@ -1,10 +1,12 @@
 # Estado del proyecto · 26 de noviembre de 2026
 
+**Último ajuste local M07-C:** carrera suave 1,5× con Shift/CORRER sólo explorando; auditoría de picadas sin otro límite del muelle reproducido y regresión de zonas alejadas sin forzar IA. 38/38 pruebas relevantes + build correctos; el 107/107 inferior es la última suite completa histórica, no repetida en este ajuste. C pendiente de aceptación, sin commit ni publicación. [Evidencia](../milestones/M07-first-steps/evidence.md).
+
 **ALBA v0.5.0 · A World Alive · Pre-Alpha.** Base auditada: `main`, `544b7e1182279ee1b3b50f7de0a1f654e97fde1b`. Se partió de un árbol limpio en 6500994 y se actualizó por fast-forward al main remoto antes de auditar. El tag v0.5.0 y la prepublicación de GitHub identifican la entrega; el manifiesto y la interfaz aún indican 0.4.0.
 
 El hito publicado más reciente es **M06**. M07 · First Steps se desarrolla en `feature/v0.6.0-first-steps`: Etapa A validada en `4b23cdcc`, SDD integrado mediante merge `6c46e22` desde `origin/main` (`81faadf`). [Ficha y aceptación](../milestones/M07-first-steps/README.md). M00 recoge la adopción documental transversal. Se mantienen los límites para aceptar Alpha: compatibilidad física, rendimiento sostenido y gates de entrega.
 
-La documentación A está conservada en `596e946`. **Etapa B** sigue implementada sin commit: transición a la orilla, sendero y dos calas. Tras la prueba real del propietario se corrigieron BUG-002 (franja invisible sobre hierba) y BUG-003 (radio/conos de pesca restrictivos), con superficie seca transitable, colisiones visibles y lances según posición/dirección actuales protegidos contra tierra/obstáculos. **Pendiente de aceptación visual/funcional del propietario**, no publicada; no se inicia otra etapa. Pruebas actuales: **95/95** y build correcto, aviso de bundle existente; recorrido completo con dos calas, lances y regreso en PC/teléfono emulado. [Evidencia B](../milestones/M07-first-steps/evidence.md).
+La documentación A está conservada en `596e946`. **Etapa B aceptada** por el propietario, incluidas BUG-002/003, y guardada en el commit local `00208d9f6781e5663b0939db3593f1a14d87e79e` (`feat: add explorable lake shoreline`). **Etapa C** implementada sin commit: pesca libre y transiciones; tras prueba real se corrigen BUG-004 (peces limitados al muelle) y BUG-005 (pendiente inicial bloqueada). Se mantienen 27 peces y decisiones individuales; llegada espacial en agua, posición/dirección actuales y guardas reales. C queda **pendiente de aceptación del propietario**, sin publicación. Pruebas actuales: **107/107** y build correcto (aviso de bundle existente). [Procedimientos y resultados de navegador](../milestones/M07-first-steps/evidence.md).
 
 ### Estado por hito
 
@@ -18,7 +20,8 @@ La documentación A está conservada en `596e946`. **Etapa B** sigue implementad
 | M05 | 5 | 5 | 0 | 0 | 0 | 0 | 0 | 100% | 100% |
 | M06 | 8 | 6 | 0 | 1 | 0 | 1 | 0 | 75% | 75% |
 | M07-A | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 100% | 100% |
-| M07-B | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 100% | 0% |
+| M07-B | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 100% | 100% |
+| M07-C | 5 | 0 | 5 | 0 | 0 | 0 | 0 | 100% | 0% |
 
 Cada fila usa el total de tareas reconstruidas de ese hito en este checkout. Implementación completa = (VERIFIED + IMPLEMENTED_UNVERIFIED) / total. Verificación = VERIFIED / total. Una tarea parcial o bloqueada no suma al numerador. Los porcentajes describen este inventario retrospectivo y los criterios propuestos, sin estimar el porcentaje del juego futuro. Las pruebas actuales no certifican retroactivamente los binarios históricos.
 
@@ -30,7 +33,8 @@ M07-A cuenta sólo las tres tareas acotadas de la Etapa A; no representa el avan
 | --- | --- |
 | VERIFIED | 23 |
 | VERIFIED · M07-A adicionales | 3 |
-| IMPLEMENTED_UNVERIFIED · M07-B | 3 |
+| VERIFIED · M07-B adicionales | 3 |
+| IMPLEMENTED_UNVERIFIED · M07-C nuevos | 4 |
 | BLOCKED | 1 |
 | PARTIAL | 1 |
 
@@ -58,7 +62,7 @@ M07-A cuenta sólo las tres tareas acotadas de la Etapa A; no representa el avan
 
 ### Próximas tres tareas
 
-La Etapa A está aceptada y B implementada; detenerse para validación visual/funcional de B. Sus porcentajes sólo describen las tareas autorizadas, no el avance total de v0.6.0. Las prioridades de estabilización de la base siguen pendientes:
+A y B están aceptadas; detenerse para validación visual/funcional de C. Sus porcentajes sólo describen las tareas autorizadas, no el avance total de v0.6.0. Las prioridades de estabilización de la base siguen pendientes:
 
 1. **BL-001.** Validar captura, audio, rotación y recarga con un Android y un iPhone físicos. La emulación cubre eventos y layout; falta el comportamiento combinado de navegador, GPU y hardware.
 2. **BL-002.** Reutilizar esos perfiles en una sesión de 30 minutos y registrar p95, memoria y degradación. Esto permite elegir presupuestos antes de aumentar densidad visual.

@@ -12,11 +12,14 @@ try{
     await page.waitForFunction(()=>window.__alba&&document.getElementById('loading').hidden,null,{polling:100});
     await page.evaluate(async mobile=>{
       const {LakeWorld}=await import('/src/world.js'),{FishingGame}=await import('/src/fishing.js');
+      const {fishWater}=await import('/src/simulation/lake-habitat.js');
       const {Exploration,ExplorationControls}=await import('/src/input/exploration.js'),route=await import('/src/input/shore-route.js');
       const THREE=await import('/node_modules/.vite/deps/three.js');
       const canvas=document.createElement('canvas');canvas.style.cssText='position:fixed;inset:0;z-index:9999';document.body.append(canvas);
       const world=new LakeWorld(canvas);world.touchMode=mobile;world.renderer.setPixelRatio(1);if(mobile)world.setQuality(false);
-      const game=new FishingGame({random:()=>.5,onEvent:e=>{if(e.type==='cast'){world.cast();game.setAim(world.castDirection.x,world.castDirection.z);}}});
+      const game=new FishingGame({random:()=>.5,waterObstacles:world.landscape.waterObstacles,onEvent:e=>{if(e.type==='cast'){world.cast();game.setAim(world.castDirection.x,world.castDirection.z);}}});
+      if(game.school.fish.length!==27||game.school.fish.filter(f=>f.position.z>8).length<8)throw new Error('missing shore habitat population');
+      for(const f of game.school.fish)if(!fishWater(f.position.x,f.position.z,world.landscape.waterObstacles))throw new Error('fish spawned on real shoreline or rocks');
       const motion=new Exploration();motion.obstacles=world.landscape.walkObstacles;motion.toggle('ready',0,0);world.exploring=true;world.rod.visible=false;
       const stick=document.createElement('div');stick.style.cssText='position:fixed;left:20px;bottom:80px;width:114px;height:114px;z-index:10000;touch-action:none';document.body.append(stick);
       new ExplorationControls({motion,world,canvas,joystick:stick,toggle:()=>{},isPaused:()=>false});
@@ -47,12 +50,16 @@ try{
         }
       }
       const castChecks=[];
-      for(const [x,yaw]of [[-7,-.2],[7,.2]]){
-        motion.x=x;motion.z=20;world.yaw=yaw;world.pitch=-.065;render();
-        const valid=world.canCastFromBank(x,20,yaw,.4,game.environment.weather);
-        const land=world.canCastFromBank(x,20,Math.PI,.4,game.environment.weather);
-        castChecks.push({x,yaw,valid,land});
+      for(const [x,z,yaw]of [[-7,20,-.2],[7,20,.2],[-11,24,Math.PI/2],[11,24,-Math.PI/2],[-18,40,0],[0,20,0]]){
+        motion.x=x;motion.z=z;world.yaw=yaw;world.pitch=-.065;render();
+        const began=performance.now(),valid=world.canCastFromBank(x,z,yaw,.4,game.environment.weather),validationMs=performance.now()-began;
+        const land=world.canCastFromBank(x,z,Math.PI,.4,game.environment.weather);
+        castChecks.push({x,z,yaw,valid,land,validationMs});
         if(!valid||land)throw new Error(`geometry guard ${JSON.stringify(castChecks)}`);
+      }
+      for(const [x,z,yaw,power]of [[0,32,Math.PI,.4],[-7,20,.65,.4],[4,76,0,.08],[18,40,-Math.PI/2,1]]){
+        motion.x=x;motion.z=z;world.yaw=yaw;render();
+        if(world.canCastFromBank(x,z,yaw,power,game.environment.weather))throw new Error(`unsafe bank/rock/basin cast ${x},${z},${yaw}`);
       }
       motion.x=0;motion.z=7;world.yaw=0;render();
       window.shoreFixture={world,game,motion,route,render,go,canvas,castChecks};
@@ -89,7 +96,8 @@ try{
       await page.screenshot({path:`test-results/shore-${profile}-fishing-${i}.png`});posts.push(result);
     }
     const resources=await page.evaluate(()=>{const w=shoreFixture.world;return {...w.renderer.info.memory,drawCalls:w.renderer.info.render.calls,triangles:w.renderer.info.render.triangles};});
-    report.push({profile,mobile,legs,posts,resources});await page.close();
+    const castChecks=await page.evaluate(()=>shoreFixture.castChecks);
+    report.push({profile,mobile,legs,posts,resources,castChecks});await page.close();
   }
   assert.deepEqual(errors,[]);await writeFile('test-results/shore-browser.json',JSON.stringify(report,null,2));console.log('PASS shore route: actual WASD/touch adapter, fixed-step outbound/return, mainland connection, three fishing origins and retrieval; four emulated profiles, no JS/shader errors.');
 }finally{await browser.close();}

@@ -4,7 +4,7 @@ La línea publicada es M06. Antes de ampliar el lago conviene decidir si las ent
 
 **Actualización autorizada:** M07 identifica ahora [First Steps · v0.6.0](../milestones/M07-first-steps/README.md), con Etapa A validada y sin publicar. La anterior propuesta «M07 Calidad de entrega» permanece como candidata sin ID asignado; no se renumeran requisitos o tareas existentes.
 
-El encargo posterior del propietario autoriza **Etapa B**: conexión natural a tierra, sendero y dos puestos nuevos. Implementación local pendiente de validación del propietario, sin commit ni publicación; no se autoriza la siguiente etapa.
+La **Etapa B** (conexión a tierra, sendero y dos calas, incluidas correcciones) está aceptada y conservada en `00208d9`. El propietario autoriza **Etapa C**: pesca libre segura en la ribera existente y transiciones entre modos, sin nuevas zonas ni RPG. C queda local, sin commit ni publicación y pendiente de aceptación.
 
 | Orden | Hito candidato | Valor y dependencia | Coste y salida |
 | --- | --- | --- | --- |

@@ -1,20 +1,21 @@
 // Walkable footprint of the existing dock boards (x +/-2.4, z 1.71..13.69).
 // Inset by a body radius: posts and side ropes remain outside the walkable area.
 import {walkHeight,nearestSpot,atSpot,FISHING_SPOTS} from './shore-route.js';
-export const WALK={radius:.3,minX:-2.1,maxX:2.1,minZ:2.01,maxZ:13.39,floor:.78,eye:1.7,speed:2.2};
+export const WALK={radius:.3,minX:-2.1,maxX:2.1,minZ:2.01,maxZ:13.39,floor:.78,eye:1.7,speed:2.2,runMultiplier:1.5};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export class Exploration {
-  constructor(){this.mode='fishing';this.x=0;this.z=7;this.spot=FISHING_SPOTS[0];this.obstacles=[];this.vx=0;this.vz=0;this.keys=new Set();this.stick={x:0,y:0};}
+  constructor(){this.mode='fishing';this.x=0;this.z=7;this.spot=FISHING_SPOTS[0];this.obstacles=[];this.vx=0;this.vz=0;this.keys=new Set();this.stick={x:0,y:0};this.sprint=false;}
   get floor(){return walkHeight(this.x,this.z,this.obstacles)??WALK.floor;}
   get nearest(){return nearestSpot(this.x,this.z);}
-  clear(){this.keys.clear();this.stick.x=this.stick.y=0;this.vx=this.vz=0;}
+  get running(){return this.mode==='exploring'&&(this.sprint||this.keys.has('ShiftLeft')||this.keys.has('ShiftRight'));}
+  clear(){this.keys.clear();this.stick.x=this.stick.y=0;this.vx=this.vz=0;this.sprint=false;}
   toggle(state,yaw,pitch,canFish=()=>true){
     if(this.mode==='fishing'){
       if(state!=='ready')return 'Recupera el aparejo y termina la captura antes de explorar.';
       this.mode='exploring';
     }else{
-      const spot=atSpot(this.x,this.z);
-      if(!spot)return 'Acércate a un puesto: muelle, ribera oeste o cala de juncos.';
+      const spot=atSpot(this.x,this.z,this.obstacles);
+      if(!spot)return 'Acércate a una orilla transitable o al puesto del muelle.';
       if(spot.id==='dock'&&(Math.abs(yaw-spot.yaw)>spot.look||pitch<-.48||pitch>.25))return 'Mira hacia el lago para volver a pescar.';
       if(spot.id!=='dock'&&!canFish())return 'Apunta hacia agua libre de tierra y obstáculos para pescar.';
       this.spot=spot;this.mode='fishing';
@@ -27,12 +28,13 @@ export class Exploration {
     let x=(this.keys.has('KeyD')?1:0)-(this.keys.has('KeyA')?1:0)+this.stick.x;
     let y=(this.keys.has('KeyS')?1:0)-(this.keys.has('KeyW')?1:0)+this.stick.y;
     const length=Math.hypot(x,y);if(length>1){x/=length;y/=length;}
+    const speed=WALK.speed*(this.running?WALK.runMultiplier:1);
     // Substeps and exponential smoothing keep speed and boundaries stable at low FPS.
     let remaining=Math.min(.25,Math.max(0,dt));
     while(remaining>1e-8){
       const step=Math.min(remaining,1/120),blend=1-Math.exp(-step*14),c=Math.cos(yaw),s=Math.sin(yaw);
-      this.vx+=((x*c+y*s)*WALK.speed-this.vx)*blend;
-      this.vz+=((-x*s+y*c)*WALK.speed-this.vz)*blend;
+      this.vx+=((x*c+y*s)*speed-this.vx)*blend;
+      this.vz+=((-x*s+y*c)*speed-this.vz)*blend;
       const nextX=this.x+this.vx*step,nextZ=this.z+this.vz*step;
       if(walkHeight(nextX,nextZ,this.obstacles)!==null){this.x=nextX;this.z=nextZ;}
       else if(walkHeight(nextX,this.z,this.obstacles)!==null)this.x=nextX;
@@ -44,14 +46,15 @@ export class Exploration {
 }
 
 export class ExplorationControls {
-  constructor({motion,world,canvas,joystick,modeButton,toggle,isPaused}){
-    this.motion=motion;this.pointer=null;this.joystick=joystick;
+  constructor({motion,world,canvas,joystick,modeButton,runButton,toggle,isPaused}){
+    this.motion=motion;this.pointer=null;this.joystick=joystick;this.runButton=runButton;
     this.listen=(el,type,fn,options)=>el.addEventListener(type,fn,options);
     if(modeButton)bindModeToggle(modeButton,toggle);
+    if(runButton)bindModeToggle(runButton,()=>{if(!isPaused()&&motion.mode==='exploring'){motion.sprint=!motion.sprint;runButton.setAttribute('aria-pressed',String(motion.sprint));}});
     this.listen(window,'keydown',e=>{
       if(e.code==='Escape'&&document.pointerLockElement===canvas){document.exitPointerLock();this.clear();return;}
       if(e.code==='KeyV'&&!e.repeat&&!isPaused()){e.preventDefault();toggle();return;}
-      if(motion.mode!=='exploring'||isPaused()||!['KeyW','KeyA','KeyS','KeyD'].includes(e.code))return;
+      if(motion.mode!=='exploring'||isPaused()||!['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(e.code))return;
       e.preventDefault();motion.keys.add(e.code);
     });
     this.listen(window,'keyup',e=>motion.keys.delete(e.code));
@@ -80,7 +83,7 @@ export class ExplorationControls {
     for(const type of ['blur','resize'])this.listen(window,type,()=>this.clear());
     this.listen(document,'visibilitychange',()=>{if(document.hidden)this.clear();});
   }
-  clear(){this.motion.clear();this.pointer=null;this.joystick.style.setProperty('--stick-x','0px');this.joystick.style.setProperty('--stick-y','0px');}
+  clear(){this.motion.clear();this.pointer=null;this.runButton?.setAttribute('aria-pressed','false');this.joystick.style.setProperty('--stick-x','0px');this.joystick.style.setProperty('--stick-y','0px');}
 }
 
 // Some mobile browsers suppress the compatibility click after a camera drag.
@@ -92,7 +95,7 @@ export function bindModeToggle(button,toggle,{now=()=>performance.now()}={}){
   button.addEventListener('pointerup',e=>{
     const start=touch;touch=null;
     if(e.pointerType!=='touch'||!start||start.id!==e.pointerId||Math.hypot(e.clientX-start.x,e.clientY-start.y)>14)return;
-    e.preventDefault();lastTouch=now();toggle();
+    e.preventDefault();lastTouch=now();toggle();lastTouch=now();
   });
   button.addEventListener('click',e=>{if(e.detail!==0&&now()-lastTouch<700)return;toggle();});
 }

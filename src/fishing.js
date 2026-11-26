@@ -1,6 +1,7 @@
 import {SPECIES,LURES,EQUIPMENT,getLure} from './simulation/config.js';
 import {FishSchool} from './simulation/fish-ai.js';
 import {lakeDepth} from './simulation/lake.js';
+import {fishWater,habitatDepth} from './simulation/lake-habitat.js';
 import {Environment} from './simulation/environment.js';
 import {CAST_TIMING} from './animation/fishing-motion.js';
 export {SPECIES,LURES,EQUIPMENT};
@@ -8,9 +9,9 @@ const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 
 // Authoritative simulation shared by every input device; renderer-independent.
 export class FishingGame {
-  constructor({random=Math.random,onEvent=()=>{},school,now=()=>new Date().toISOString(),environment=new Environment()}={}) {
+  constructor({random=Math.random,onEvent=()=>{},school,waterObstacles=[],now=()=>new Date().toISOString(),environment=new Environment()}={}) {
     this.random=random;this.onEvent=onEvent;this.now=now;
-    this.school=school||new FishSchool({random});
+    this.school=school||new FishSchool({random,obstacles:waterObstacles});
     this.environment=environment;this.windOffset={x:0,z:0};
     this.state='ready';this.time=0;this.power=0;this.tension=0;this.distance=0;
     this.reeling=false;this.catches=[];this.lureId='spinner';this.aim={x:0,z:-1};
@@ -84,8 +85,9 @@ export class FishingGame {
       this.windOffset.z=clamp(this.windOffset.z+wind.windZ*dt*drift,-1.5,1.5);
       const speed=this.reeling ? this.lureType.retrieveSpeed : 0;
       jerk=speed>1.8 && this.lureSpeed<.1;this.lureSpeed=speed;
-      this.distance=Math.max(2.5,this.distance-speed*dt);this.updateLure();
-      if(this.distance<=2.5)this.reset();
+      const arrival=(this.landingDistance??2.6)-.1;
+      this.distance=Math.max(arrival,this.distance-speed*dt);this.updateLure();
+      if(this.distance<=arrival)this.reset();
     }
     const attacker=this.school.update(dt,{active:this.state==='waiting'||this.state==='bite',lure:this.lure,lureType:this.lureType,moving:this.reeling,jerk,environment:this.environment});
     if(attacker && this.state==='waiting') {
@@ -124,12 +126,16 @@ export class FishingGame {
     const desiredX=this.origin.x+Math.sin(heading)*this.distance,desiredZ=this.origin.z-Math.cos(heading)*this.distance;
     if(fish) {
       const p=fish.position,k=1-Math.exp(-dt*4),prevX=p.x,prevZ=p.z;
-      p.x+=(desiredX-p.x)*k;p.z+=(desiredZ-p.z)*k;p.y=-.35-Math.sin(this.fightTime*3)**2*.25;
+      const nx=p.x+(desiredX-p.x)*k,nz=p.z+(desiredZ-p.z)*k;
+      if(fishWater(nx,nz,this.school.obstacles)){p.x=nx;p.z=nz;}
+      else if(fishWater(nx,p.z,this.school.obstacles))p.x=nx;
+      else if(fishWater(p.x,nz,this.school.obstacles))p.z=nz;
+      p.y=-Math.min(habitatDepth(p.x,p.z,this.school.obstacles)-.15,.35+Math.sin(this.fightTime*3)**2*.25);
       fish.heading=Math.atan2(-(p.z-prevZ),p.x-prevX);this.lure.x=p.x;this.lure.y=p.y;this.lure.z=p.z;
     }
     if(this.overloadTime>.65)this.reset('El sedal se rompió. Suelta antes de mantener la tensión al límite.');
     else if(this.slackTime>4)this.reset('Demasiada holgura: el pez se ha escapado.');
-    else if(this.distance<=2.6) {
+    else if(this.distance<=(this.landingDistance??2.6)) {
       const type=this.lureType,caught={...this.target,lureId:type.id,lureName:type.name,date:this.now(),environment:this.environment.snapshot(this.biteDepth??Math.abs(this.lure.y))};
       this.catches.push(caught);this.state='caught';this.reeling=false;this.resultTime=0;
       this.school.release(this.hookedId,true);this.emit('catch',{fish:caught});

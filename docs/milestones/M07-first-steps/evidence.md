@@ -1,5 +1,83 @@
 # Evidencia · First Steps · Etapa A
 
+**Aceptación posterior C · 26/11/2026:** el propietario declara validada C y autoriza guardarla en un commit local antes de preparar D. Se conservan los resultados/limitaciones históricos; no se atribuyen nuevas pruebas ni publicación a esta aceptación.
+
+## C · carrera y auditoría de picadas alejadas · 26/11/2026
+
+Comprobación focalizada DOM/entrada (`node test-results/check-run-controls.mjs`): PASS con Edge/Playwright en PC 1280×800 y móvil emulado 390×844 → 844×390. Shift llega al controlador; CORRER alterna una sola vez, no solapa joystick, permanece dentro de pantalla y se oculta/limpia al pescar o redimensionar. Sin errores JavaScript. Bucle de render desactivado para comprobar sólo entrada/layout, no gráficos ni dispositivos físicos. La primera aserción de resize se adelantó al evento; el guion se corrigió esperando el cambio de estado, sin modificar el juego por ese resultado. Artefacto local ignorado.
+
+Mismo HEAD `00208d9`, rama/worktree conservados y cambios C anteriores preservados. Auditoría de `FishingGame.update`, percepción/interés/picada de `FishSchool`, profundidad y entorno: no queda restricción fija al muelle en ese flujo. No se modifican IA ni probabilidades. Prueba controlada con un pez real próximo, sin forzar estado/ataque, en ambas riberas (±32,24) e interior (0,−85), 8 semillas por lugar; agua vacía sin picadas durante 60 s simulados.
+
+Carrera: objetivo 1,5× (3,30 m/s), amortiguación/subpasos existentes, Shift izquierdo/derecho o botón CORRER alternable junto al joystick; sólo exploración. Limpieza por foco, cancelación, resize, pausa y cambio de modo existentes. Sin nuevos assets/dependencias; otros sistemas intactos.
+
+`node --test tests/shore-stage-c.test.js tests/exploration.test.js tests/input.test.js tests/fish-attention.test.js tests/shore-habitat.test.js tests/fishing.test.js`: **38/38**, con carrera a 20/60/120 fps, frenado progresivo, límites/limpieza y pesca lejana natural. `npm.cmd run build`: correcto, JS 638,92 kB / gzip 175,05 kB; CSS 29,94 kB / gzip 6,76 kB, aviso existente >500 kB. No se repite la suite completa ni la validación gráfica general. C queda pendiente de aceptación; sin commit/publicación.
+
+## C · corrección posterior a prueba real · 26/11/2026 · aceptación PENDIENTE
+
+**Base y seguridad:** mismo HEAD local B `00208d9f6781e5663b0939db3593f1a14d87e79e`, rama `feature/v0.6.0-first-steps`, worktree `wolffish`; se conservan todos los cambios C previos. No se confirma ni publica esta corrección. `dartfish` continúa en `7ecc8f7`. El propietario confirma exploración/equipar/lanzar operativos, pero reporta hábitat vacío y lances restringidos; no acepta C todavía.
+
+**Causas reproducidas antes de editar:** el constructor de `FishSchool` situaba hogares en una banda x≈±9,5, z≈−3…−25,5, con patrullas de 2,5–4 m y recorte z≤8; no podían llegar a las nuevas riberas positivas en z. El origen/orientación de C ya dependían del jugador, sin referencia fija al muelle. La guarda exigía agua desde 5,6 m exactos: en (−18,40), yaw=0, potencia=0,5, rechazaba suelo a y≈0,47 m aunque el destino (−18,12,5) era agua y el arco pasaba por encima. El sondeo también confirmó salidas laterales ya válidas y obstáculos auténticos en los promontorios; no se atribuye cada rechazo a un bug. Procedimiento local de diagnóstico: `test-results/probe-shore-c.mjs`; su JSON se sobrescribe al repetirlo, no se presenta como archivo histórico anterior a la corrección.
+
+**Corrección espacial:** se detecta el primer tramo húmedo en vez de exigirlo a distancia fija. Se admite sobrevolar la pendiente inicial si el arco no toca geometría; se rechazan barreras después del acceso al agua, destinos secos/someros y obstáculos reales. El final de recogida/captura se ajusta al tramo húmedo y evita arrastrar el pez por esa pendiente. El muelle conserva su umbral histórico. No cambian potencia/distancia, tensiones, cansancio, señuelos, especies o guardados.
+
+**Hábitat:** `lake-habitat.js` combina profundidad y altura de ribera con huellas conservadoras de las 130 rocas y 2 promontorios ya existentes. Los mismos **27** agentes tienen hogares variados en ambas riberas e interior, además del entorno del muelle; se rechazan puntos secos/alojados en rocas. Semillas 1/42/73 sin obstáculos produjeron 6 hogares por ribera, 6 interiores y 9 en aguas cercanas al muelle. Patrullas con frecuencia individual, margen al fondo y pasos que se rechazan/deslizan ante tierra/roca, también durante combate. Se mantienen atención, competencia, memoria, horarios, clima y especies; no hay teletransporte hacia el señuelo ni nuevos meshes.
+
+**Incidencias de validación y rendimiento:** la primera suite mostró 103/104 por una aserción que imponía la antigua elipse de movimiento; se sustituyó por agua/hábitat/fondo reales, conservando comprobaciones ambientales. El recorrido táctil reprodujo `pointerup → fishing → click → exploring`: una validación síncrona larga agotaba los 700 ms de supresión. Se renueva el instante al terminar la acción y se añade regresión con 1.100 ms de coste simulado. Para reducir ese coste, las 65 muestras de corredor usan altura analítica: sólo se consulta geometría exacta al localizar el borde, en destino, dos niveles del corredor y 20 segmentos del arco. Sin raycasts por frame, nuevas entidades, materiales o dependencias. No se atribuye una mejora de FPS físicos a esta reducción por construcción.
+
+**Pruebas reales, entorno y comandos:** Windows, Node 24.20.0, Vite 7.3.8, Edge/Playwright headless con SwiftShader; servidor `http://127.0.0.1:5174/`.
+
+```powershell
+node --test tests/shore-habitat.test.js tests/environment.test.js tests/fish-attention.test.js tests/shore-route.test.js tests/fishing.test.js
+npm.cmd test
+npm.cmd run build
+node tests/shore-live.mjs
+node tests/shore-browser.mjs
+```
+
+41/41 relevantes en el grupo de hábitat/entorno/IA/pesca; 15/15 al añadir comprobación de toque lento al grupo exploración/hábitat. Suite final **107/107**, build correcto: 42 módulos, JS **638,27 kB / gzip 174,84 kB**, CSS 29,48 kB / gzip 6,68 kB. Permanece el aviso conocido >500 kB.
+
+- 7 regresiones nuevas de hábitat: 27 agentes repartidos con varias semillas; agua/rocas; cinco minutos **simulados** de patrulla; interés local sin teletransporte; recogida en borde húmedo; persecución sin cruzar tierra; combate y captura de orilla con datos conservados. Las pruebas existentes de atención individual, picada ambiental y captura siguen pasando.
+- Aplicación completa final PC 1280×800 y teléfono táctil emulado 390×844: recorrido desde muelle a ambas calas, lances laterales hacia x≈−31 y +31, z≈24 (fuera de la zona del muelle), rechazo hacia tierra, recuperación, regreso y lance desde muelle. Tres lances válidos por perfil; 27 peces; error del sedal <0,000001 m. Teclado/ratón y joystick/gesto reales del guion, sin escribir en estado ni teletransportar. La repetición final pasó tras corregir el toque lento, sin errores JavaScript/shaders.
+- Fixture geométrico final: PASS en 1280×800, 390×844, 844×390 y 1024×768. Valida suelo y rocas reales, hogares válidos de 27 peces, lances laterales y el caso de pendiente (−18,40), además de tres orígenes, recogida y regreso. Ceros errores JavaScript/shaders. Medianas locales de validación por acción (6 casos): 74,5 / 46,8 / 23,4 / 21,9 ms respectivamente; máximo observado 90 ms. Estas consultas ocurren al cambiar de modo/soltar, no por frame. Es un fixture Chromium/SwiftShader con distintas calidades y cámaras, no una comparación de FPS ni un benchmark físico.
+
+Se revisaron capturas reales: la cala este muestra agua lateral libre y HUD táctil accesible; en el punto oeste elegido la vegetación preexistente puede tapar la vista al girar. No se modifica esa vegetación dentro de esta tarea: el jugador puede variar su posición. Artefactos ignorados: `shore-live.json`, `shore-browser.json`, `shore-live-*-{west,east}.png` y `probe-shore-c.json` en `test-results/`.
+
+**Revisión manual:** explorar hasta las calas, orientar hacia el agua lateral exterior (oeste desde la izquierda, este desde la derecha), equipar, lanzar con varias potencias y recuperar. Probar también distintos tramos secos mirando al lago y un intento hacia una roca visible/tierra. Buscar peces a distintas profundidades y horas: población limitada y condiciones no garantizan picadas. Guardar, volver al muelle y lanzar allí.
+
+**Límites:** huellas elípticas conservadoras y muestreo del arco, sin navegación compleja de rutas; distribución y movimientos válidos no garantizan densidad en cada lance. Sin Android/iOS físico, WebKit, captura completa nueva en navegador ni benchmark térmico. Captura/combate están cubiertos en dominio. C pendiente de aceptación humana, sin commit/push/tag/release.
+
+## C · implementación inicial histórica · 26/11/2026 · anterior a BUG-004/005
+
+**Base:** B aceptada por el propietario incluidas BUG-002/003. Tras revisar cambios y excluir artefactos/prototipos se creó únicamente el commit local `00208d9f6781e5663b0939db3593f1a14d87e79e`, `feat: add explorable lake shoreline`; Git quedó limpio antes de C. No se publica ni modifica `dartfish`. Implementación C y este registro quedan sin commit.
+
+**Diagnóstico y alcance:** B seguía restringiendo `atSpot` a radios de 4 m. `main.js` alternaba `rod.visible` instantáneamente. La cámara de exploración admitía pitch ±1,15, pero al primer gesto en pesca lo recortaba directamente a −0,48…0,25. El yaw de las calas se detenía en ±π. Se corrigen estos puntos reales sin modificar modelos, pesca, IA, clima, audio, HUD o guardados.
+
+**Cambios:** selección libre sobre suelo transitable de la ribera existente; destino, cuenca y corredor de recogida húmedo, además de trayectoria y obstáculos B. Equipar/guardar rig en 0,38 s, conservando carrete y pivotes, bloqueo de entrada durante equipamiento, orientación preservada y pitch amortiguado. El puesto del muelle conserva su origen y tolerancias históricas.
+
+**Entorno:** Windows, PowerShell, Node 24.20.0, Vite 7.3.8, Playwright/Edge Chromium headless con SwiftShader. Aplicación completa en escritorio 1280×800 y teléfono táctil emulado 390×844. Fixture adicional en esos tamaños, móvil horizontal 844×390 y tablet 1024×768, calidad baja en perfiles móviles. No son dispositivos físicos.
+
+**Comandos y resultados reales:**
+
+```powershell
+node --test tests/shore-free.test.js tests/shore-route.test.js tests/exploration.test.js tests/input.test.js tests/fishing.test.js
+npm.cmd test
+npm.cmd run build
+node tests/shore-live.mjs
+node tests/shore-browser.mjs
+```
+
+29/29 relevantes y **99/99** suite completa. Build correcto: 41 módulos, JS **636,54 kB / gzip 174,23 kB**, CSS 29,48 kB / gzip 6,68 kB. Persiste el aviso previo >500 kB; aumento JS frente a B: 1,51 kB. Sin dependencias, geometrías/materiales nuevos ni consultas geométricas por frame. No es una medición de FPS sostenidos.
+
+- `shore-free.test.js`: posiciones fuera de radios (−11,24), (11,24), (4,32), rechazo si no hay acceso/obstáculo, conservación de coordenadas; equipar/guardar reversible a 20/60/120 fps; pulsación durante equipamiento no se convierte en lance posterior y cancelar no lanza; pitch fuera de límites no salta al primer gesto y yaw cruza ±π.
+- `shore-live.mjs`: aplicación completa con entradas reales WASD/ratón o joystick/gestos CDP. Muelle → margen oeste aprox. (−11,24), margen este aprox. (11,24) → muelle, sin teletransporte ni escritura en estado. En ambos márgenes: equipar, conservar yaw ±0,35, esperar equipamiento, rechazar intento hacia tierra, lanzar, recuperar y guardar hasta que el rig desaparece. Regreso a (0,7), lance desde muelle y vuelta a explorar. **Tres lances válidos por perfil**, sedal conectado con error <0,000001 m, sin errores JavaScript/shaders.
+- `shore-browser.mjs`: fixture de tiempo controlado y dirección guiada, adaptadores reales WASD/joystick, recorrido y regreso, tres orígenes y recogida. Guardas geométricas válidas en las dos calas B y fuera de sus radios; rechazo por tierra, rocas y destinos/corredores fuera de agua accesible en los cuatro perfiles. Sin errores JavaScript/shaders. No se presenta como partida manual.
+
+Artefactos locales ignorados: `test-results/shore-live.json`, `shore-browser.json`, `shore-live-{desktop,phone}-{west,east}.png` y capturas de cuatro perfiles. Se revisó la captura táctil oeste con caña, carrete y HUD accesibles; las capturas adicionales permiten revisar ambas márgenes. URL local comprobada: `http://127.0.0.1:5174/`.
+
+**Revisión del propietario:** V / botón para explorar, salir por detrás del muelle, caminar hacia el borde seco de ambas calas y otros tramos de ribera. Mirar al agua, V / Pescar, esperar a equipar y mantener/soltar Espacio o LANZAR. Recuperar con R / Equipo y V / Explorar. Probar orientación después de equipar, guardar/equipar de nuevo y un intento hacia tierra. La ribera interior, agua somera/fuera de cuenca o corredores secos se rechazan: no toda posición permite cualquier dirección/potencia.
+
+**Limitaciones:** colisión aproximada por muestras, troncos simplificados, sin física continua; puede exigir acercarse al borde o ajustar potencia. Sin nueva captura completa en navegador (combate/capturas cubiertos en dominio), Android/iOS físico, WebKit o benchmark térmico. No se añaden zonas ni persistencia de posición. **Etapa C pendiente de aceptación humana. Sin commit C, push, tags o release.**
+
 **Aceptación posterior B · 26/11/2026:** el propietario confirma validada la Etapa B, incluidas navegación y lanzamiento corregidos, y autoriza conservarla en commit local antes de Etapa C. Se mantienen los registros técnicos e incidencias históricos; no se atribuyen pruebas físicas nuevas.
 
 **SHA y fecha** — Registro del 25 de noviembre de 2026 (Europe/Madrid). Implementación validada: `4b23cdcc2c6e3d1d804ab1ea54a9698c95f16147`. Integración SDD: `6c46e22fa38dac0cffcc02697b5656ceb9ca8862`, padres `4b23cdcc` y `81faadf`. La documentación posterior queda sin commit en esta tarea.

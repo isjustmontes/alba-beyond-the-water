@@ -55,3 +55,9 @@ test('mode tap works without a compatibility click and never toggles twice; mous
   send('pointerdown');send('pointercancel');send('pointerup');assert.equal(calls,3);
   send('pointerdown');send('pointerup',{clientX:70});assert.equal(calls,3,'a drag is not a mode tap');
 });
+test('a slow shore validation cannot expire touch click suppression before it returns',()=>{
+  const button=new EventTarget();let calls=0,time=0;
+  bindModeToggle(button,()=>{calls++;time+=1100;},{now:()=>time});
+  const send=type=>button.dispatchEvent(Object.assign(new Event(type,{cancelable:true}),{pointerType:'touch',pointerId:1,clientX:20,clientY:20,detail:type==='click'?1:0}));
+  send('pointerdown');send('pointerup');send('click');assert.equal(calls,1);
+});

@@ -3,6 +3,9 @@
 #walk-stick{display:none;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;z-index:15;width:114px;height:114px;border:1px solid #e4d5ac66;border-radius:50%;background:#16372e88;left:max(16px,env(safe-area-inset-left));bottom:calc(74px + env(safe-area-inset-bottom))}
 #walk-stick span{display:block;position:absolute;width:44px;height:44px;left:34px;top:34px;border-radius:50%;background:#ddceaa88;transform:translate(var(--stick-x,0px),var(--stick-y,0px));pointer-events:none}
 .touch-mode[data-player-mode=exploring] #walk-stick{display:block}
+#walk-run{display:none;position:fixed;z-index:15;left:calc(max(16px,env(safe-area-inset-left)) + 126px);bottom:calc(108px + env(safe-area-inset-bottom));min-width:64px;min-height:44px;padding:6px 8px;border:1px solid #d6c59b66;border-radius:9px;background:#17382fee;color:#f1e7cf;font:600 10px sans-serif;touch-action:manipulation}
+.touch-mode[data-player-mode=exploring] #walk-run{display:block}
+#walk-run[aria-pressed=true]{background:#d6c59b;color:#17382f}
 [data-player-mode=exploring] :is(.fishing-panel,.session-card,.compass,footer,#touch-hud-info){display:none!important}
 .touch-mode #mode-toggle{top:calc(100px + env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font-size:11px;padding:8px 12px}
 .touch-mode #exploration-hint{bottom:calc(195px + env(safe-area-inset-bottom));font-size:11px;width:max-content;max-width:calc(100% - 32px)}

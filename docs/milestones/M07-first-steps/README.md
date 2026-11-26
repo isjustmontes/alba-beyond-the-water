@@ -4,4 +4,4 @@ Alcance autorizado y validado por el propietario: **Etapa A**, movimiento por el
 
 [Especificación](spec.md) · [Diseño](design.md) · [Tareas](tasks.md) · [Aceptación](acceptance.md) · [Evidencia](evidence.md)
 
-La Etapa A se conserva como registro histórico validado; su documentación se confirmó en `596e9460e8e9bf94a3c22178d57776e6a1f1292c`. El propietario autorizó posteriormente la **Etapa B: conexión natural a tierra, sendero y dos puestos adicionales**. B queda sin commit y pendiente de validación visual/funcional del propietario. No certifica la versión completa ni autoriza publicación o una siguiente etapa.
+La Etapa A se conserva como registro histórico validado; su documentación se confirmó en `596e9460e8e9bf94a3c22178d57776e6a1f1292c`. La **Etapa B**, conexión natural a tierra, sendero y dos calas, está aceptada por el propietario incluidas BUG-002/003 y conservada en `00208d9f6781e5663b0939db3593f1a14d87e79e` (`feat: add explorable lake shoreline`). La **Etapa C**, pesca libre segura desde la ribera existente y transiciones, está autorizada; su implementación queda sin commit y pendiente de aceptación. Sin publicación de v0.6.0.

@@ -20,8 +20,18 @@ El sonido espera una interacción y recuerda el silencio elegido. El cuaderno co
 
 El paseo está limitado al interior del muelle: sus extremos y laterales bloquean la salida al agua. No hay conexión caminable a la orilla, salto ni guardado de posición. Esta etapa fue validada en PC y móviles emulados y aceptada por el propietario; no implica pruebas en teléfonos físicos. [Aceptación y límites](../milestones/M07-first-steps/acceptance.md).
 
-## Etapa B · orillas (local, pendiente de validación)
+## Etapa B · orillas (aceptada, commit local `00208d9`)
 
 Entra en exploración y sal **por detrás del puesto original**: con la cámara inicial mirando al lago, usa S o el joystick hacia abajo. Tras el extremo posterior del muelle aparece tierra. Sigue el sendero: una corta desviación a la izquierda conduce a **Ribera oeste**, la de la derecha a **Cala de juncos**. El indicador de exploración muestra el puesto más próximo y la distancia. Continúa hacia el bosque para llegar a la ribera sur original; recorre el mismo camino para regresar.
 
-En cualquiera de las dos calas, entra en su zona de pesca (hasta 4 m del centro, sobre tierra seca) y apunta hacia agua libre. Pulsa V o el botón de modo para pescar con los controles habituales. Puedes caminar por la hierba seca de la conexión, no sólo por el sendero. Se mantienen el margen al agua, las colisiones con árboles/rocas y el límite exterior; no se abre todo el bosque. El lanzamiento usa tu posición y dirección actuales: si el destino o trayectoria alcanzan tierra u obstáculos, se cancela y se avisa; cambia la dirección o la potencia. Recoge el aparejo antes de explorar. El muelle conserva su tolerancia anterior de 0,18 m. La posición no se guarda. Corrección B pendiente de validación del propietario. [Evidencia y limitaciones B](../milestones/M07-first-steps/evidence.md).
+La Etapa B aceptada permite pescar en las zonas de las dos calas (4 m alrededor de sus centros). La Etapa C descrita debajo amplía esa posibilidad a la ribera segura sin radios. Puedes caminar por la hierba seca de la conexión, no sólo por el sendero. Se mantienen margen al agua, colisiones, límite exterior y tolerancia de 0,18 m del puesto original del muelle. No se guarda posición ni se abre todo el bosque. [Evidencia B/C](../milestones/M07-first-steps/evidence.md).
+
+## Etapa C · pesca libre (local, pendiente de aceptación)
+
+**Carrera:** mantén Shift mientras caminas en PC. En móvil, activa CORRER junto al joystick para ir a 1,5×; pulsa de nuevo para caminar. Sólo funciona en exploración y se desactiva al cambiar de modo, cancelar entradas, pausar o redimensionar. La velocidad cambia progresivamente y conserva los límites del terreno.
+
+Corrección de nuevas orillas: puedes apuntar también al agua lateral exterior de las calas (oeste desde la cala izquierda, este desde la derecha), sin dirigir todos los lances al muelle. La pendiente inicial puede sobrevolarse; si hay tierra/rocas intermedias, aguas demasiado someras o destino seco, cambia dirección/potencia o acércate al borde. El final de recogida se adapta al borde húmedo. Hay 27 peces repartidos entre riberas e interior, sin garantía de presencia o picada en cada lance; observa el agua y prueba profundidad, cebo y hora. Las preferencias y el comportamiento individual se mantienen.
+
+B está aceptada por el propietario. C elimina los radios de sus calas como requisito: camina por la ribera existente y apunta a agua libre. **V / Pescar** equipa caña y carrete juntos en unos 0,38 s; espera a que estén equipados para lanzar. La orientación se conserva y la altura sigue el suelo. El muelle mantiene su puesto original.
+
+Se comprueban destino, trayectoria, cuenca y corredor de recogida. Si se rechaza, acércate al borde transitable o cambia dirección/potencia. No se permite lanzar desde cualquier punto del interior, sobre tierra, rocas o agua demasiado somera/fuera de la cuenca. Para guardar la caña recupera el aparejo (R en PC o Equipo → recuperar en móvil) y pulsa V / Explorar. WASD/ratón y joystick/gesto siguen iguales. Sin mapa nuevo ni posición persistente.

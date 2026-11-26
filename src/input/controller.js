@@ -3,8 +3,8 @@ import {TOUCH_SENSITIVITY} from './touch-mode.js';
 const MAX_TOUCH_DELTA=40;
 
 export class GameControls {
-  constructor({canvas,button,game,world,isPaused,onPause,onCommand,isExploring=()=>false}) {
-    this.actions=new FishingActions(game,{isBlocked:()=>isPaused()||isExploring()});this.cameraPointer=null;
+  constructor({canvas,button,game,world,isPaused,onPause,onCommand,isExploring=()=>false,isFishingReady=()=>true}) {
+    this.actions=new FishingActions(game,{isBlocked:()=>isPaused()||isExploring()||!isFishingReady()});this.cameraPointer=null;
     this.canvas=canvas;this.cleanup=[];
     const listen=(el,type,handler,options)=>{el.addEventListener(type,handler,options);this.cleanup.push(()=>el.removeEventListener(type,handler,options));};
     const stopCamera=id=>{if(this.cameraPointer===id)this.cameraPointer=null;};

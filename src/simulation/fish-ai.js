@@ -1,5 +1,6 @@
 import {SPECIES} from './config.js';
 import {lakeDepth} from './lake.js';
+import {fishHome,fishWater,habitatDepth} from './lake-habitat.js';
 import {speciesResponse,preferredDepth,biteChance} from './environment.js';
 
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -27,12 +28,12 @@ export function lureInterest(fish,lureType,{moving=false,competitors=0,proximity
 }
 
 export class FishSchool {
-  constructor({random=Math.random,count=27}={}) {
-    this.random=random;this.time=0;this.fish=[];this.approaching=0;this.nearLure=0;
+  constructor({random=Math.random,count=27,obstacles=[]}={}) {
+    this.random=random;this.obstacles=obstacles;this.time=0;this.fish=[];this.approaching=0;this.nearLure=0;
     for(let i=0;i<count;i++) {
-      const speciesIndex=i%SPECIES.length,species=SPECIES[speciesIndex],station=Math.floor(i/SPECIES.length);
-      const x=((i+station)%3-1)*8+(random()-.5)*3,z=-4-station*4.1+(random()-.5)*2;
-      const y=-Math.min(species.depth,lakeDepth(x,z)-.25);
+      const speciesIndex=i%SPECIES.length,species=SPECIES[speciesIndex];
+      const {x,z}=fishHome(i,random,obstacles);
+      const y=-Math.min(species.depth,habitatDepth(x,z,obstacles)-.25);
       const weight=+(species.min+random()*(species.max-species.min)).toFixed(2);
       this.fish.push({id:i,speciesIndex,weight,length:Math.round((species.lengthFactor||23)*Math.cbrt(weight)+(species.lengthBase??22)),position:{x,y,z},home:{x,y,z},heading:random()*6.28,state:'swimming',stateTime:0,interest:0,hunger:.55+random()*.45,phase:random()*6.28,cooldown:0,nextStrike:0,alert:0,memory:0,avoidedLure:null,activity:'exploring',decisionIn:0,response:{activity:1,thermal:1,feeding:'drift'},targetDepth:-y});
       const fish=this.fish[this.fish.length-1],individual=(fish.phase/6.28+i*.61803398875)%1;
@@ -134,7 +135,7 @@ export class FishSchool {
       } else if(fish.state==='fleeing') {
         const away=Math.atan2(p.x-lure.x,p.z-lure.z);tx=p.x+Math.sin(away)*5;tz=p.z+Math.cos(away)*5;ty=p.y-.2;speed*=2.7;
       } else {
-        const a=this.time*.17+fish.phase,r=fish.state==='foraging' ? 2.5 : 4;
+        const a=this.time*(.13+fish.decisionOffset*.07)+fish.phase,r=fish.state==='foraging' ? 2.5 : 4;
         tx=fish.home.x+Math.cos(a)*r;tz=fish.home.z+Math.sin(a)*r;ty=environment ? -fish.targetDepth-Math.min(.6,fish.alert*.6)+Math.sin(a*.7)*.12 : fish.home.y+Math.sin(a*.7)*.12;
         if(fish.activity==='resting')speed*=.55;
         // Hungry fish explore slowly towards wind-driven food, within the same bounded lake.
@@ -142,10 +143,11 @@ export class FishSchool {
         if(fish.state==='recovering')speed*=.65;
       }
       const dx=tx-p.x,dz=tz-p.z,dy=ty-p.y,len=Math.hypot(dx,dy,dz),step=Math.min(1,speed*dt/Math.max(.001,len));
-      p.x+=dx*step;p.z+=dz*step;p.y+=dy*step;
-      p.x=clamp(p.x,-65,65);p.z=clamp(p.z,-125,8);
-      const radius=Math.hypot(p.x/78,(p.z+42)/100);if(radius>.93){p.x/=(radius/.93);p.z=-42+(p.z+42)/(radius/.93);}
-      p.y=clamp(p.y,-Math.max(.25,lakeDepth(p.x,p.z)-.15),-.22);
+      const nx=p.x+dx*step,nz=p.z+dz*step;
+      if(fishWater(nx,nz,this.obstacles)){p.x=nx;p.z=nz;}
+      else if(fishWater(nx,p.z,this.obstacles))p.x=nx;
+      else if(fishWater(p.x,nz,this.obstacles))p.z=nz;
+      p.y=clamp(p.y+dy*step,-Math.max(.25,habitatDepth(p.x,p.z,this.obstacles)-.15),-.22);
       if(Math.hypot(dx,dz)>.01)fish.heading=Math.atan2(-dz,dx);
     }
     return attacker;

@@ -49,15 +49,18 @@ try{
       else{await page.keyboard.down('Space');await page.waitForTimeout(300);await page.keyboard.up('Space');}
     };
     await tap('#mode-toggle');const legs=[],casts=[];
-    for(const point of [[0,13],[0,17],[-7,20]])legs.push(await go(...point));
-    for(const [x,yaw]of [[-7,-.2],[7,.2]]){
-    if(x>0){await look(0);for(const point of [[0,20],[7,20]])legs.push(await go(...point));}
+    for(const point of [[0,13],[0,17],[-7,20],[-11,24]])legs.push(await go(...point));
+    for(const [x,yaw]of [[-11,Math.PI/2],[11,-Math.PI/2]]){
+    if(x>0){await look(0);for(const point of [[0,23],[11,24]])legs.push(await go(...point));}
     await look(yaw);
+    await page.evaluate(()=>{window.modeTrace=[];const b=document.getElementById('mode-toggle');for(const type of ['pointerdown','pointerup','click','pointercancel'])b.addEventListener(type,e=>modeTrace.push({type,pointer:e.pointerType,detail:e.detail,mode:__alba.snapshot().playerMode}));});
     await tap('#mode-toggle');
     try{await page.waitForFunction(()=>window.__alba.snapshot().playerMode==='fishing',null,{timeout:5000});}catch(error){
-      await page.screenshot({path:`test-results/shore-live-${profile}-failure.png`});console.log(JSON.stringify(await page.evaluate(()=>({mode:__alba.snapshot(),toast:document.getElementById('toast').textContent})),null,2));throw error;
+      await page.screenshot({path:`test-results/shore-live-${profile}-failure.png`});console.log(JSON.stringify(await page.evaluate(()=>({trace:window.modeTrace,mode:__alba.snapshot(),toast:document.getElementById('toast').textContent})),null,2));throw error;
     }
     assert.equal(await page.locator('#walk-stick').isVisible(),false);
+    await page.waitForFunction(()=>window.__alba.snapshot().equipmentProgress===1);
+    assert.ok(Math.abs((await snap()).cameraYaw-yaw)<.003,'equip preserves heading');
     assert.ok(Math.abs((await snap()).playerPosition[0]-x)<.4);
     const before=(await snap()).casts;
     // Landward casting must be refused even after entering fishing mode.
@@ -65,15 +68,21 @@ try{
     assert.equal((await snap()).state,'ready');assert.equal((await snap()).casts,before);
     await look(yaw);await cast();
     await page.waitForFunction(()=>['waiting','bite'].includes(window.__alba.snapshot().state));
-    const result=await snap();assert.equal(result.casts,before+1);assert.ok(result.bobber[2]<10,'lure reaches lake from actual shore position');assert.ok(result.lineTipError<.001);casts.push(result);
+    const result=await snap();assert.equal(result.casts,before+1);assert.ok(Math.abs(result.bobber[0])>20&&result.bobber[2]>15,'lure reaches lateral lake water away from the dock');assert.ok(result.lineTipError<.001);casts.push(result);
     await page.screenshot({path:`test-results/shore-live-${profile}-${x<0?'west':'east'}.png`});
     if(mobile){await tap('#touch-equipment');await tap('#retrieve-rig');await tap('#equipment-dialog .close');}else await page.keyboard.press('r');
     await tap('#mode-toggle');await page.waitForFunction(()=>window.__alba.snapshot().playerMode==='exploring');
+    await page.waitForFunction(()=>!window.__alba.snapshot().rodVisible);
     }
     await look(0);for(const point of [[0,20],[0,17],[0,13],[0,7]])legs.push(await go(...point));
     await tap('#mode-toggle');assert.equal((await snap()).playerMode,'fishing');
     assert.equal((await snap()).casts,2);
+    await page.waitForFunction(()=>window.__alba.snapshot().equipmentProgress===1);
+    await cast();await page.waitForFunction(()=>['waiting','bite'].includes(window.__alba.snapshot().state));
+    assert.equal((await snap()).casts,3,'dock casting remains functional');
+    if(mobile){await tap('#touch-equipment');await tap('#retrieve-rig');await tap('#equipment-dialog .close');}else await page.keyboard.press('r');
+    await tap('#mode-toggle');await page.waitForFunction(()=>!window.__alba.snapshot().rodVisible);
     report.push({profile,legs,casts,returned:await snap()});await page.close();
   }
-  assert.deepEqual(errors,[]);await writeFile('test-results/shore-live.json',JSON.stringify(report,null,2));console.log(`PASS live app (${report.map(r=>r.profile).join(', ')}): dock, both coves, grass crossing, landward cast refusal, two lake casts and return; actual controls, no shortcuts or JS/shader errors.`);
+  assert.deepEqual(errors,[]);await writeFile('test-results/shore-live.json',JSON.stringify(report,null,2));console.log(`PASS live app (${report.map(r=>r.profile).join(', ')}): both coves outside former radii, equip/stow, landward cast refusal, two shore casts, return and dock cast; actual controls, no shortcuts or JS/shader errors.`);
 }finally{await browser.close();}

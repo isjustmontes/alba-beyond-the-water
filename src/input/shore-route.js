@@ -7,6 +7,7 @@ export const FISHING_SPOTS=[
   {id:'willows',name:'Ribera oeste',x:-6,z:20,yaw:0,look:Math.PI,originX:-6,originZ:17},
   {id:'reeds',name:'Cala de juncos',x:6,z:20,yaw:0,look:Math.PI,originX:6,originZ:17}
 ];
+const FREE_SHORE={id:'shore',name:'Orilla del lago',yaw:0,look:Math.PI};
 export function pathDistance(x,z){
   let best=Infinity;
   for(let i=1;i<SHORE_PATH.length;i++){
@@ -43,8 +44,9 @@ export function nearestSpot(x,z){
   for(const candidate of FISHING_SPOTS){const d=Math.hypot(x-candidate.x,z-candidate.z);if(d<distance){spot=candidate;distance=d;}}
   return {spot,distance};
 }
-export function atSpot(x,z){
+export function atSpot(x,z,obstacles=[]){
   const found=nearestSpot(x,z);
-  if(found.spot.id==='dock')return found.distance<=.18?found.spot:null;
-  return found.distance<=4&&walkHeight(x,z)!==null?found.spot:null;
+  if(found.spot.id==='dock'&&found.distance<=.18)return found.spot;
+  if(z<13.7||walkHeight(x,z,obstacles)===null)return null;
+  return found.spot.id!=='dock'&&found.distance<=4?found.spot:FREE_SHORE;
 }

@@ -9,6 +9,9 @@ import { makeLakeWater, makeLakeBed, waterElevation } from './visuals/water.js';
 import { FishModels } from './visuals/fish.js';
 import { RodRig } from './visuals/rod.js';
 import { makeLandscape } from './visuals/landscape.js';
+import {EquipmentTransition} from './animation/equipment-transition.js';
+import {lakeDepth} from './simulation/lake.js';
+import {habitatDepth} from './simulation/lake-habitat.js';
 import {FishingEffects} from './visuals/effects.js';
 
 function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
@@ -114,6 +117,7 @@ export class LakeWorld {
   }
   makeRig() {
     this.rodRig=new RodRig(); this.rod=this.rodRig.root; this.camera.add(this.rod);
+    this.equipment=new EquipmentTransition();
     this.tip=this.rodRig.tip;this.hands=new FirstPersonHands(this.camera,this.rodRig);
     this.pose={};this.flightOrigin=new THREE.Vector3();this.flightTarget=new THREE.Vector3();this.flightStartedAt=null;
     this.lineOptions={};this.linePoint=new THREE.Vector3();
@@ -141,23 +145,57 @@ export class LakeWorld {
     this.fauna=new AmbientFauna(this.scene);
   }
   setView() { this.camera.rotation.order = 'YXZ'; this.camera.rotation.set(this.pitch,this.yaw,0); }
+  setExploring(value){
+    this.exploring=value;
+    this.viewPitchTarget=value?null:THREE.MathUtils.clamp(this.pitch,-.48,.25);
+  }
   look(dx, dy) {
     const yaw=this.yaw-dx*.002;
     const center=this.fishingYaw??0,limit=this.fishingLook??.8;
-    this.yaw=this.exploring ? Math.atan2(Math.sin(yaw),Math.cos(yaw)) : THREE.MathUtils.clamp(yaw,center-limit,center+limit);
-    this.pitch=THREE.MathUtils.clamp(this.pitch-dy*.002,this.exploring ? -1.15 : -.48,this.exploring ? 1.15 : .25);this.setView();
+    this.yaw=this.exploring||limit>=Math.PI ? Math.atan2(Math.sin(yaw),Math.cos(yaw)) : THREE.MathUtils.clamp(yaw,center-limit,center+limit);
+    const transitioning=this.viewPitchTarget!=null;
+    this.pitch=THREE.MathUtils.clamp(this.pitch-dy*.002,this.exploring ? -1.15 : transitioning?Math.min(this.pitch,-.48):-.48,this.exploring ? 1.15 : transitioning?Math.max(this.pitch,.25):.25);
+    if(transitioning)this.viewPitchTarget=THREE.MathUtils.clamp(this.pitch,-.48,.25);
+    this.setView();
   }
   cast() { this.flightStartedAt=null;this.castStartPitch=this.rod.rotation.x;this.camera.getWorldDirection(this.castDirection); this.castDirection.y = 0; this.castDirection.normalize(); }
   canCastFromBank(x,z,yaw,power,weather){
     // Event-time queries only: use the rendered ground/rocks, not a compass cone.
-    this.castProbe??={ray:new THREE.Raycaster(),start:new THREE.Vector3(),end:new THREE.Vector3(),previous:new THREE.Vector3(),point:new THREE.Vector3(),delta:new THREE.Vector3(),hits:[]};
+    this.castProbe??={ray:new THREE.Raycaster(),start:new THREE.Vector3(),end:new THREE.Vector3(),previous:new THREE.Vector3(),point:new THREE.Vector3(),delta:new THREE.Vector3(),releaseRotation:new THREE.Euler(.48,.055,-.035),hits:[]};
     const p=this.castProbe,surfaces=this.landscape.castSurfaces.filter(mesh=>mesh.visible),distance=9+31*power;
     this.scene.updateMatrixWorld(true);
     p.end.set(x-Math.sin(yaw)*(distance+3)+weather.windX*power*.09,.12,z-Math.cos(yaw)*(distance+3)+weather.windZ*power*.09);
+    if(lakeDepth(p.end.x,p.end.z)<.45)return false;
+    // Find the shore's actual wet edge. The initial bank can be overflown;
+    // dry barriers after reaching water still make retrieval inaccessible.
+    let wetStart=null;
+    for(let i=0;i<=64;i++){
+      const d=2.5+(distance+.5)*i/64;
+      const px=x-Math.sin(yaw)*d+weather.windX*power*.09*i/64,pz=z-Math.cos(yaw)*d+weather.windZ*power*.09*i/64;
+      let wet=habitatDepth(px,pz)>=.45;
+      // Exact rock query only while locating the initial wet edge; height
+      // samples handle land, continuous rays below handle later obstacles.
+      if(wet&&wetStart===null){
+        p.ray.set(p.point.set(px,200,pz),p.delta.set(0,-1,0));p.ray.far=400;p.hits.length=0;
+        p.ray.intersectObjects(surfaces,false,p.hits);wet=!p.hits.some(hit=>hit.point.y>-.02);
+      }
+      if(wet){if(wetStart===null)wetStart=d;}
+      else if(wetStart!==null)return false;
+    }
+    if(wetStart===null||wetStart+.75>=distance+3)return false;
+    for(const height of [.02,-.1]){
+      const u=(wetStart-2.5)/(distance+.5);
+      p.previous.set(x-Math.sin(yaw)*wetStart+weather.windX*power*.09*u,height,z-Math.cos(yaw)*wetStart+weather.windZ*power*.09*u);
+      p.delta.set(p.end.x-p.previous.x,0,p.end.z-p.previous.z);const length=p.delta.length();
+      p.ray.set(p.previous,p.delta.normalize());p.ray.far=length;p.hits.length=0;
+      p.ray.intersectObjects(surfaces,false,p.hits);if(p.hits.length)return false;
+    }
     p.ray.set(p.point.set(p.end.x,200,p.end.z),p.delta.set(0,-1,0));p.ray.far=400;p.hits.length=0;
     p.ray.intersectObjects(surfaces,false,p.hits);
     if(p.hits.some(hit=>hit.point.y>-.02))return false;
-    this.tip.getWorldPosition(p.start);p.start.y-=.28;p.previous.copy(p.start);
+    // Predict the elevated release pose, independent of the stowed rig's position.
+    p.start.copy(this.rodRig.restTip).applyEuler(p.releaseRotation).add(p.delta.set(.82,-.33,-1.05)).applyMatrix4(this.camera.matrixWorld);
+    p.start.y-=.28;p.previous.copy(p.start);
     for(let i=1;i<=20;i++){
       castFlight(p.start,p.end,i/20,power,p.point);
       p.delta.subVectors(p.point,p.previous);const length=p.delta.length();p.ray.set(p.previous,p.delta.normalize());p.ray.far=length;p.hits.length=0;
@@ -169,7 +207,7 @@ export class LakeWorld {
       }
       p.previous.copy(p.point);
     }
-    return true;
+    this.bankLandingDistance=Math.max(2.6,wetStart+.75-3);return true;
   }
   nearby() { return this.fish.filter(f => f.mesh.position.distanceTo(this.bobber.position) < 9); }
   hookFish(speciesIndex,id) {
@@ -221,6 +259,7 @@ export class LakeWorld {
       geometries:this.renderer.info.memory.geometries,
       textures:this.renderer.info.memory.textures,
       handsAvailable:this.hands.available,handsEnabled:this.hands.enabled,rodBend:this.rodRig.bend.value,rodPitch:this.rod.rotation.x,castPhase:this.pose.phase,
+      equipmentProgress:this.equipment.value,rodVisible:this.rod.visible,
       flightReleased:this.flightStartedAt!==null,flightOrigin:this.flightOrigin.toArray(),bobber:this.bobber.position.toArray(),
       rotorAngle:this.rodRig.rotor.rotation.z,reelRate:this.rodRig.reelRate,
       lineTipError:this.line.visible ? lineStart.distanceTo(tip) : 0,
@@ -230,6 +269,13 @@ export class LakeWorld {
     };
   }
   update(dt, game) {
+    if(this.viewPitchTarget!=null){
+      this.pitch+=(this.viewPitchTarget-this.pitch)*(1-Math.exp(-dt*12));
+      if(Math.abs(this.pitch-this.viewPitchTarget)<.00001){this.pitch=this.viewPitchTarget;this.viewPitchTarget=null;}
+      this.setView();
+    }
+    const lowered=this.equipment.update(dt,!this.exploring);
+    this.rod.position.set(.82,-.33-lowered*3.2,-1.05+lowered*.6);this.rod.visible=this.equipment.value>0;
     const t = game.time;
     this.environmentView.update(game.environment,t);
     this.fishModels.clock.value=t;
@@ -250,7 +296,7 @@ export class LakeWorld {
     this.hands.update(dt,game);
     this.camera.updateMatrixWorld();
     const tip=this.tip.getWorldPosition(this.scratch.tip);
-    const active=['charging','casting','waiting','bite','fighting','caught'].includes(state);
+    const active=!this.exploring&&['charging','casting','waiting','bite','fighting','caught'].includes(state);
     this.bobber.visible=active&&state!=='caught';this.line.visible=active;
     if(state==='charging'||(casting&&!game.lineReleased)){
       this.bobber.position.copy(tip);this.bobber.position.y-=.28;

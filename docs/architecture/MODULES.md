@@ -2,6 +2,8 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [lake-habitat.js](../../src/simulation/lake-habitat.js) | Profundidad de hábitat, margen al agua/rocas y hogares individuales en riberas/interior | habitatDepth, fishWater, fishHome | lake.js, alturas compartidas de shore-route.js |
+| [equipment-transition.js](../../src/animation/equipment-transition.js) | Equipar/guardar el rig existente con un escalar reversible; bloqueo de entrada durante equipamiento | EquipmentTransition | `./fishing-motion.js` |
 | [ambient-life.js](../../src/ambient-life.js) | Calcula actividad acústica según hora y clima; conserva funciones de poses de fauna experimental. | faunaConditions, makeFaunaSlots, birdPose, insectPose | — |
 | [fish-motion.js](../../src/animation/fish-motion.js) | Suaviza orientación, velocidad y profundidad de la malla sin modificar al agente. | createFishMotion, updateFishMotion | `./fishing-motion.js`, `../simulation/lake.js` |
 | [fishing-motion.js](../../src/animation/fishing-motion.js) | Comparte temporización de lanzamiento, curvas de pose y resorte. | CAST_TIMING, clamp, smooth, DampedSpring, castPose, rodPose, castFlight, linePoint, jumpHeight, canJump | — |

@@ -119,7 +119,7 @@ export function makeLandscape(rand) {
   const terrainHigh=new THREE.Mesh(terrainGeometry(256,64),terrainMat),terrainLow=new THREE.Mesh(terrainGeometry(128,32),terrainMat);
   terrainHigh.receiveShadow=true;terrainLow.receiveShadow=true;terrainLow.visible=false;group.add(terrainHigh,terrainLow);
   const shore=new THREE.Mesh(shoreGeometry(),terrainMat);shore.name='walkable-shore';shore.receiveShadow=true;group.add(shore);
-  const walkObstacles=[],castSurfaces=[terrainHigh,terrainLow,shore];
+  const walkObstacles=[],waterObstacles=[],castSurfaces=[terrainHigh,terrainLow,shore];
   const treeGroups=[];
   for(let kind=0;kind<3;kind++) {
     const profile=VEGETATION_PROFILES[['pine','spruce','birch'][kind]];
@@ -161,6 +161,7 @@ export function makeLandscape(rand) {
     }
     if(z>12&&z<82&&pathDistance(x,z)<size+2){x+=x<shoreCenter(z)?-size-4:size+4;y=terrainHeight(x,z);}
     dummy.position.set(x,y,z);dummy.scale.set(size,.5+size*.5,size*.8);dummy.rotation.set(rand()*.2,rand()*Math.PI,rand()*.15);dummy.updateMatrix();rocks.setMatrixAt(i,dummy.matrix);
+    waterObstacles.push({x,z,rx:size*1.2+.4,rz:size*1.2+.4});
     if(z>12&&z<80)walkObstacles.push({x,z,y,height:size+1,radius:size*1.14,mesh:rocks,index:i});
     rocks.setColorAt(i,new THREE.Color().setHSL(.17+rand()*.05,.09,.55+rand()*.25));
   }
@@ -170,6 +171,7 @@ export function makeLandscape(rand) {
   for(const side of [-1,1]) {
     const bank=new THREE.Mesh(rockGeo,shorelineMaterial(new THREE.MeshStandardMaterial({map:texture,bumpMap:texture,bumpScale:.3,color:0x63724a,roughness:1}),rain));
     bank.position.set(side*23,-.8,-4);bank.scale.set(12,1.1,23);bank.receiveShadow=true;group.add(bank);
+    waterObstacles.push({x:bank.position.x,z:bank.position.z,rx:13.5,rz:25.5});
     castSurfaces.push(bank);
   }
   const blade=new THREE.PlaneGeometry(.045,.9,1,4),bp=blade.attributes.position;
@@ -207,7 +209,7 @@ export function makeLandscape(rand) {
     dummy.position.set(x,site.y,z);dummy.scale.set(width,height,width);dummy.rotation.set(0,0,(rand()-.5)*.2);dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);
   }
   seedVegetationPhases(reeds,VEGETATION_PROFILES.reed);padVegetationBounds(reeds,VEGETATION_PROFILES.reed,1.15);group.add(reeds);
-  return {group,clock,wind,rain,walkObstacles,castSurfaces,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
+  return {group,clock,wind,rain,walkObstacles,waterObstacles,castSurfaces,counts:{trees:750,rocks:130,grass:1800},setQuality(high) {
     detail.value=high ? 1 : 0;
     terrainHigh.visible=high;terrainLow.visible=!high;
     for(const {mesh,total,distant} of treeGroups)mesh.count=high ? total : Math.ceil(total*(distant ? .55 : .8));
