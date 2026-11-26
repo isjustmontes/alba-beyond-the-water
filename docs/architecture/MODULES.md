@@ -2,6 +2,8 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [village-layout.js](../../src/village-layout.js) | Huellas y altura compartidas de aldea, casas, árboles y obstáculos | VILLAGE_HOUSES, VILLAGE_TREES, villageHeight, villageWalkHeight | — |
+| [village.js](../../src/visuals/village.js) | Escena rural cacheada, arquitectura/materiales procedurales, vegetación compartida y señal del sendero | VillageView, makeVillageTrailSign | Three.js, village-layout, vegetación y alturas existentes |
 | [zones.js](../../src/zones.js) | Registro de Lago Sereno y planes de salidas sin efectos; conserva referencia de escena existente | ZONES, ZoneManager | — |
 | [lake-habitat.js](../../src/simulation/lake-habitat.js) | Profundidad de hábitat, margen al agua/rocas y hogares individuales en riberas/interior | habitatDepth, fishWater, fishHome | lake.js, alturas compartidas de shore-route.js |
 | [equipment-transition.js](../../src/animation/equipment-transition.js) | Equipar/guardar el rig existente con un escalar reversible; bloqueo de entrada durante equipamiento | EquipmentTransition | `./fishing-motion.js` |

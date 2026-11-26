@@ -6,7 +6,7 @@ test('Lago Sereno reuses the supplied scene and describes the unchanged dock spa
   const scene={camera:{x:2},children:['existing']},before=structuredClone(scene),session=new ZoneManager({scene});
   assert.equal(session.scene,scene);assert.equal(session.current.id,'lago-sereno');assert.equal(session.entryId,'dock');
   assert.deepEqual(session.spawn,{position:{x:0,y:3,z:7},yaw:0,pitch:-.065});assert.deepEqual(scene,before);
-  assert.deepEqual(Object.keys(ZONES),['lago-sereno']);assert.deepEqual(session.current.exits,{});assert.equal(session.prepareExit('future'),null);
+  assert.deepEqual(Object.keys(ZONES),['lago-sereno','anglers-village']);assert.equal(session.prepareExit('village').to,'anglers-village');assert.equal(session.prepareExit('future'),null);
 });
 test('exit planning resolves independent entries without switching zone, scene or player',()=>{
   const entry=(x)=>({position:{x,y:2,z:3},yaw:.2,pitch:0});

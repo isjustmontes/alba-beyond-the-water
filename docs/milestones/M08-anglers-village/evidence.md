@@ -1,5 +1,29 @@
 # Evidencia · Angler's Village · Etapa A
 
+## B · aldea explorable · 26/11/2026 · aceptación PENDIENTE
+
+**Decisión posterior:** propietario confirma B validada al autorizar guardarla antes de C, incluidos desplazamiento del cartel e indicador contextual. Se conservan los resultados técnicos y estados históricos inferiores; esta aceptación no autoriza publicación.
+
+**Ajuste UX contextual:** se reutilizan el botón `zone-travel`, `nearbyExit`, el radio existente y la acción de viaje, sin mover destinos. PC muestra «T · Viajar a la aldea» / «T · Volver a Lago Sereno», con presentación compacta y atajo accesible; móvil muestra el mismo destino sin prefijo de teclado y mantiene superficie táctil ≥44 px. Desaparece al salir del radio. `node test-results/check-travel-ux.mjs`: PC 1280×800, móvil 390×844 y 844×390 correctos; aparición/ocultación, T o toque, ida/vuelta y comprobación de hit-test/solapamientos con HUD, toast y controles. Guion con posicionamiento de fixture sólo en respuesta de prueba para no repetir navegación; sin errores de ejecución. Capturas locales `test-results/travel-ux-*`, sin dispositivos físicos, suite general ni build. Sin commit/publicación; aceptación visual B pendiente.
+
+**Ajuste final de señalización:** cartel ALDEA adelantado 2,5 m hacia quien se aproxima por el sendero: x=8, z=71→68,5, altura recalculada con el mismo suelo. Orientación π, geometría, texto e interacción sin cambios; salida de viaje intacta en x=6,z=74, radio 3 m. Comprobación focalizada en Chromium: vista desde x=6,z=64 revisada en `test-results/village-sign-forward.png`, cartel visible delante del follaje; recorrido hasta la salida sin bloqueo y viaje aldea→lago conservando pose correctos. Sin errores de ejecución en esta comprobación. Sin suite general ni build repetidos, sin commit ni publicación; B sigue pendiente de aceptación. Guion local ignorado `test-results/check-village-sign.mjs`.
+
+**SHA y fecha** — A aprobada y guardada en `2c7b2ef` (`docs: define anglers village MVP`); B sobre ese commit, sin commit propio. Worktree wolffish/rama feature/v0.7.0-anglers-village; dartfish sin modificar. Sólo conexión, escena rural, navegación, pruebas y SDD; sin economía/compras/interiores/NPC ni dependencias/assets externos.
+
+**Equipo, navegador y perfil** — Windows/PowerShell, Node 24.20.0, Vite 7.3.8. Edge Chromium headless/WebGL con SwiftShader: PC 1280×800, teléfono 390×844, horizontal 844×390, tablet 1024×768. Revisadas capturas PC y móvil vertical/horizontal. Sin teléfono/tablet físicos ni certificación Safari/WebKit.
+
+**Comando y datos** — `node --test tests/zones.test.js tests/village.test.js tests/exploration.test.js tests/input.test.js tests/shore-stage-c.test.js tests/fishing.test.js`: **31/31**, cero fallos. Añadidos cuatro casos puros de viaje/pose/navegación/colisión; contrato de zones ajustado para registrar salida real. `npm.cmd run build`: correcto, 45 módulos, JS 661,33 kB (gzip 182,75 kB), CSS 30,48 kB; aviso >500 kB ya existente. `git diff --check` sin errores.
+
+`node tests/village-browser.mjs`: correcto en los cuatro perfiles. Aplicación real con instrumentación de respuesta sólo para obtener instancia de renderer; reloj RAF controlado, se omite render al acelerar pasos de marcha y se renderizan checkpoints. Teclado o eventos táctiles CDP/joystick reales, sin teletransportar coordenadas de prueba: muelle→sendero→aldea→plaza→tienda sólida→sendero→lago→muelle→lance. Cinco idas/vueltas conservan x/z/yaw/pitch, sin duplicación de acción, geometrías o texturas; buffers de vegetación del lago intactos. V no equipa en aldea; gesto táctil vuelve a activar la capa móvil tras probar teclado híbrido. Un lance correcto tras regresar por perfil, datos de capturas intactos y manos desactivadas. Sin errores JavaScript/shaders. Dos intentos de instrumentación adicionales fallaron en el harness al intentar obtener escena mediante un hook de prototipo (render es propiedad de instancia); corregido en el guion y repetido correctamente, sin modificar el juego por ese fallo.
+
+**Resultado, métricas e incidencias** — En el checkpoint rural de retorno: PC 35 draw calls / 97.006 triángulos; teléfono 22 / 90.068; horizontal 35 / 90.094; tablet 29 / 90.082. Tras calentamiento, geometrías/texturas por perfil estables durante cinco viajes (110/24, 85/22, 110/24, 108/23). Son contadores de escena en vistas concretas, no FPS, benchmark sostenido ni comparación antes/después en hardware equivalente. La escena rural se cachea y ocupa memoria adicional una vez; sólo la activa se renderiza. Reducción de hierba en móvil y materiales/texturas vegetales compartidos. Medición térmica y presupuesto p95 siguen pendientes; no declarar NFR completo VERIFIED.
+
+Recursos generados por código del proyecto; sin descargas ni nuevas licencias externas. Proporciones tradicionales, materiales granulares y tejas curvas, pero interpretación procedural pendiente de aceptación visual del propietario. Tienda cerrada sin interacción comercial; posición sólo en sesión; reloj/clima/audio siguen avanzando mientras peces quedan pausados en memoria al visitar aldea. Capturas/JSON/screenshots locales en `test-results/village-*` ignorados, sin incluir prototipos. URL de revisión `http://127.0.0.1:5174/`; recorrido indicado en README de M08. **T02/T03 y REQ-VIL-001/002 IMPLEMENTED_UNVERIFIED**, esperando validación humana B; no publicación ni siguiente etapa.
+
+---
+
+## Registro histórico A
+
 **SHA y fecha** — 26/11/2026; base `28432a5738d44abceebac4a90c5fe0b30e5c3a4e`, origin/main actualizado mediante fetch. Rama nueva `feature/v0.7.0-anglers-village`; documentación sin commit.
 
 **Equipo, navegador y perfil** — Windows/PowerShell en `wolffish`; sin navegador ni dispositivo probado para M08. `dartfish` permanece en su rama y commit anteriores.

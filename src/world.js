@@ -13,6 +13,7 @@ import {EquipmentTransition} from './animation/equipment-transition.js';
 import {lakeDepth} from './simulation/lake.js';
 import {habitatDepth} from './simulation/lake-habitat.js';
 import {FishingEffects} from './visuals/effects.js';
+import {VillageView,makeVillageTrailSign} from './visuals/village.js';
 
 function rng(seed) { return () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
 export class LakeWorld {
@@ -49,6 +50,7 @@ export class LakeWorld {
     this.scene.environment=this.environmentTarget.texture; this.scene.environmentIntensity=.35;
     environment.dispose();
     this.makeLand(); this.makeWater(); this.makeDock(); this.makeFish(); this.makeRig(); this.makeBirds();
+    this.scene.add(makeVillageTrailSign());
     this.effects=new FishingEffects(this.scene,this.random,this.water.material.uniforms.fishingRipples.value);
     this.environmentView=new EnvironmentalView(this);
     this.jumpStartedAt=-Infinity;this.jumpCount=0;this.jumpWasAbove=false;this.lastWakeTime=-Infinity;this.effectPoint=new THREE.Vector3();
@@ -148,6 +150,10 @@ export class LakeWorld {
   setExploring(value){
     this.exploring=value;
     this.viewPitchTarget=value?null:THREE.MathUtils.clamp(this.pitch,-.48,.25);
+  }
+  setZone(id){
+    if(id==='anglers-village')this.village??=new VillageView(this);
+    this.activeZone=id;this.renderer.shadowMap.needsUpdate=true;
   }
   look(dx, dy) {
     const yaw=this.yaw-dx*.002;
@@ -269,6 +275,11 @@ export class LakeWorld {
     };
   }
   update(dt, game) {
+    if(this.activeZone==='anglers-village'){
+      this.environmentView.update(game.environment,game.time);this.landscape.clock.value=game.time;
+      this.equipment.update(dt,false);this.rod.visible=false;this.camera.updateMatrixWorld();
+      this.village.update(this);this.renderer.info.reset();this.renderer.render(this.village.scene,this.camera);return;
+    }
     if(this.viewPitchTarget!=null){
       this.pitch+=(this.viewPitchTarget-this.pitch)*(1-Math.exp(-dt*12));
       if(Math.abs(this.pitch-this.viewPitchTarget)<.00001){this.pitch=this.viewPitchTarget;this.viewPitchTarget=null;}

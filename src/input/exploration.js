@@ -4,8 +4,8 @@ import {walkHeight,nearestSpot,atSpot,FISHING_SPOTS} from './shore-route.js';
 export const WALK={radius:.3,minX:-2.1,maxX:2.1,minZ:2.01,maxZ:13.39,floor:.78,eye:1.7,speed:2.2,runMultiplier:1.5};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export class Exploration {
-  constructor(){this.mode='fishing';this.x=0;this.z=7;this.spot=FISHING_SPOTS[0];this.obstacles=[];this.vx=0;this.vz=0;this.keys=new Set();this.stick={x:0,y:0};this.sprint=false;}
-  get floor(){return walkHeight(this.x,this.z,this.obstacles)??WALK.floor;}
+  constructor(){this.mode='fishing';this.x=0;this.z=7;this.spot=FISHING_SPOTS[0];this.obstacles=[];this.heightAt=(x,z)=>walkHeight(x,z,this.obstacles);this.vx=0;this.vz=0;this.keys=new Set();this.stick={x:0,y:0};this.sprint=false;}
+  get floor(){return this.heightAt(this.x,this.z)??WALK.floor;}
   get nearest(){return nearestSpot(this.x,this.z);}
   get running(){return this.mode==='exploring'&&(this.sprint||this.keys.has('ShiftLeft')||this.keys.has('ShiftRight'));}
   clear(){this.keys.clear();this.stick.x=this.stick.y=0;this.vx=this.vz=0;this.sprint=false;}
@@ -36,9 +36,9 @@ export class Exploration {
       this.vx+=((x*c+y*s)*speed-this.vx)*blend;
       this.vz+=((-x*s+y*c)*speed-this.vz)*blend;
       const nextX=this.x+this.vx*step,nextZ=this.z+this.vz*step;
-      if(walkHeight(nextX,nextZ,this.obstacles)!==null){this.x=nextX;this.z=nextZ;}
-      else if(walkHeight(nextX,this.z,this.obstacles)!==null)this.x=nextX;
-      else if(walkHeight(this.x,nextZ,this.obstacles)!==null)this.z=nextZ;
+      if(this.heightAt(nextX,nextZ)!==null){this.x=nextX;this.z=nextZ;}
+      else if(this.heightAt(nextX,this.z)!==null)this.x=nextX;
+      else if(this.heightAt(this.x,nextZ)!==null)this.z=nextZ;
       if(this.x!==nextX)this.vx=0;if(this.z!==nextZ)this.vz=0;
       remaining-=step;
     }

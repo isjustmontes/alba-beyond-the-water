@@ -1,8 +1,14 @@
 # Aceptación propuesta · Angler's Village
 
+**Aceptación B confirmada por el propietario:** al encargar la Etapa C declara validada B, incluidos cartel ALDEA e indicador contextual PC/móvil. REQ-VIL-001/002 y T02/T03 VERIFIED dentro del alcance y límites de emulación documentados. No acepta por ello economía/compras aún no implementadas, rendimiento físico ni M07-D retrospectivamente.
+
+**Estado vigente B:** REQ-VIL-001 y REQ-VIL-002 IMPLEMENTED_UNVERIFIED, con pruebas técnicas y vistas emuladas registradas en [evidencia](evidence.md); aceptación visual/funcional del propietario PENDIENTE. NFR-VIL-001 parcialmente cubierto sólo para B, sin presupuesto móvil físico aprobado. REQ-VIL-003, REQ-ECO-001, REQ-INV-001 y REQ-SAVE-001 NOT_STARTED. No se da por aceptado el pueblo por pasar unitarias ni se anuncia comercio funcional.
+
+**REQ-VIL-001 · UX de viaje:** al entrar en el radio existente, indicador discreto «T · Viajar a la aldea» / «T · Volver a Lago Sereno» en PC y botón equivalente sin prefijo T en móvil; fuera del radio desaparece. Debe responder una sola vez, quedar accesible y no solaparse con HUD/controles. Comprobación focalizada PC y móvil vertical/horizontal correcta, con detalle y límites en evidencia; pendiente de revisión del propietario.
+
 **A aceptada por el propietario** en la solicitud de implementar B. Aceptación documental, no funcional: requisitos de producto pendientes. B actual agrupa conexión y construcción de aldea (T02/T03); las letras anteriores de la tabla son planificación histórica. Compras/economía quedan excluidas de B.
 
-Todos los criterios de producto están NOT_STARTED. Etapa A pendiente de aprobación documental; no hay aceptación de v0.7.0.
+La tabla recoge los criterios del MVP; aplicar los estados vigentes B indicados arriba. No hay aceptación final de v0.7.0.
 
 | Criterio | Entrada y acción | Resultado esperado | Evidencia obtenida | Decisión humana |
 | --- | --- | --- | --- | --- |

@@ -1,5 +1,9 @@
 # Especificación · Angler's Village
 
+## Alcance autorizado B · aldea explorable
+
+A aprobada y guardada en `2c7b2ef`. El propietario agrupa en B la conexión (REQ-VIL-001) y la aldea gallega (REQ-VIL-002), antes separadas como B/C. Tres casas exteriores, centro pequeño, pozo, bancos, caminos naturales y tienda señalizada integrada en casa tradicional. Viaje explícito desde el final del sendero terrestre de Lago Sereno, retorno a la posición/orientación conservadas por zona durante la sesión, exploración PC/móvil. Bloquear transición con aparejo activo y pesca en el pueblo. No interiores, atención comercial interactiva, compra, economía, inventario nuevo, NPC ni misiones. Aceptación visual B pendiente; las propuestas económicas inferiores no se implementan en esta etapa.
+
 **Problema del jugador** — La exploración termina en el lago; falta un destino rural coherente y un lugar para consultar y comprar aparejos, conservando la pesca y el progreso actual.
 
 **Requisito estable y origen** — Solicitud v0.7.0 Etapa A del propietario, 26/11/2026. Prioridades P1 para recorrido/comercio/persistencia y P2 para acabado. Propuesta, no autorización de implementación.
@@ -18,4 +22,4 @@
 
 **Economía propuesta para aprobar** — 100 créditos iniciales una sola vez al crear el nuevo progreso; tres entradas de catálogo correspondientes a cucharilla/lombriz/artificial, precios orientativos 20/15/35 créditos, existencias comerciales ilimitadas y compra de una unidad por acción. Las compras acumulan reservas; el equipo legado se conserva y no se consume al pescar. Saldo y precios son enteros configurables. No venta de capturas, ingresos recurrentes, desgaste ni conversión retroactiva del diario: saldo finito de demostración, sin prometer un bucle RPG completo. Aprobar o ajustar esta limitación antes de implementar economía; no inventar ingresos ni retirar funcionalidad existente para justificar compras.
 
-**Criterios observables** — Detalle reproducible en [aceptación](acceptance.md); todos los requisitos de producto están NOT_STARTED. La identidad rural gallega está decidida por el propietario; su realización visual, precios y presupuesto móvil quedan pendientes de aprobación. No se atribuyen resultados de M07 a M08.
+**Criterios observables** — Detalle reproducible en [aceptación](acceptance.md): REQ-VIL-001/002 IMPLEMENTED_UNVERIFIED tras B; comercio/economía/inventario nuevo NOT_STARTED. La identidad rural gallega está decidida por el propietario; su realización visual, precios y presupuesto móvil quedan pendientes de aprobación. No se atribuyen resultados de M07 a M08.

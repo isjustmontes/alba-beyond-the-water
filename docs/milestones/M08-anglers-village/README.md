@@ -1,5 +1,9 @@
 # M08 · Angler's Village · v0.7.0 · propuesta de MVP
 
+**B implementada localmente, aceptación visual pendiente.** Zona rural independiente con tres casas tradicionales, tienda exterior cerrada, plaza, pozo, bancos, sendero y vegetación; sin compras/interiores/NPC. `REQ-VIL-001/002` y T02/T03 IMPLEMENTED_UNVERIFIED hasta revisión del propietario. Aprobación A conservada en `2c7b2ef`. No commit B ni publicación.
+
+Para revisar: `npm.cmd run dev -- --port 5174`, abrir `http://127.0.0.1:5174/`, pulsar **Explorar / V**, seguir el sendero tierra adentro desde el muelle hasta el cartel ALDEA (aprox. x=6,z=74) y pulsar **T** o el botón contextual. Caminar hasta plaza y tienda; regresar por el sendero sur de la aldea y activar **Volver al lago**. Se recuerdan posición y mirada por zona durante la sesión; aldea sin modo pesca. WASD/Shift/ratón o joystick/CORRER/gesto mantienen sus acciones. No se persiste posición al recargar. La tienda no tiene interacción comercial en B.
+
 **Aceptación A confirmada:** el propietario declara aprobada la Etapa A al encargar B. Autoriza ahora conexión de zonas y aldea gallega explorable (T02/T03), con sendero, centro y exterior de tienda; sin interiores, compras, economía, NPC ni misiones. Esta autorización sustituye el orden B/C propuesto inferior sin abrir D/E. Las notas anteriores se conservan como historial; M07 no cambia de aceptación.
 
 **Etapa A: sólo SDD, pendiente de aprobación.** Encargo del propietario del 26/11/2026. Base: `origin/main`, `28432a5738d44abceebac4a90c5fe0b30e5c3a4e` (v0.6.0). Rama `feature/v0.7.0-anglers-village`, worktree `wolffish`; `dartfish` sin cambios.

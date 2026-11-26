@@ -2,7 +2,9 @@
 
 | Archivo | Comando | Unidad de recuento | Casos o propósito |
 | --- | --- | --- | --- |
-| [zones.test.js](../../tests/zones.test.js) | node --test tests/zones.test.js | 4 | Escena existente, aparición original, salidas vacías, planes sin efectos, destinos inválidos y datos copiados/inmutables |
+| [zones.test.js](../../tests/zones.test.js) | node --test tests/zones.test.js | 4 | Escena existente, aparición original, registro de aldea/salida, planes sin efectos, destinos inválidos y datos copiados/inmutables |
+| [village.test.js](../../tests/village.test.js) | node --test tests/village.test.js | 4 | Guardas de viaje, cinco idas/vueltas con pose independiente, recorrido muelle/plaza/tienda, huellas y límites |
+| [village-browser.mjs](../../tests/village-browser.mjs) | node tests/village-browser.mjs | 1 guion / 4 perfiles | Aplicación instrumentada para reloj controlado y render de checkpoints; entradas PC/joystick, recorrido/tienda, cinco viajes, buffers/recursos estables y lance tras regreso; no FPS ni dispositivos físicos |
 | [shore-stage-c.test.js](../../tests/shore-stage-c.test.js) | node --test tests/shore-stage-c.test.js | 4 | Carrera 1,5× y limpieza, picadas naturales alejadas con 8 semillas por zona, ausencia de picadas sin peces |
 | [shore-habitat.test.js](../../tests/shore-habitat.test.js) | node --test tests/shore-habitat.test.js | 7 | 27 peces en ambas riberas/interior, agua/rocas, cinco minutos de patrulla, cebo espacial sin teletransporte, persecución sin cruzar tierra y recogida/combate/captura por borde húmedo |
 | [shore-free.test.js](../../tests/shore-free.test.js) | node --test tests/shore-free.test.js | 4 | Ribera sin radios, colisiones, transición reversible a 20/60/120 fps, entrada mantenida/cancelación y orientación sin salto |

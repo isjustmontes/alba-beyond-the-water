@@ -6,6 +6,9 @@ Cada fila define un criterio acotado. El origen de los requisitos funcionales es
 
 | ID | Hito | Prioridad | Comportamiento | Criterio | Implementación | Prueba | Estado | Límite |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQ-VIL-001 | M08-B | P1 | Viajar aldea/lago y conservar pose | Exploración/ready/proximidad/suelo; cinco viajes y retorno | ZoneManager.travel, main | village.test.js, village-browser.mjs | IMPLEMENTED_UNVERIFIED | Pendiente aceptación humana, poses sólo en sesión |
+| REQ-VIL-002 | M08-B | P2 | Aldea gallega explorable | Casas de granito/teja/madera, sendero, plaza, tienda exterior, vegetación y colisiones | village.js, village-layout.js | village.test.js, capturas village-browser | IMPLEMENTED_UNVERIFIED | Interpretación procedural; revisión visual del propietario pendiente |
+| NFR-VIL-001 | M08-B | P1 | Conservar controles y coste acotado | PC y tres perfiles táctiles, recursos estables y pesca al volver | Escena activa y recursos cacheados/compartidos | village-browser.mjs y regresión relevante | PARTIAL | No benchmark FPS sostenido ni hardware físico; MVP completo pendiente |
 | REQ-ZONE-001 | M07-D | P1 | Registrar Lago Sereno sobre escena existente | ID, entrada/aparición original y salidas vacías | zones.js y composición main | [zones.test.js](../../tests/zones.test.js) | IMPLEMENTED_UNVERIFIED | Pendiente aceptación D; sin transición visual |
 | REQ-ZONE-002 | M07-D | P1 | Preparar salidas sin ejecutarlas | Destino/entrada válidos, copia sin mutación de escena/jugador | ZoneManager.prepareExit | [zones.test.js](../../tests/zones.test.js) | IMPLEMENTED_UNVERIFIED | Sólo contrato, no carga ni cambio activo |
 | REQ-EXP-009 | M07-C | P1 | Carrera sólo explorando | Shift/CORRER a 1,5×, suavidad, colisión y limpieza | exploration.js, main.js, exploration.css | [shore-stage-c.test.js](../../tests/shore-stage-c.test.js) | VERIFIED | C aceptada en b7ae025 |

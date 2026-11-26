@@ -1,12 +1,14 @@
 # Tareas · Angler's Village
 
+**B implementada, pendiente de aceptación:** M08-T02/M08-T03 IMPLEMENTED_UNVERIFIED agrupan ahora zona independiente y construcción de aldea, con evidencia técnica y revisión visual emulada. M08-T01 aceptada en `2c7b2ef`; T04/T05/T06 NOT_STARTED. T07 PARTIAL se limita a evidencias de B, sin declarar verificado el MVP completo. El orden inferior refleja planificación original; no se habilitan compras.
+
 **Actualización de autorización:** T01 VERIFIED por aprobación explícita del propietario. Etapa B autorizada agrupa T02 y T03 (conexión + aldea); T04–T07 no se abren como funcionalidades nuevas. Validar únicamente alcance B y actualizar evidencia, sin commit de implementación.
 
-**ID y requisito** — Etapas propuestas, sin implementación autorizada. Todas las tareas B–F NOT_STARTED; A es documentación pendiente de aprobación.
+**ID y requisito** — A aceptada; B actual implementa T02/T03 con aceptación pendiente. Las etapas comerciales y la validación completa posteriores permanecen propuestas, sin autorización de implementación.
 
 | ID | Etapa / requisito | Dependencias | Cambio acotado | Prueba prevista / bloqueo |
 | --- | --- | --- | --- | --- |
-| M08-T01 | A · especificación/diseño/aceptación | Base v0.6.0 y plantillas SDD | Documentar MVP y decisiones | Revisión del propietario; IN_PROGRESS hasta aprobación |
+| M08-T01 | A · especificación/diseño/aceptación | Base v0.6.0 y plantillas SDD | Documentar MVP y decisiones | VERIFIED por aprobación del propietario, commit 2c7b2ef |
 | M08-T02 | B · REQ-VIL-001 | T01 aprobado; inspección real de contratos | Activación mínima de zonas, retorno seguro y bloqueo con aparejo activo | Unitarias de entrada/salida/duplicados; paseo PC/táctil; sin escena provisional publicada |
 | M08-T03 | C · REQ-VIL-002 | T02; identidad gallega decidida, alcance visual/presupuesto por aprobar | Sendero natural, centro pequeño y tienda en casa tradicional de granito, teja y madera; vegetación atlántica y colisiones | Ida/vuelta, bordes, autenticidad/proporciones y calidad visual día/lluvia PC/móvil; sin modelos provisionales de baja calidad, assets condicionados a licencia |
 | M08-T04 | D · REQ-VIL-003 | T03 | Interacción cercana y catálogo accesible | Abrir/cerrar/cancelar teclado/táctil, sin lances ni movimiento accidental |
