@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**Planificación autorizada v0.7.0:** [M08 · Angler's Village](../milestones/M08-anglers-village/README.md), sólo Etapa A SDD pendiente de aprobación. Etapas propuestas: B conexión de zonas, C pueblo/sendero, D tienda, E economía/inventario persistente, F validación. «M08 Técnicas de pesca» de la tabla histórica inferior era candidato sin ficha y queda como propuesta futura sin ID; no se renumeran requisitos ni hitos existentes. No se autoriza código ni se acepta M07 retrospectivamente. Base publicada v0.6.0, `28432a5`.
+
 **26/11/2026 · Entrega v0.6.0 autorizada.** Implementación M07 A–D cerrada para pre-release, D conservada en `be1430a`. A/B/C aceptadas; D y aceptación final pendientes. La autorización actual sustituye las restricciones históricas de publicación inferiores; no autoriza ampliar funcionalidades ni abrir otro hito.
 
 La línea publicada es M06. Antes de ampliar el lago conviene decidir si las entradas táctiles, el audio y la frecuencia de cuadro son aceptables en los equipos de los jugadores. Las siguientes agrupaciones requieren decisión del propietario.

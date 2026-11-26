@@ -1,0 +1,17 @@
+# Aceptación propuesta · Angler's Village
+
+**A aceptada por el propietario** en la solicitud de implementar B. Aceptación documental, no funcional: requisitos de producto pendientes. B actual agrupa conexión y construcción de aldea (T02/T03); las letras anteriores de la tabla son planificación histórica. Compras/economía quedan excluidas de B.
+
+Todos los criterios de producto están NOT_STARTED. Etapa A pendiente de aprobación documental; no hay aceptación de v0.7.0.
+
+| Criterio | Entrada y acción | Resultado esperado | Evidencia obtenida | Decisión humana |
+| --- | --- | --- | --- | --- |
+| REQ-VIL-001 | Caminar lago→sendero→pueblo→lago cinco veces; intentar viajar con aparejo activo | Apariciones seguras, orientación coherente, sin duplicados; transición bloqueada con pesca activa | Ninguna; previsto dominio y navegador PC/táctil | Pendiente B |
+| REQ-VIL-002 | Recorrer sendero, centro y tienda con día/lluvia en PC y móvil; revisar vistas cercanas y lejanas e intentar atravesar límites | Aldea gallega reconocible: granito, teja, madera, caminos naturales y vegetación atlántica; tienda integrada en casa tradicional sin interior visitable. Proporciones creíbles, sin modelos provisionales de baja calidad; ruta continua, colisiones y sin agua transitable. Escala pequeña y coste dentro del presupuesto que se apruebe | Ninguna funcional; identidad decidida por el propietario, revisión visual/navegación/rendimiento pendientes | Pendiente C |
+| REQ-VIL-003 | Interactuar cerca/lejos; abrir y cancelar tienda en PC/teléfono/tablet | Sólo interacción cercana abre; precios/cantidades legibles, panel desplazable, sin activación de pesca/cámara | Ninguna; pruebas de entrada/UI previstas | Pendiente D |
+| REQ-ECO-001 | Partir de 100 créditos propuestos, comprar cucharilla de 20; repetir mismo ID; intentar compra sin fondos o ID/cantidad inválidos | Primera operación deja 80 y +1 unidad; duplicado no cobra; inválidas sin mutación, saldo nunca negativo | Ninguna; tests deterministas previstos, valores sujetos a aprobación | Pendiente E |
+| REQ-INV-001 | Comprar, consultar/seleccionar tipo compatible, recargar y comprobar equipo legado | Cantidad adquirida y saldo conservados, selección actual funcional; ningún equipo previo retirado ni nuevo coste de pesca | Ninguna; dominio/UI/recarga previstos | Pendiente E |
+| REQ-SAVE-001 | Usar guardado previo con capturas; simular cuota, JSON inválido, esquema futuro y reintento | Diario y preferencias intactos; sin confirmación ni cambios por escritura fallida; datos corruptos preservados y aviso, sin reinicio silencioso | Ninguna; pruebas de almacenamiento previstas | Pendiente E |
+| NFR-VIL-001 | Tras viajes, pescar/capturar, abrir diario/equipo, alternar mute y observar clima; comparar perfiles y cinco viajes | Sistemas anteriores operativos; HUD/controles accesibles, ausencia de errores; métricas y recursos dentro de presupuesto aprobado | Ninguna nueva; resultados v0.6.0 sólo baseline histórica | Pendiente F y presupuesto |
+
+La identidad rural gallega está decidida; no equivale a aceptación visual de un resultado implementado. Antes de B, el propietario debe aprobar la Etapa A completa: economía finita de reservas (sin consumo ni ingresos), precios/saldo orientativos, atención exterior en casa tradicional y presupuesto visual/móvil. Si se exige progresión económica renovable, especificar fuente de ingresos y migración antes de implementar; no vender ni modificar capturas implícitamente. Android/iOS físicos no se darán por probados por emulación.

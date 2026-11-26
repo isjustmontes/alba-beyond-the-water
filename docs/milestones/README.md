@@ -10,3 +10,4 @@ Las fichas agrupan especificación, diseño, tareas, aceptación y evidencia. M0
 - [M05 · The Art of Fishing](M05-the-art-of-fishing/README.md)
 - [M06 · A World Alive](M06-a-world-alive/README.md)
 - [M07 · First Steps · v0.6.0 Etapa A validada, sin publicar](M07-first-steps/README.md)
+- [M08 · Angler's Village · v0.7.0 propuesta SDD pendiente de aprobación](M08-anglers-village/README.md)
