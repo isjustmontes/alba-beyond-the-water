@@ -10,6 +10,6 @@ Las siguientes decisiones se reconstruyen de la implementación y del historial.
 | Mantener manos experimentales desactivadas y fauna visual retirada | Los sockets y cálculos de movimiento por sí solos no acreditan una mejora visual entregada | [Manos](../../src/visuals/hands.js) y [fauna](../../src/visuals/fauna.js) |
 | Identificar esta baseline por tag y SHA | README y STATUS citan v0.5.0 aunque el paquete y el HUD conserven v0.4.0 | [Historial](../releases/README.md) |
 
-El propietario autorizó y validó M07 · First Steps, únicamente Etapa A: paseo por el muelle y retorno al puesto original para pescar. No se conecta la orilla ni se altera el dominio de pesca. [Alcance](../milestones/M07-first-steps/spec.md) · [Diseño y alternativas](../milestones/M07-first-steps/design.md).
+El propietario autorizó y validó M07 · First Steps, Etapa A, y después autorizó Etapa B: conexión natural a tierra, sendero y dos puestos nuevos. B está implementada localmente y pendiente de validación humana; se parametriza sólo el origen espacial de pesca para esos puestos. [Alcance](../milestones/M07-first-steps/spec.md) · [Diseño y alternativas](../milestones/M07-first-steps/design.md).
 
-Siguen pendientes equipos de referencia, presupuestos físicos, gates de Pages y alcance de la Etapa B. Registrar nuevas decisiones con la [plantilla ADR](../sdd/templates/adr.md).
+Siguen pendientes validación visual/funcional de B, equipos de referencia, presupuestos físicos, gates de Pages y alcance de otra etapa. Registrar nuevas decisiones con la [plantilla ADR](../sdd/templates/adr.md).

@@ -2,7 +2,9 @@
 
 La línea publicada es M06. Antes de ampliar el lago conviene decidir si las entradas táctiles, el audio y la frecuencia de cuadro son aceptables en los equipos de los jugadores. Las siguientes agrupaciones requieren decisión del propietario.
 
-**Actualización autorizada:** M07 identifica ahora [First Steps · v0.6.0, Etapa A](../milestones/M07-first-steps/README.md), ya validada y sin publicar: exploración del muelle y retorno a pesca. No hay alcance aprobado para Etapa B. La anterior propuesta «M07 Calidad de entrega» permanece como candidata sin ID asignado; no se renumeran requisitos o tareas existentes.
+**Actualización autorizada:** M07 identifica ahora [First Steps · v0.6.0](../milestones/M07-first-steps/README.md), con Etapa A validada y sin publicar. La anterior propuesta «M07 Calidad de entrega» permanece como candidata sin ID asignado; no se renumeran requisitos o tareas existentes.
+
+El encargo posterior del propietario autoriza **Etapa B**: conexión natural a tierra, sendero y dos puestos nuevos. Implementación local pendiente de validación del propietario, sin commit ni publicación; no se autoriza la siguiente etapa.
 
 | Orden | Hito candidato | Valor y dependencia | Coste y salida |
 | --- | --- | --- | --- |

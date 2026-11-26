@@ -4,4 +4,4 @@ Alcance autorizado y validado por el propietario: **Etapa A**, movimiento por el
 
 [Especificación](spec.md) · [Diseño](design.md) · [Tareas](tasks.md) · [Aceptación](acceptance.md) · [Evidencia](evidence.md)
 
-Esta ficha registra retrospectivamente la Etapa A ya validada, desarrollada antes de incorporar SDD. No certifica la versión completa ni autoriza la Etapa B. La exploración está limitada al muelle: no existe conexión transitable con las orillas.
+La Etapa A se conserva como registro histórico validado; su documentación se confirmó en `596e9460e8e9bf94a3c22178d57776e6a1f1292c`. El propietario autorizó posteriormente la **Etapa B: conexión natural a tierra, sendero y dos puestos adicionales**. B queda sin commit y pendiente de validación visual/funcional del propietario. No certifica la versión completa ni autoriza publicación o una siguiente etapa.

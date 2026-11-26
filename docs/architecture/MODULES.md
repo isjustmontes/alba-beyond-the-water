@@ -41,5 +41,7 @@
 | --- | --- | --- | --- |
 | [exploration.js](../../src/input/exploration.js) | Posición y velocidad dentro del muelle; joystick, WASD, cambio de modo y Pointer Lock opcional | WALK, Exploration, ExplorationControls | Lógica sin renderer; adaptador DOM del navegador |
 | [exploration.css](../../src/exploration.css) | Botón de modo, instrucciones y joystick contextual con áreas seguras | Estilos por modo y entrada táctil | HUD existente |
+| [shore-route.js](../../src/input/shore-route.js) | Etapa B: ruta, puestos, superficie compartida y altura de colisión | SHORE_PATH, FISHING_SPOTS, pathDistance, shoreCenter, shoreWidth, shoreHeight, walkHeight, nearestSpot, atSpot | `../terrain-height.js` |
+| [terrain-height.js](../../src/terrain-height.js) | Funciones originales de relieve reutilizadas por paisaje y ruta sin dependencias circulares | noise, fbm, terrainHeight | Sin renderer ni librerías nuevas |
 
 `main.js` incorpora ambos módulos y aplica posición/altura; `controller.js` recibe `isExploring` para bloquear acciones de pesca; `world.js` amplía los límites de mirada sólo al explorar. No se alteran dependencias de paquetes ni interfaces de simulación o persistencia. [Diseño](../milestones/M07-first-steps/design.md).

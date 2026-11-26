@@ -2,7 +2,10 @@
 
 | Archivo | Comando | Unidad de recuento | Casos o propósito |
 | --- | --- | --- | --- |
-| [exploration.test.js](../../tests/exploration.test.js) | node --test tests/exploration.test.js | 6 | Movimiento, límites del muelle, diagonal, joystick, tasas 20/60/120 fps, guardas de modo y limpieza de estado |
+| [shore-route.test.js](../../tests/shore-route.test.js) | node --test tests/shore-route.test.js | 7 | Ida/vuelta 20/60/120 fps, suelo y terreno, tres orígenes y combate; regresiones de hierba fuera del eje, obstáculos/LOD, zonas de pesca y rechazo/posición/dirección al soltar |
+| [shore-browser.mjs](../../tests/shore-browser.mjs) | node tests/shore-browser.mjs | 1 guion / 4 perfiles | Adaptadores WASD/joystick reales con pasos de tiempo controlados y dirección guiada por test; ruta, obstáculos, raycasts, puestos y recogida |
+| [shore-live.mjs](../../tests/shore-live.mjs) | node tests/shore-live.mjs | 1 guion / PC y teléfono | Aplicación real sin teletransporte: muelle, ambas calas, cruce de hierba y regreso; dos lances hacia agua, rechazo hacia tierra y cámara por gesto |
+| [exploration.test.js](../../tests/exploration.test.js) | node --test tests/exploration.test.js | 7 | Movimiento, límites del muelle, diagonal, joystick, tasas 20/60/120 fps, guardas de modo, limpieza y toque sin acción duplicada |
 | [exploration-browser.mjs](../../tests/exploration-browser.mjs) | node tests/exploration-browser.mjs | 1 guion / 4 perfiles | Escritorio, teléfono vertical/horizontal y tablet; movimiento, ratón capturado/Esc, joystick/cancelación/resize, retorno al puesto y lanzamiento único. [Registro M07](../milestones/M07-first-steps/evidence.md) |
 | [advanced.test.js](../../tests/advanced.test.js) | npm test | 5 | a biting fish stays at the actual bait throughout the hook window; lures have different real depth and retrieve motion; equipment cannot change in water; bait affinity affects whether a real carp attacks; critical tension has a short recovery window and fighting causes fatigue and direction changes; two input sources hook only once and capture records store the equipped bait |
 | [ai.test.js](../../tests/ai.test.js) | npm test | 3 | empty water never produces a timer-generated bite; fish investigate actual lure coordinates, attack nearby and recover after escape; nearby cautious fish flee abrupt lure movement, distant fish ignore it |

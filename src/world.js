@@ -143,10 +143,34 @@ export class LakeWorld {
   setView() { this.camera.rotation.order = 'YXZ'; this.camera.rotation.set(this.pitch,this.yaw,0); }
   look(dx, dy) {
     const yaw=this.yaw-dx*.002;
-    this.yaw=this.exploring ? Math.atan2(Math.sin(yaw),Math.cos(yaw)) : THREE.MathUtils.clamp(yaw,-.8,.8);
+    const center=this.fishingYaw??0,limit=this.fishingLook??.8;
+    this.yaw=this.exploring ? Math.atan2(Math.sin(yaw),Math.cos(yaw)) : THREE.MathUtils.clamp(yaw,center-limit,center+limit);
     this.pitch=THREE.MathUtils.clamp(this.pitch-dy*.002,this.exploring ? -1.15 : -.48,this.exploring ? 1.15 : .25);this.setView();
   }
   cast() { this.flightStartedAt=null;this.castStartPitch=this.rod.rotation.x;this.camera.getWorldDirection(this.castDirection); this.castDirection.y = 0; this.castDirection.normalize(); }
+  canCastFromBank(x,z,yaw,power,weather){
+    // Event-time queries only: use the rendered ground/rocks, not a compass cone.
+    this.castProbe??={ray:new THREE.Raycaster(),start:new THREE.Vector3(),end:new THREE.Vector3(),previous:new THREE.Vector3(),point:new THREE.Vector3(),delta:new THREE.Vector3(),hits:[]};
+    const p=this.castProbe,surfaces=this.landscape.castSurfaces.filter(mesh=>mesh.visible),distance=9+31*power;
+    this.scene.updateMatrixWorld(true);
+    p.end.set(x-Math.sin(yaw)*(distance+3)+weather.windX*power*.09,.12,z-Math.cos(yaw)*(distance+3)+weather.windZ*power*.09);
+    p.ray.set(p.point.set(p.end.x,200,p.end.z),p.delta.set(0,-1,0));p.ray.far=400;p.hits.length=0;
+    p.ray.intersectObjects(surfaces,false,p.hits);
+    if(p.hits.some(hit=>hit.point.y>-.02))return false;
+    this.tip.getWorldPosition(p.start);p.start.y-=.28;p.previous.copy(p.start);
+    for(let i=1;i<=20;i++){
+      castFlight(p.start,p.end,i/20,power,p.point);
+      p.delta.subVectors(p.point,p.previous);const length=p.delta.length();p.ray.set(p.previous,p.delta.normalize());p.ray.far=length;p.hits.length=0;
+      p.ray.intersectObjects(surfaces,false,p.hits);
+      if(p.hits.some(hit=>hit.point.y>.02))return false;
+      for(const obstacle of this.landscape.walkObstacles){
+        if(!obstacle.tree||obstacle.index>=obstacle.mesh.count)continue;
+        if(p.point.y>obstacle.y&&p.point.y<obstacle.y+obstacle.height&&Math.hypot(p.point.x-obstacle.x,p.point.z-obstacle.z)<obstacle.radius+.15)return false;
+      }
+      p.previous.copy(p.point);
+    }
+    return true;
+  }
   nearby() { return this.fish.filter(f => f.mesh.position.distanceTo(this.bobber.position) < 9); }
   hookFish(speciesIndex,id) {
     this.hookedFish = this.fish.find(f=>f.id===id) || this.fish.filter(f=>f.speciesIndex===speciesIndex).sort((a,b)=>a.mesh.position.distanceTo(this.bobber.position)-b.mesh.position.distanceTo(this.bobber.position))[0];

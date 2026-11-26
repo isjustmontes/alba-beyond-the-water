@@ -152,16 +152,22 @@ function controls() {
   const joystick=document.createElement('div');joystick.id='walk-stick';joystick.setAttribute('role','group');joystick.setAttribute('aria-label','Joystick para caminar');joystick.append(document.createElement('span'));document.body.append(joystick);
   const toggleMode=()=>{
     if(paused)return;
-    const error=exploration.toggle(game.state,world.yaw,world.pitch);
+    const error=exploration.toggle(game.state,world.yaw,world.pitch,()=>[.08,.45,1].some(power=>world.canCastFromBank(exploration.x,exploration.z,world.yaw,power,game.environment.weather)));
     if(error){toast(error);return;}
     clearHeld();world.exploring=exploration.mode==='exploring';world.rod.visible=!world.exploring;
+    if(!world.exploring){
+      const spot=exploration.spot;
+      world.fishingYaw=spot.yaw;world.fishingLook=spot.look;
+      if(spot.id==='dock')game.setOrigin(spot.originX,spot.originZ);
+      else game.setOrigin(exploration.x-3*Math.sin(world.yaw),exploration.z-3*Math.cos(world.yaw));
+    }
     document.documentElement.dataset.playerMode=exploration.mode;
     modeButton.textContent=world.exploring ? 'Pescar en el puesto · V' : 'Explorar · V';modeButton.setAttribute('aria-pressed',String(world.exploring));
     walkHint.hidden=!world.exploring;
-    if(world.exploring)toast('Camina por el muelle. Vuelve al puesto inicial y mira al lago para pescar.');
+    if(world.exploring)toast('Sal por detrás del muelle y sigue el sendero. Pesca en el muelle o las dos calas mirando al lago.');
   };
-  document.documentElement.dataset.playerMode=exploration.mode;modeButton.onclick=toggleMode;
-  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,toggle:toggleMode,isPaused:()=>paused});
+  document.documentElement.dataset.playerMode=exploration.mode;
+  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,modeButton,toggle:toggleMode,isPaused:()=>paused});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
     if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
@@ -197,6 +203,7 @@ function controls() {
 }
 try {
   world = new LakeWorld($('scene'));
+  exploration.obstacles=world.landscape.walkObstacles;
   const environmentOptions={};
   // Development-only observation links; ordinary play and production always use the normal clock.
   if(import.meta.env.DEV){
@@ -208,6 +215,13 @@ try {
   const environment=new Environment(environmentOptions);
   if(import.meta.env.DEV){const weather=new URLSearchParams(location.search).get('weather');if(Object.hasOwn(WEATHER,weather))environment.weather.request(weather,{manual:true});}
   game = new FishingGame({ onEvent:event,environment });
+  game.canCast=power=>{
+    if(exploration.spot.id==='dock')return true;
+    if(!world.canCastFromBank(exploration.x,exploration.z,world.yaw,power,game.environment.weather)){
+      toast('Lanzamiento bloqueado por tierra u obstáculos. Apunta al agua o ajusta la potencia.');return false;
+    }
+    game.setOrigin(exploration.x-3*Math.sin(world.yaw),exploration.z-3*Math.cos(world.yaw));return true;
+  };
   try {
     const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
     game.catches=migrateCatches(saved);
@@ -224,11 +238,11 @@ try {
       exploration.update(dt,world.yaw);
     }
     world.camera.position.x=exploration.x;world.camera.position.z=exploration.z;
-    const eye=world.exploring ? WALK.floor+WALK.eye : 3;
+    const eye=world.exploring||exploration.spot.id!=='dock' ? exploration.floor+WALK.eye : 3;
     world.camera.position.y+=(eye-world.camera.position.y)*(1-Math.exp(-(paused ? 0 : dt)*10));
     if(world.exploring){
-      const distance=Math.hypot(exploration.x,exploration.z-7);
-      $('exploration-hint').textContent=`${touchMode ? 'Joystick: caminar · Arrastra: mirar' : 'WASD: caminar · Clic: capturar ratón · Esc: liberar'} · Puesto: ${distance.toFixed(1)} m · V / botón: pescar`;
+      const {spot,distance}=exploration.nearest;
+      $('exploration-hint').textContent=`${touchMode ? 'Joystick: caminar · Arrastra: mirar' : 'WASD: caminar · Clic: capturar ratón · Esc: liberar'} · ${spot.name}: ${distance.toFixed(1)} m · V / botón: pescar`;
     }
     world.update(paused ? 0 : dt,game); updateUI();
     requestAnimationFrame(frame);

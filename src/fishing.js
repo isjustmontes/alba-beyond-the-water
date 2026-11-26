@@ -15,12 +15,17 @@ export class FishingGame {
     this.state='ready';this.time=0;this.power=0;this.tension=0;this.distance=0;
     this.reeling=false;this.catches=[];this.lureId='spinner';this.aim={x:0,z:-1};
     this.lure={x:0,y:-.75,z:4};this.lureSpeed=0;this.hookedId=null;
+    this.origin={x:0,z:4};
     this.actionCounts={casts:0,hooks:0};
     this.chargeTime=0;this.castStartedAt=-Infinity;this.castPreparation=0;this.lineReleased=false;this.pullCount=0;
   }
   get lureType(){return getLure(this.lureId);}
   emit(type,data={}){this.onEvent({type,...data});}
   setAim(x,z){const len=Math.hypot(x,z)||1;this.aim.x=x/len;this.aim.z=z/len;}
+  setOrigin(x,z){
+    if(!['ready','charging'].includes(this.state)||!Number.isFinite(x)||!Number.isFinite(z))return false;
+    this.origin.x=x;this.origin.z=z;return true;
+  }
   selectLure(id) {
     if(!['ready','caught'].includes(this.state)||!LURES.some(l=>l.id===id))return false;
     this.lureId=id;this.emit('equipment');return true;
@@ -39,6 +44,7 @@ export class FishingGame {
   release() {
     this.reeling=false;
     if(this.state!=='charging')return;
+    if(this.canCast&&!this.canCast(this.power)){this.cancelHeld();return;}
     this.state='casting';this.distance=9+this.power*31;this.castDistance=this.distance;this.castTime=0;
     this.castStartedAt=this.time;this.castPreparation=Math.min(1,this.chargeTime/.42);this.lineReleased=false;
     const wind=this.environment.weather;
@@ -56,7 +62,7 @@ export class FishingGame {
   }
   updateLure() {
     const type=this.lureType;
-    this.lure.x=this.aim.x*this.distance+this.windOffset.x;this.lure.z=4+this.aim.z*this.distance+this.windOffset.z;
+    this.lure.x=this.origin.x+this.aim.x*this.distance+this.windOffset.x;this.lure.z=this.origin.z+this.aim.z*this.distance+this.windOffset.z;
     this.lure.y=-Math.min(type.depth,lakeDepth(this.lure.x,this.lure.z)-.2);
     this.lure.y+=Math.sin(this.time*(type.id==='worm' ? 1.3 : 4.5))*type.motion*(this.reeling ? 1 : .3);
     this.lure.y=Math.min(-.22,this.lure.y);
@@ -115,7 +121,7 @@ export class FishingGame {
     this.slackTime=this.tension<.035 ? this.slackTime+dt : 0;
     const heading=this.fightHeading+Math.sin(this.fightTime*1.2)*.08*this.stamina;
     const fish=this.school.fish.find(f=>f.id===this.hookedId);
-    const desiredX=Math.sin(heading)*this.distance,desiredZ=4-Math.cos(heading)*this.distance;
+    const desiredX=this.origin.x+Math.sin(heading)*this.distance,desiredZ=this.origin.z-Math.cos(heading)*this.distance;
     if(fish) {
       const p=fish.position,k=1-Math.exp(-dt*4),prevX=p.x,prevZ=p.z;
       p.x+=(desiredX-p.x)*k;p.z+=(desiredZ-p.z)*k;p.y=-.35-Math.sin(this.fightTime*3)**2*.25;
