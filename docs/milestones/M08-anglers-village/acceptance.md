@@ -1,5 +1,11 @@
 # Aceptación propuesta · Angler's Village
 
+**C validada por el propietario:** al autorizar D confirma C aceptada, incluida la corrección visual del cartel LAGO SERENO (giro π, posición e interacción intactas, captura revisada desde el pueblo). T04/T05/T06 y requisitos comerciales quedan VERIFIED en el alcance acotado de C; D revisará uso/persistencia del equipamiento sin aceptar aún sus cambios.
+
+**Resultado técnico C:** REQ-VIL-003, REQ-ECO-001, REQ-INV-001 y REQ-SAVE-001 IMPLEMENTED_UNVERIFIED. Catálogo, compras/duplicados/fondos, guardado/errores, selección y compatibilidad cubiertos por 29 pruebas relevantes y tres perfiles de navegador; build correcto. Falta aceptación visual/funcional del propietario. La validación móvil sigue siendo emulada. Los estados B/NOT_STARTED inferiores reflejan el historial previo a C.
+
+**C · criterios previos:** cerca de tienda, T o toque abre una sola vez y libera entradas; lejos no abre. Catálogo legible/desplazable en PC y móvil, precio/saldo/existencias visibles. Comprar cucharilla desde saldo inicial 100 deja 80 y una unidad adicional; doble evento/recibo no vuelve a cobrar. Compra sin fondos/ID inválido no muta estado. Recarga conserva saldo/existencias; equipo legado, capturas y preferencias intactos. Escritura denegada/corrupción no reinicia progreso ni concede compra sin guardar. Encabezado ALDEA al llegar y LAGO SERENO al volver. C permanece pendiente de validación del propietario.
+
 **Aceptación B confirmada por el propietario:** al encargar la Etapa C declara validada B, incluidos cartel ALDEA e indicador contextual PC/móvil. REQ-VIL-001/002 y T02/T03 VERIFIED dentro del alcance y límites de emulación documentados. No acepta por ello economía/compras aún no implementadas, rendimiento físico ni M07-D retrospectivamente.
 
 **Estado vigente B:** REQ-VIL-001 y REQ-VIL-002 IMPLEMENTED_UNVERIFIED, con pruebas técnicas y vistas emuladas registradas en [evidencia](evidence.md); aceptación visual/funcional del propietario PENDIENTE. NFR-VIL-001 parcialmente cubierto sólo para B, sin presupuesto móvil físico aprobado. REQ-VIL-003, REQ-ECO-001, REQ-INV-001 y REQ-SAVE-001 NOT_STARTED. No se da por aceptado el pueblo por pasar unitarias ni se anuncia comercio funcional.

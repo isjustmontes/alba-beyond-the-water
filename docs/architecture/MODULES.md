@@ -2,6 +2,8 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [shop.js](../../src/shop.js) | Catálogo compatible, saldo/inventario local y compras idempotentes con persistencia previa a mutación | VillageShop, SHOP_CATALOG, SHOP_STORAGE_KEY, INITIAL_COINS | config.js existente |
+| [shop-panel.js](../../src/shop-panel.js) | Catálogo modal, selección actual y protección de doble clic/toque | ShopPanel | shop.js, DOM |
 | [village-layout.js](../../src/village-layout.js) | Huellas y altura compartidas de aldea, casas, árboles y obstáculos | VILLAGE_HOUSES, VILLAGE_TREES, villageHeight, villageWalkHeight | — |
 | [village.js](../../src/visuals/village.js) | Escena rural cacheada, arquitectura/materiales procedurales, vegetación compartida y señal del sendero | VillageView, makeVillageTrailSign | Three.js, village-layout, vegetación y alturas existentes |
 | [zones.js](../../src/zones.js) | Registro de Lago Sereno y planes de salidas sin efectos; conserva referencia de escena existente | ZONES, ZoneManager | — |

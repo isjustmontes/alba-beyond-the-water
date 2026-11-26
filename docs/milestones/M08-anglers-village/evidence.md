@@ -1,5 +1,21 @@
 # Evidencia · Angler's Village · Etapa A
 
+## C · tienda y economía básica · aceptación PENDIENTE
+
+**Aceptación posterior C:** el propietario declara C validada al autorizar su commit antes de D. Incluye giro visual π del cartel LAGO SERENO, sin moverlo ni alterar colisiones/interacción/transición; comprobado desde el pueblo en captura local lake-sign-facing-village.png. Los estados pendientes inferiores conservan el historial de C anterior a esta aceptación.
+
+**SHA y fecha** — 26/11/2026, base B `1b46d47` (`feat: add explorable Galician village`), commit local conservando cartel/UX y SDD. Git limpio antes de C; implementación C sin commit en feature/v0.7.0-anglers-village, wolffish. Dartfish sin modificar. Sin modelos, NPC, interiores, dependencias ni publicación.
+
+**Equipo, navegador y perfil** — Windows/Node 24.20.0, Edge Chromium headless/WebGL SwiftShader: PC 1280×800, teléfono 390×844 y 844×390. Capturas revisadas para catálogo PC y móvil. Sin Android/iOS físicos ni certificación WebKit.
+
+**Comando y datos** — `node --test tests/shop.test.js tests/village.test.js tests/zones.test.js tests/input.test.js tests/fishing.test.js tests/journal.test.js`: **29/29**, cero fallos. Ocho casos nuevos de tienda: fondos una sola vez/legado, recibos idempotentes tras recarga, saldo/ID inválido, escritura fallida y reintento, JSON corrupto/esquema futuro preservados, cambio de guardado entre instancias, proximidad de puerta y selección existente sin alterar propiedades. `npm.cmd run build`: correcto, 48 módulos, JS 667,29 kB (gzip 184,71 kB), CSS 31,84 kB; persiste aviso conocido de chunk >500 kB.
+
+`node tests/shop-browser.mjs`: PC y teléfono vertical correctos; horizontal detectó una aserción prematura del harness que consultaba pausa inmediatamente después de cerrar el diálogo. Se cambió la aserción por espera del evento de cierre (sin modificar el juego por este caso); `node tests/shop-browser.mjs --profile=landscape` correcto. En los tres perfiles: viajar y encabezado ALDEA, interacción T/toque en puerta y rechazo lejos, catálogo de cuatro entradas, doble clic/doble toque sólo una compra (100→80, cucharilla 1→2), resto de compras deja 5 créditos y botones sin fondos deshabilitados, selección de artificial, Equipo con existencias, recarga conserva saldo/cantidades/selección y bytes originales de capturas/audio; regreso muestra LAGO SERENO y permite lanzar. Sin errores JavaScript/shaders. Fixtures sólo posicionan jugador en respuesta servida para acotar validación a tienda/transiciones; no certifican nuevamente el recorrido a pie. Resultados/capturas en test-results/shop-* ignorados.
+
+**Resultado, métricas e incidencias** — Compras guardan candidato completo antes de modificar memoria; recibos persistidos y bloqueo breve del botón evitan duplicados, habilitando compras intencionales posteriores. Inicialización fallida/corrupción preserva datos y deshabilita tienda, sin impedir pesca. Fallo de escritura de una compra conserva saldo/existencias y permite reintentar. Clave nueva alba-village-progress-v1; ninguna migración destructiva de diario/preferencias/equipo. Reserva de sedal no cambia resistencia y los cebos no se consumen; no ingresos ni venta. Protección contra sobrescritura de una instancia obsoleta, sin prometer atomicidad distribuida entre pestañas ni antitrampas local. Encabezado móvil discreto bajo marca, sin reemplazar controles. No se realiza benchmark de rendimiento ni suite completa ajena al alcance. **C pendiente de aceptación del propietario**; T04/T05/T06 IMPLEMENTED_UNVERIFIED, T07 PARTIAL.
+
+---
+
 ## B · aldea explorable · 26/11/2026 · aceptación PENDIENTE
 
 **Decisión posterior:** propietario confirma B validada al autorizar guardarla antes de C, incluidos desplazamiento del cartel e indicador contextual. Se conservan los resultados técnicos y estados históricos inferiores; esta aceptación no autoriza publicación.

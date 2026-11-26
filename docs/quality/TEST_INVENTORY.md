@@ -2,6 +2,8 @@
 
 | Archivo | Comando | Unidad de recuento | Casos o propósito |
 | --- | --- | --- | --- |
+| [shop.test.js](../../tests/shop.test.js) | node --test tests/shop.test.js | 8 | Fondos/legado, recibos, precios/saldo, escritura fallida, corrupción/esquema futuro, instancia obsoleta, proximidad y equipo compatible |
+| [shop-browser.mjs](../../tests/shop-browser.mjs) | node tests/shop-browser.mjs | 1 guion / 3 perfiles | T/toque, catálogo, doble compra, saldo insuficiente, inventario/selección, recarga/legado, encabezado y regreso/lance; fixture de posición, sin repetir paseo |
 | [zones.test.js](../../tests/zones.test.js) | node --test tests/zones.test.js | 4 | Escena existente, aparición original, registro de aldea/salida, planes sin efectos, destinos inválidos y datos copiados/inmutables |
 | [village.test.js](../../tests/village.test.js) | node --test tests/village.test.js | 4 | Guardas de viaje, cinco idas/vueltas con pose independiente, recorrido muelle/plaza/tienda, huellas y límites |
 | [village-browser.mjs](../../tests/village-browser.mjs) | node tests/village-browser.mjs | 1 guion / 4 perfiles | Aplicación instrumentada para reloj controlado y render de checkpoints; entradas PC/joystick, recorrido/tienda, cinco viajes, buffers/recursos estables y lance tras regreso; no FPS ni dispositivos físicos |

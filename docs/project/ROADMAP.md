@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M08-C actual:** B aceptada en `1b46d47`; el propietario autoriza tienda/economía básica agrupando T04/T05/T06 como C. Implementación y evidencia pendientes de aceptación humana; no se abren interiores, ingresos, misiones ni NPC. Se conserva el historial de etapas inferior.
+
 **M08-B vigente:** propietario acepta A y autoriza aldea y conexión como una sola Etapa B (T02/T03). Tienda únicamente exterior; compras, economía e inventario nuevo permanecen pendientes de autorización posterior. Detenerse tras evidencia técnica y revisión visual; no publicar.
 
 **Planificación autorizada v0.7.0:** [M08 · Angler's Village](../milestones/M08-anglers-village/README.md), sólo Etapa A SDD pendiente de aprobación. Etapas propuestas: B conexión de zonas, C pueblo/sendero, D tienda, E economía/inventario persistente, F validación. «M08 Técnicas de pesca» de la tabla histórica inferior era candidato sin ficha y queda como propuesta futura sin ID; no se renumeran requisitos ni hitos existentes. No se autoriza código ni se acepta M07 retrospectivamente. Base publicada v0.6.0, `28432a5`.

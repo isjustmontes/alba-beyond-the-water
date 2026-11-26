@@ -1,5 +1,9 @@
 # Especificación · Angler's Village
 
+## C autorizada · tienda y economía básica
+
+B validada y conservada en `1b46d47`, incluidos cartel/UX. C agrupa T04/T05/T06: T/botón cerca de la puerta exterior de ARTES DE PESCA abre catálogo de cucharilla (20), lombriz (15), artificial (35) y monofilamento de recambio (25). Saldo inicial de prueba 100 créditos, concedido una sola vez; equipo/cebos legados permanecen disponibles. Comprar añade una unidad de reserva, sin consumir ni cambiar estadísticas de pesca. Saldo y cantidades persisten juntos en clave nueva; sin ventas, ingresos ni progresión nueva. Encabezado ALDEA/LAGO SERENO según zona. No NPC, interiores ni modelos nuevos. Aceptación C pendiente tras pruebas; los nombres de etapas inferiores son históricos.
+
 ## Alcance autorizado B · aldea explorable
 
 A aprobada y guardada en `2c7b2ef`. El propietario agrupa en B la conexión (REQ-VIL-001) y la aldea gallega (REQ-VIL-002), antes separadas como B/C. Tres casas exteriores, centro pequeño, pozo, bancos, caminos naturales y tienda señalizada integrada en casa tradicional. Viaje explícito desde el final del sendero terrestre de Lago Sereno, retorno a la posición/orientación conservadas por zona durante la sesión, exploración PC/móvil. Bloquear transición con aparejo activo y pesca en el pueblo. No interiores, atención comercial interactiva, compra, economía, inventario nuevo, NPC ni misiones. Aceptación visual B pendiente; las propuestas económicas inferiores no se implementan en esta etapa.

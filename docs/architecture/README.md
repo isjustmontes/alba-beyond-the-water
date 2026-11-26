@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M08-C · comercio local
+
+`VillageShop` separa catálogo/compras del renderer y guarda saldo, cantidades y recibos juntos en `alba-village-progress-v1` antes de aplicar cada compra. Preserva claves de capturas, selección y audio. Datos inválidos/inaccesibles bloquean comercio; fallo de compra no consume saldo. `ShopPanel` presenta catálogo modal, bloquea doble activación y usa `FishingGame.selectLure` existente; Equipo muestra cantidades/saldo. `main` despacha una sola acción T/botón según cercanía (puerta de tienda o salida), limpia entradas al abrir modal y actualiza encabezado por zona. Sin cambiar mecánicas, estadísticas, consumo ni modelos; inventario comercial agrega reservas al equipo inicial. [Diseño M08](../milestones/M08-anglers-village/design.md).
+
 ### M08-B · zona rural independiente (local, pendiente de aceptación)
 
 `ZoneManager.travel` aplica sólo la sesión de zonas y conserva copias de poses; `main` comprueba modo/proximidad/seguridad y aplica la pose tras limpiar entradas. `Exploration.heightAt` permite navegación específica sin sustituir colisiones del lago. `village-layout.js` comparte huellas/altura entre mallas y navegación. `VillageView` se crea una vez y se cachea: sólo la escena activa se renderiza con el renderer/cámara existentes. El entorno sigue avanzando en aldea mientras la escuela de peces queda pausada en memoria. Vegetación comparte materiales y texturas, con geometrías clonadas para atributos de instancias independientes. No nuevos guardados, dependencias, interiores o economía; detalles y límites en [M08](../milestones/M08-anglers-village/design.md). Las secciones M07 inferiores son históricas.

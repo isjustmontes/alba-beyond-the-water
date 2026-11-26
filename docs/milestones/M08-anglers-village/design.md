@@ -1,5 +1,11 @@
 # Diseño propuesto · Angler's Village
 
+## C · diseño de implementación autorizado
+
+Dominio de tienda independiente del renderer, catálogo mapeado a LURES/EQUIPMENT existentes. Proximidad a la puerta exterior compartida con las huellas de casa; T y botón contextual despachan una sola acción (tienda o viaje), sin duplicar listeners de interacción. Panel modal detiene movimiento/cámara y cierra con controles existentes/Esc. En equipo se muestran existencias y saldo sin sustituir selección de señuelo.
+
+Nuevo documento local versionado `alba-village-progress-v1`: saldo, cantidades y recibos de compra. Inicializa 100 créditos y una unidad de cada cebo/recambio como equipo inicial conservado. Compra valida ID, precio de catálogo, saldo y transacción; escribe estado candidato completo antes de aplicarlo. Recibo persistido evita repetir una operación; botón se deshabilita brevemente tras éxito para evitar doble toque/clic físico, después permite otra compra intencional. Si cambia el guardado desde otra instancia, recargar/validar y pedir reintento en vez de sobrescribirlo. Datos corruptos/futuros o almacenamiento inaccesible deshabilitan comercio, sin modificar el texto original ni impedir pescar. Fallo al guardar compra conserva estado anterior y permite reintentar. Sin modificar claves de capturas, audio o selección de equipo; economía local sin garantía antitrampas ni transacción distribuida entre pestañas simultáneas.
+
 ## Contrato implementado en B · pendiente de aceptación
 
 `zones.js` conserva su contrato `prepareExit` y añade entradas/salidas de aldea, proximidad y `travel`: exige exploración, pesca ready, pose finita y suelo de destino válido; recuerda copias de posición/yaw/pitch por zona sólo en memoria. No modifica guardados. `main` limpia entradas al viajar, aplica altura de suelo y mantiene cámara/controles existentes. Acción T/botón sólo cerca de salida (lago x=6,z=74; aldea x=0,z=30). Pesca/equipar bloqueados en aldea; el diario y preferencias actuales siguen accesibles.

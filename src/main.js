@@ -4,9 +4,12 @@ import './phase4.css';
 import './phase5.css';
 import './mobile-hud.css';
 import './exploration.css';
+import './shop.css';
+import {VillageShop} from './shop.js';
+import {ShopPanel} from './shop-panel.js';
 import {Exploration,ExplorationControls,WALK,bindModeToggle} from './input/exploration.js';
 import {walkHeight} from './input/shore-route.js';
-import {villageWalkHeight} from './village-layout.js';
+import {villageWalkHeight,nearVillageShop} from './village-layout.js';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
 import {ZoneManager} from './zones.js';
@@ -21,9 +24,11 @@ const $ = id => document.getElementById(id);
 const number = (n, places = 0) => n.toLocaleString('es-ES',{ minimumFractionDigits: places, maximumFractionDigits: places });
 const audio = new LakeAudio();
 const storageKey = 'alba-catches-v1';
-let world, game, input, inputMode, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
+let world, game, input, inputMode, shop, shopPanel, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
 const exploration=new Exploration();let walkControls,zones,travelButton;
 const zoneHeight=(id,x,z)=>id==='anglers-village'?villageWalkHeight(x,z):walkHeight(x,z,world.landscape.walkObstacles);
+const atShop=()=>zones.zoneId==='anglers-village'&&exploration.mode==='exploring'&&nearVillageShop(exploration.x,exploration.z);
+function interact(){if(paused)return;if(atShop())openDialog('shop-dialog');else travel();}
 function travel(){
   if(paused||exploration.mode!=='exploring'||game.state!=='ready')return;
   const exit=zones.nearbyExit(exploration.x,exploration.z);if(!exit)return;
@@ -39,7 +44,8 @@ function travel(){
   world.yaw=result.spawn.yaw;world.pitch=result.spawn.pitch;world.viewPitchTarget=null;world.setView();
   world.camera.position.set(exploration.x,exploration.floor+WALK.eye,exploration.z);
   document.documentElement.dataset.zone=result.to;$('mode-toggle').hidden=result.to!=='lago-sereno';
-  toast(result.to==='anglers-village'?'Aldea de Lago Sereno · Artes de pesca. Tienda todavía cerrada.':'De vuelta en Lago Sereno.');
+  const zoneName=result.to==='anglers-village'?'ALDEA':'LAGO SERENO';$('location-name').textContent=zoneName;$('mobile-zone-name').textContent=zoneName;
+  toast(result.to==='anglers-village'?'Aldea · Acércate a ARTES DE PESCA para preparar tu equipo.':'De vuelta en Lago Sereno.');
 }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('visible'),5000); }
 function fatal(error) { console.error(error); $('loading').hidden = true; $('fatal').hidden = false; $('fatal-message').textContent = `Este juego necesita un navegador con WebGL 2 y aceleración gráfica. ${error.message}`; }
@@ -69,17 +75,20 @@ function renderJournal() {
   }
 }
 function renderEquipment() {
+  let inventory=$('inventory-summary');
+  if(!inventory){inventory=document.createElement('p');inventory.id='inventory-summary';$('equipment-dialog').querySelector('.equipment-specs').after(inventory);}
+  inventory.textContent=shop.blocked?'Tienda no disponible; tu equipo anterior sigue disponible.':`Saldo: ${shop.balance} créditos · Existencias guardadas; el equipo no se consume al pescar.`;
   $('hands-toggle').checked=world.hands.enabled;$('hands-toggle').disabled=!world.hands.available;
   $('hands-status').textContent=world.hands.available ? 'Modelo validado. Ajuste opcional.' : 'Sin modelo validado. Desactivado.';
   $('equipment-toggle').textContent=`${game.lureType.name} ▾`;
   $('rod-name').textContent=EQUIPMENT.rod;$('rod-action').textContent=EQUIPMENT.action;
-  $('line-name').textContent=EQUIPMENT.line;$('line-strength').textContent=`Resistencia: ${number(EQUIPMENT.lineStrengthKg,1)} kg`;
+  $('line-name').textContent=EQUIPMENT.line;$('line-strength').textContent=`Resistencia: ${number(EQUIPMENT.lineStrengthKg,1)} kg · Existencias: ${shop.count('line')}`;
   $('lure-options').replaceChildren();
   for(const lure of LURES) {
     const button=document.createElement('button');button.className='lure-option';button.dataset.lure=lure.id;
     button.setAttribute('aria-pressed',String(game.lureId===lure.id));button.disabled=!['ready','caught'].includes(game.state);
     const title=document.createElement('strong'),description=document.createElement('span'),details=document.createElement('small'),technique=document.createElement('em');
-    title.textContent=lure.name;description.textContent=lure.description;details.textContent=`${number(lure.depth,1)} m aprox. · ${lure.targets}`;technique.textContent=lure.technique;
+    title.textContent=lure.name;description.textContent=lure.description;details.textContent=`${number(lure.depth,1)} m aprox. · ${lure.targets} · Existencias: ${shop.count(lure.id)}`;technique.textContent=lure.technique;
     button.append(title,description,details,technique);button.onclick=()=>{if(game.selectLure(lure.id))$('lure-options').querySelector(`[data-lure="${lure.id}"]`)?.focus({preventScroll:true});};$('lure-options').append(button);
   }
   $('equipment-hint').textContent=['ready','caught'].includes(game.state) ? 'El señuelo elegido se guarda para el próximo lanzamiento.' : 'Recupera el aparejo antes de cambiar de señuelo.';
@@ -153,7 +162,7 @@ function setPaused(value) {
   if (value) $('pause-dialog').showModal(); else if ($('pause-dialog').open) $('pause-dialog').close();
   $('pause').textContent = value ? '▷' : 'Ⅱ';
 }
-function openDialog(id) { if(document.querySelector('dialog[open]'))return;clearHeld(); paused = true;if(id==='equipment-dialog')renderEquipment(); $(id).showModal(); }
+function openDialog(id) { if(document.querySelector('dialog[open]'))return;clearHeld(); paused = true;if(id==='equipment-dialog')renderEquipment();if(id==='shop-dialog')shopPanel.render(); $(id).showModal(); }
 function showMobileInfo() {
   // Snapshot the existing HUD while paused; no second simulation or saved data.
   const text=ids=>ids.map(id=>$(id).textContent).join(' · ');
@@ -191,8 +200,8 @@ function controls() {
   document.documentElement.dataset.playerMode=exploration.mode;
   walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,modeButton,runButton,toggle:toggleMode,isPaused:()=>paused});
   travelButton=document.createElement('button');travelButton.id='zone-travel';travelButton.hidden=true;travelButton.setAttribute('aria-keyshortcuts','T');document.body.append(travelButton);
-  bindModeToggle(travelButton,travel);
-  window.addEventListener('keydown',e=>{if(e.code==='KeyT'&&!e.repeat&&!document.querySelector('dialog[open]')){e.preventDefault();travel();}});
+  bindModeToggle(travelButton,interact);
+  window.addEventListener('keydown',e=>{if(e.code==='KeyT'&&!e.repeat&&!document.querySelector('dialog[open]')){e.preventDefault();interact();}});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
     if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
@@ -254,6 +263,8 @@ try {
     game.catches=migrateCatches(saved);
     game.lureId=getLure(localStorage.getItem('alba-equipment-v1')).id;
   } catch { /* Private browsing and corrupt storage must not prevent playing. */ }
+  try{shop=new VillageShop(localStorage);}catch{shop=new VillageShop(null);}
+  shopPanel=new ShopPanel({shop,game,dialog:$('shop-dialog'),onChange:renderEquipment});
   renderJournal();renderEquipment(); controls(); updateUI();
   $('scene').addEventListener('webglcontextlost',e=>{ e.preventDefault(); setPaused(true); toast('Se ha perdido la conexión con la GPU. Recarga para volver al lago.'); });
   function frame(now) {
@@ -271,9 +282,9 @@ try {
       const {spot,distance}=exploration.nearest;
       $('exploration-hint').textContent=`${touchMode ? 'Joystick: caminar · Arrastra: mirar' : 'WASD: caminar · Clic: capturar ratón · Esc: liberar'} · ${zones.zoneId==='anglers-village'?'Aldea · Sendero sur: volver al lago':`${spot.name}: ${distance.toFixed(1)} m · Sendero hacia la aldea: tierra adentro · V: pescar`}`;
     }
-    const exit=world.exploring?zones.nearbyExit(exploration.x,exploration.z):null;
-    travelButton.hidden=!exit;
-    if(exit){const label=touchMode?exit.name:`T · ${exit.name}`;if(travelButton.textContent!==label)travelButton.textContent=label;}
+    const exit=world.exploring?zones.nearbyExit(exploration.x,exploration.z):null,shopNearby=world.exploring&&atShop();
+    travelButton.hidden=(!exit&&!shopNearby)||paused;
+    if(exit||shopNearby){const name=shopNearby?'Abrir ARTES DE PESCA':exit.name,label=touchMode?name:`T · ${name}`;if(travelButton.textContent!==label)travelButton.textContent=label;}
     world.update(paused ? 0 : dt,game); updateUI();
     requestAnimationFrame(frame);
   }

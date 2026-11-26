@@ -9,6 +9,10 @@ export const VILLAGE_TREES=Object.freeze(Array.from({length:38},(_,i)=>{
   return Object.freeze({x:Math.cos(a)*r,z:Math.sin(a)*r-2,height:6+(i%7)*.65});
 }));
 export const villageHeight=(x,z)=>1+.008*z+.07*Math.sin(x*.17)*Math.sin(z*.13);
+export function nearVillageShop(x,z){
+  const house=VILLAGE_HOUSES[0],front=house.z+house.d/2;
+  return z>=front+.35&&Math.hypot(x-(house.x+1.65),z-(front+1))<=2.3;
+}
 export function villageWalkHeight(x,z){
   if(!Number.isFinite(x)||!Number.isFinite(z)||x< -23.5||x>23.5||z< -29||z>32)return null;
   for(const h of VILLAGE_HOUSES)if(Math.abs(x-h.x)<h.w/2+.35&&Math.abs(z-h.z)<h.d/2+.35)return null;

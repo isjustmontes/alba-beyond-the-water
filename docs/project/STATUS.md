@@ -1,5 +1,7 @@
 # Estado del proyecto · 26 de noviembre de 2026
 
+**M08-C vigente:** B aceptada en `1b46d47`; tienda exterior T/botón, catálogo, 100 créditos de prueba, compras/existencias persistentes y encabezado ALDEA/LAGO SERENO implementados sin commit C. T04/T05/T06 y requisitos comerciales IMPLEMENTED_UNVERIFIED hasta validación del propietario; T02/T03 VERIFIED, T07 PARTIAL. 29/29 relevantes, build y PC/móvil vertical-horizontal correctos; [evidencia](../milestones/M08-anglers-village/evidence.md). Sin economía renovable, consumo, NPC, interiores, modelos nuevos ni publicación. Próxima acción: validación visual/funcional C.
+
 **M08-B autorizado:** A aceptada y conservada en `2c7b2ef`; B agrupa conexión y aldea gallega explorable (T02/T03), sin economía/interiores/NPC. Implementación local en `feature/v0.7.0-anglers-village`, pendiente de validación visual del propietario; [evidencias M08](../milestones/M08-anglers-village/evidence.md). No publicación ni commit B. Se conservan las anotaciones históricas inferiores.
 
 **Resultado B:** T02/T03 y REQ-VIL-001/002 IMPLEMENTED_UNVERIFIED; NFR-VIL-001/T07 PARTIAL. 31/31 pruebas relevantes, build correcto y recorrido de cuatro perfiles emulados (muelle/aldea/tienda/regreso/lance, cinco viajes con recursos estables), sin errores JS/shaders. 22–35 draw calls en checkpoint rural; no FPS físico ni presupuesto p95 certificado. Tienda cerrada; capturas y preferencias sin cambios. Próxima acción: aceptación visual/funcional del propietario, sin abrir compras.

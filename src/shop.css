@@ -1,0 +1,16 @@
+#shop-dialog{width:min(660px,calc(100vw - 28px));max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+.shop-wallet{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #d6c59b44;color:#c9be9f}
+#shop-balance{color:#eed5a6;white-space:nowrap}
+.shop-item{padding:17px 0;border-bottom:1px solid #d6c59b22}
+.shop-item>small{color:#b8c6a3;text-transform:uppercase;font-size:10px;letter-spacing:1.5px}
+.shop-item h3{font-size:19px;margin:7px 0}
+.shop-item p{font-size:12px;color:#c0cbbd;line-height:1.5;margin:5px 0 9px}
+.shop-owned{font-size:12px;color:#d5d5bb}
+.shop-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.shop-actions button{min-height:44px;margin:0;touch-action:manipulation}
+.shop-actions button:disabled{opacity:.5;cursor:default}
+#shop-feedback{min-height:2.6em;font-size:13px;line-height:1.5;color:#eed5a6}
+#inventory-summary{font-size:12px;color:#c6cdbb;line-height:1.5}
+#mobile-zone-name{display:none}
+.touch-mode .brand #mobile-zone-name{display:block;font-size:7px;letter-spacing:1.4px;margin-top:4px}
+@media(max-width:520px){#shop-dialog{padding:22px 18px}.shop-wallet{font-size:12px}.shop-actions{gap:8px}.shop-actions button{font-size:11px;padding:10px 12px}}

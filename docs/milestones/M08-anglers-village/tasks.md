@@ -1,5 +1,7 @@
 # Tareas · Angler's Village
 
+**C implementada:** B aceptada en `1b46d47`; T02/T03 VERIFIED. T04/T05/T06 IMPLEMENTED_UNVERIFIED, ahora agrupadas como Etapa C: interacción/catálogo, moneda/compras/existencias y persistencia aditiva. 29/29 pruebas relevantes, build y PC/móvil vertical-horizontal correctos; pendiente aceptación del propietario. T07 PARTIAL, sólo regresión acotada de C. No nuevas zonas/modelos ni ingresos. La aceptación B no elimina los límites de hardware físico.
+
 **B implementada, pendiente de aceptación:** M08-T02/M08-T03 IMPLEMENTED_UNVERIFIED agrupan ahora zona independiente y construcción de aldea, con evidencia técnica y revisión visual emulada. M08-T01 aceptada en `2c7b2ef`; T04/T05/T06 NOT_STARTED. T07 PARTIAL se limita a evidencias de B, sin declarar verificado el MVP completo. El orden inferior refleja planificación original; no se habilitan compras.
 
 **Actualización de autorización:** T01 VERIFIED por aprobación explícita del propietario. Etapa B autorizada agrupa T02 y T03 (conexión + aldea); T04–T07 no se abren como funcionalidades nuevas. Validar únicamente alcance B y actualizar evidencia, sin commit de implementación.

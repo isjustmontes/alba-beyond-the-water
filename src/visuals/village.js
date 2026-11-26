@@ -149,7 +149,7 @@ export class VillageView {
     ctx.fillStyle='#343c30';ctx.fillRect(0,0,1024,160);ctx.strokeStyle='#b3aa80';ctx.lineWidth=3;ctx.strokeRect(12,12,1000,136);
     ctx.fillStyle='#e3d6b1';ctx.font='58px Georgia';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,512,80);
     const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;
-    const sign=new THREE.Mesh(new THREE.BoxGeometry(w,h,.10),[this.materials.wood,this.materials.wood,this.materials.wood,this.materials.wood,new THREE.MeshStandardMaterial({map,roughness:.94}),this.materials.wood]);sign.position.set(x,y,z);this.scene.add(sign);
+    const sign=new THREE.Mesh(new THREE.BoxGeometry(w,h,.10),[this.materials.wood,this.materials.wood,this.materials.wood,this.materials.wood,new THREE.MeshStandardMaterial({map,roughness:.94}),this.materials.wood]);sign.position.set(x,y,z);this.scene.add(sign);return sign;
   }
   details(){
     // Well with an open centre and irregular granite coping; no opaque cylinder.
@@ -174,7 +174,7 @@ export class VillageView {
       const px=x*.93+(rand()-.5)*.09,pz=z*1.05+(rand()-.5)*.09;
       this.box('trim',px,villageHeight(px,pz)-.01,pz,.82+rand()*.07,.045,.94, (rand()-.5)*.035);
     }
-    this.sign('LAGO SERENO',1.8,villageHeight(1.8,28)+1.45,28,1.6,.32);
+    this.sign('LAGO SERENO',1.8,villageHeight(1.8,28)+1.45,28,1.6,.32).rotation.y=Math.PI;
     this.box('wood',1.8,villageHeight(1.8,28)+.7,28,.10,1.4,.10);
   }
   finishBatches(){

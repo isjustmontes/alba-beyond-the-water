@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**M08-C:** B validada y conservada en `1b46d47`; tienda/economía básica y existencias persistentes implementadas localmente, pendientes de validación del propietario. [Criterios/evidencia M08](milestones/M08-anglers-village/README.md). Sin commit C ni publicación; las notas inferiores son históricas.
+
 **M08-B:** A aprobada en `2c7b2ef`; aldea gallega explorable y conexión con Lago Sereno en implementación local, pendiente de validación visual. [Estado y evidencia](milestones/M08-anglers-village/README.md). Sin funciones comerciales ni publicación.
 
 **Planificación actual:** [M08 · Angler's Village · v0.7.0](milestones/M08-anglers-village/README.md), Etapa A sólo SDD, pendiente de aprobación. Base publicada v0.6.0 (`28432a5`); sin implementación de pueblo ni economía.
