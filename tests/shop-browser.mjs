@@ -1,3 +1,4 @@
+import {openContextualShop} from './context-shop.mjs';
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -32,8 +33,8 @@ try{
    if(mobile)assert.ok(await page.locator('#mobile-zone-name').isVisible());
   };
   const openShop=async()=>{
-   await move(-8.35,2.5);await page.waitForFunction(()=>document.getElementById('zone-travel').textContent.includes('ARTES DE PESCA'));
-   await interact();await page.waitForFunction(()=>document.getElementById('shop-dialog').open);assert.equal((await snap()).walkingKeys,0);
+   await move(-8.35,2.5);await page.waitForFunction(()=>document.getElementById('zone-travel').getAttribute('aria-keyshortcuts')==='E');
+   await openContextualShop(page,mobile);await page.waitForFunction(()=>document.getElementById('shop-dialog').open);assert.equal((await snap()).walkingKeys,0);
   };
   await ready();const original=await page.evaluate(()=>({catches:localStorage.getItem('alba-catches-v1'),audio:localStorage.getItem('alba-audio-v1')}));
   assert.equal((await snap()).lureId,'worm','old commerce save keeps the legacy equipped lure');

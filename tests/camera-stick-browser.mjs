@@ -1,3 +1,4 @@
+import {openContextualShop} from './context-shop.mjs';
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -57,7 +58,7 @@ try{
    await page.evaluate(()=>window.__cameraPosition(6,72));await page.waitForFunction(()=>!document.getElementById('zone-travel').hidden);await layout();
    await page.screenshot({path:`test-results/camera-stick-${name}-lake.png`});await tap('#zone-travel');await page.waitForFunction(()=>window.__alba.snapshot().zone==='anglers-village');await layout();
    await page.screenshot({path:`test-results/camera-stick-${name}-village.png`});
-   await page.evaluate(()=>window.__cameraPosition(-8.35,2.5));await page.waitForFunction(()=>document.getElementById('zone-travel').textContent.includes('ARTES DE PESCA'));await tap('#zone-travel');
+   await page.evaluate(()=>window.__cameraPosition(-8.35,2.5));await page.waitForFunction(()=>document.getElementById('zone-travel').getAttribute('aria-keyshortcuts')==='E');await openContextualShop(page,mobile);
    assert.equal((await snap()).paused,true);await tap('#shop-dialog .close');
    await page.evaluate(()=>window.__cameraPosition(0,29));await page.waitForFunction(()=>document.getElementById('zone-travel').textContent.includes('Lago Sereno'));await tap('#zone-travel');await page.waitForFunction(()=>window.__alba.snapshot().zone==='lago-sereno');
    await page.evaluate(()=>window.__cameraPosition(0,7));await tap('#mode-toggle');await page.waitForFunction(()=>window.__alba.snapshot().equipmentProgress>=.999);await layout();

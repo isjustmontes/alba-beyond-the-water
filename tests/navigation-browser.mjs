@@ -1,3 +1,4 @@
+import {openContextualShop} from './context-shop.mjs';
 import {chromium} from '@playwright/test';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
@@ -59,8 +60,8 @@ try{
     await page.waitForFunction(()=>window.__alba.snapshot().zone==='anglers-village');
     await showMap();assert.equal(await page.locator('#map-title').textContent(),'Aldea de Lago Sereno');assert.equal(await page.locator('#map-legend li').count(),3);
     await page.screenshot({path:`test-results/navigation-${name}-village.png`});await closeMap();
-    await page.evaluate(()=>window.__navigationPosition(-8.35,2.5));await page.waitForFunction(()=>document.getElementById('zone-travel').textContent.includes('ARTES DE PESCA'));
-    if(mobile)await tap('#zone-travel');else await page.keyboard.press('t');await page.waitForFunction(()=>document.getElementById('shop-dialog').open);
+    await page.evaluate(()=>window.__navigationPosition(-8.35,2.5));await page.waitForFunction(()=>document.getElementById('zone-travel').getAttribute('aria-keyshortcuts')==='E');
+    await openContextualShop(page,mobile);
     if(!mobile){await page.keyboard.press('m');assert.equal(await page.locator('#map-dialog').evaluate(el=>el.open),false,'map does not replace shop');}
     await tap('#shop-dialog .close');
     await page.evaluate(()=>window.__navigationPosition(0,29));await page.waitForFunction(()=>document.getElementById('zone-travel').textContent.includes('Lago Sereno'));

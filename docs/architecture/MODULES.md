@@ -2,6 +2,10 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [dialogues/conversation.js](../../src/dialogues/conversation.js) | Shared authored-node sessions and safe encounter proximity, no persistence | Conversation, nearEncounter | village-layout.js |
+| [dialogues/shopkeeper.js](../../src/dialogues/shopkeeper.js) | Provisional shopkeeper identity, nine authored topics and catalog action | SHOPKEEPER, SHOPKEEPER_SIGN, SHOPKEEPER_NODES, nearShopkeeper | conversation.js, village-layout.js, config.js |
+| [visuals/manuel-sign.js](../../src/visuals/manuel-sign.js) | Existing-bench wooden portrait sign and bounded conversation billboard | MANUEL_SIGN, manuelMarkerState, makeManuelSign | Three.js, village-layout.js; existing wood/iron supplied by VillageView |
+| [dialogues/manuel.js](../../src/dialogues/manuel.js) | Pure Manuel graph, session choices and safe bench proximity; no save effects | MANUEL, MANUEL_NODES, ManuelConversation, nearManuel | config.js, environment.js, village-layout.js |
 | [ui/dialogue-panel.js](../../src/ui/dialogue-panel.js) | Presentación ilustrada reusable de identidad/texto/opciones; modal/foco/cierre, sin grafo ni conexión jugable | DialoguePanel | DOM/ResizeObserver, CSS asociado |
 | [previews/dialogue-preview.js](../../src/previews/dialogue-preview.js) | Entrada de desarrollo aislada con contenido de muestra, fuera del bundle de juego | Inicialización local de preview, sin exports | DialoguePanel, dialogue-panel.css |
 | [shop.js](../../src/shop.js) | Catálogo compatible, saldo/inventario local y compras idempotentes con persistencia previa a mutación | VillageShop, SHOP_CATALOG, SHOP_STORAGE_KEY, INITIAL_COINS | config.js existente |

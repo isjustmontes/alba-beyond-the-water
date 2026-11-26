@@ -6,6 +6,11 @@ import './mobile-hud.css';
 import './exploration.css';
 import './shop.css';
 import './zone-map.css';
+import './ui/dialogue-panel.css';
+import {DialoguePanel} from './ui/dialogue-panel.js';
+import {ManuelConversation,nearManuel} from './dialogues/manuel.js';
+import {Conversation} from './dialogues/conversation.js';
+import {SHOPKEEPER,SHOPKEEPER_NODES,nearShopkeeper} from './dialogues/shopkeeper.js';
 import {renderZoneMap} from './zone-map.js';
 import {VillageShop} from './shop.js';
 import {ShopPanel} from './shop-panel.js';
@@ -27,10 +32,21 @@ const number = (n, places = 0) => n.toLocaleString('es-ES',{ minimumFractionDigi
 const audio = new LakeAudio();
 const storageKey = 'alba-catches-v1';
 let world, game, input, inputMode, shop, shopPanel, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
-const exploration=new Exploration();let walkControls,zones,travelButton;
+const exploration=new Exploration();let walkControls,zones,travelButton,dialoguePanel,characters,activeCharacter,pendingDialogueMenu=null;
 const zoneHeight=(id,x,z)=>id==='anglers-village'?villageWalkHeight(x,z):walkHeight(x,z,world.landscape.walkObstacles);
 const atShop=()=>zones.zoneId==='anglers-village'&&exploration.mode==='exploring'&&nearVillageShop(exploration.x,exploration.z);
-function interact(){if(paused)return;if(atShop())openDialog('shop-dialog');else travel();}
+const atManuel=()=>nearManuel({zone:zones.zoneId,mode:exploration.mode,state:game.state,grounded:exploration.grounded,x:exploration.x,z:exploration.z});
+const atShopkeeper=()=>nearShopkeeper({zone:zones.zoneId,mode:exploration.mode,state:game.state,grounded:exploration.grounded,x:exploration.x,z:exploration.z});
+const nearbyCharacter=()=>characters.find(character=>character.isNear());
+function renderConversation(){
+  return dialoguePanel.show({speaker:activeCharacter.speaker,...activeCharacter.conversation.view()});
+}
+function talkToCharacter(character){
+  if(paused||document.querySelector('dialog[open]')||!character?.isNear())return;
+  clearHeld();paused=true;activeCharacter=character;activeCharacter.conversation.reset();
+  if(!renderConversation()){paused=false;activeCharacter=null;}
+}
+function interact(){if(paused)return;const character=nearbyCharacter();if(character)talkToCharacter(character);else if(atShop())openDialog('shop-dialog');else travel();}
 function travel(){
   if(paused||exploration.mode!=='exploring'||game.state!=='ready'||!exploration.grounded)return;
   const exit=zones.nearbyExit(exploration.x,exploration.z);if(!exit)return;
@@ -202,6 +218,27 @@ function sound() { try { audio.toggle(); } catch { toast('El sonido no está dis
 function fullscreen() { const promise = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); promise?.catch(()=>toast('El navegador no permite pantalla completa.')); }
 function controls() {
   renderSound();
+  characters=[
+    {id:'manuel',isNear:atManuel,location:'Banco de la plaza',speaker:{name:'Manuel',role:'Vecino de la aldea · Pescador de toda la vida',portrait:`${import.meta.env.BASE_URL}assets/dialogues/manuel-portrait.webp`,alt:'Manuel, pescador veterano de la aldea, en acuarela'},conversation:new ManuelConversation(game.environment)},
+    {id:SHOPKEEPER.id,isNear:atShopkeeper,location:'',speaker:{name:SHOPKEEPER.name,role:SHOPKEEPER.role,portrait:`${import.meta.env.BASE_URL}assets/dialogues/${SHOPKEEPER.portrait}`,alt:`${SHOPKEEPER.name}, dueño de Artes de Pesca, en acuarela`},conversation:new Conversation(SHOPKEEPER_NODES,game.environment)}
+  ];
+  dialoguePanel=new DialoguePanel({parchment:`${import.meta.env.BASE_URL}assets/dialogues/dialogue-parchment.webp`,onChoice:choice=>{
+    if(!dialoguePanel.dialog.open||!activeCharacter)return;
+    const result=activeCharacter.conversation.choose(choice);
+    if(result?.action==='shop'&&activeCharacter.id===SHOPKEEPER.id){pendingDialogueMenu='shop-dialog';dialoguePanel.close();}
+    else if(result==='close')dialoguePanel.close();else if(result===true)renderConversation();
+  },onClose:()=>{
+    clearHeld();activeCharacter=null;paused=false;$('pause').textContent='Ⅱ';
+    const menu=pendingDialogueMenu;pendingDialogueMenu=null;if(menu)openDialog(menu);
+  }});
+  // E retains equipment everywhere except this contextual encounter. Capture
+  // prevents one press from both speaking and opening the equipment command.
+  window.addEventListener('keydown',e=>{
+    if(e.code==='KeyE'&&!paused&&!document.querySelector('dialog[open]')){
+      const character=nearbyCharacter();if(!character)return;
+      e.preventDefault();e.stopImmediatePropagation();if(!e.repeat)talkToCharacter(character);
+    }
+  },{capture:true});
   const modeButton=document.createElement('button');modeButton.id='mode-toggle';modeButton.textContent='Explorar · V';modeButton.setAttribute('aria-pressed','false');document.body.append(modeButton);
   const walkHint=document.createElement('div');walkHint.id='exploration-hint';walkHint.hidden=true;document.body.append(walkHint);
   const joystick=document.createElement('div');joystick.id='walk-stick';joystick.setAttribute('role','group');joystick.setAttribute('aria-label','Joystick para caminar');joystick.append(document.createElement('span'));document.body.append(joystick);
@@ -226,8 +263,19 @@ function controls() {
   document.documentElement.dataset.playerMode=exploration.mode;
   walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,lookJoystick,modeButton,runButton,toggle:toggleMode,isPaused:()=>paused,isTouch:()=>touchMode});
   travelButton=document.createElement('button');travelButton.id='zone-travel';travelButton.hidden=true;travelButton.setAttribute('aria-keyshortcuts','T');document.body.append(travelButton);
+  // The context action opens on touch pointerup. Its later compatibility click
+  // can be retargeted onto a dialogue choice beneath the old button position.
+  // Consume only that opening click; a fresh pointerdown or keyboard action is
+  // immediately usable, without a timer or blocking deliberate quick choices.
+  let openingDialogueTap=false;
+  document.addEventListener('pointerdown',()=>{openingDialogueTap=false;},{capture:true});
+  travelButton.addEventListener('pointerup',e=>{if(e.pointerType==='touch'&&!paused&&nearbyCharacter())openingDialogueTap=true;},{capture:true});
+  document.addEventListener('click',e=>{
+    if(!openingDialogueTap||e.detail===0)return;openingDialogueTap=false;
+    if(dialoguePanel.dialog.open){e.preventDefault();e.stopImmediatePropagation();}
+  },{capture:true});
   bindModeToggle(travelButton,interact);
-  window.addEventListener('keydown',e=>{if(e.code==='KeyT'&&!e.repeat&&!document.querySelector('dialog[open]')){e.preventDefault();interact();}});
+  window.addEventListener('keydown',e=>{if(e.code==='KeyT'&&!e.repeat&&!document.querySelector('dialog[open]')&&!atManuel()){e.preventDefault();if(atShop())openDialog('shop-dialog');else travel();}});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
     if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyN')return;
@@ -235,6 +283,7 @@ function controls() {
   };
   for(const type of ['pointerdown','pointerup','click','keydown'])document.addEventListener(type,unlockAudio,{capture:true});
   input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isExploring:()=>world.exploring,isFishingReady:()=>world.equipment.ready,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
+    if(dialoguePanel.dialog.open)return;
     if(command==='sound')sound();
     else if(command==='map')toggleMap();
     else if(command==='fullscreen')fullscreen();
@@ -247,7 +296,7 @@ function controls() {
   $('touch-hud-info').onclick=showMobileInfo;
   $('retrieve-rig').onclick=()=>{clearHeld();game.reset();renderEquipment();};
   document.querySelectorAll('[data-close]').forEach(button=>button.onclick=()=>button.closest('dialog').close());
-  document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('close',()=>{ paused = false; $('pause').textContent = 'Ⅱ'; }));
+  document.querySelectorAll('dialog').forEach(dialog=>{if(dialog!==dialoguePanel.dialog)dialog.addEventListener('close',()=>{ paused = false; $('pause').textContent = 'Ⅱ'; });});
   $('sound').onclick = sound; $('fullscreen').onclick = fullscreen;
   bindModeToggle($('map-toggle'),toggleMap);
   $('quality').onclick = ()=>{ highQuality = !highQuality; world.setQuality(highQuality); $('quality').textContent = `GRÁFICOS: ${highQuality ? 'ALTO' : 'BAJO'}`;$('equipment-quality').textContent=`Gráficos: ${highQuality ? 'alto' : 'bajo'}`; };
@@ -311,9 +360,10 @@ try {
       const {spot,distance}=exploration.nearest;
       $('exploration-hint').textContent=`${touchMode ? 'Izquierdo: caminar · Derecho: mirar · MAPA' : 'WASD: caminar · Shift: correr · Espacio: saltar · M: mapa'} · ${zones.zoneId==='anglers-village'?'Aldea · Sendero sur: volver al lago':`${spot.name}: ${distance.toFixed(1)} m · Sendero hacia la aldea: tierra adentro · V: pescar`}`;
     }
-    const exit=world.exploring?zones.nearbyExit(exploration.x,exploration.z):null,shopNearby=world.exploring&&atShop();
-    travelButton.hidden=(!exit&&!shopNearby)||paused;
-    if(exit||shopNearby){const name=shopNearby?'Abrir ARTES DE PESCA':exit.name,label=touchMode?name:`T · ${name}`;if(travelButton.textContent!==label)travelButton.textContent=label;}
+    const exit=world.exploring?zones.nearbyExit(exploration.x,exploration.z):null,shopNearby=world.exploring&&atShop(),character=world.exploring&&nearbyCharacter();
+    travelButton.hidden=(!exit&&!shopNearby&&!character)||paused;
+    if(exit||shopNearby||character){const name=character?`Hablar con ${character.speaker.name}${character.location?` · ${character.location}`:''}`:shopNearby?'Abrir ARTES DE PESCA':exit.name,key=character?'E':'T',label=touchMode?name:`${key} · ${name}`;if(travelButton.textContent!==label)travelButton.textContent=label;travelButton.setAttribute('aria-keyshortcuts',key);}
+    world.dialogueMarkersHidden=paused;
     world.update(paused ? 0 : dt,game); updateUI();
     requestAnimationFrame(frame);
   }

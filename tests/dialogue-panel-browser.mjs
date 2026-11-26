@@ -60,6 +60,6 @@ try{
  await page.goto(`${process.env.ALBA_TEST_URL||'http://127.0.0.1:5177'}/dialogue-preview.html`);await page.locator('#preview-open').click();await page.waitForFunction(()=>!document.querySelector('.alba-dialogue__image-error').hidden);
  await page.locator('.alba-dialogue__close').click();await page.locator('#preview-open').click();assert.equal(await page.locator('.alba-dialogue__image-error').isVisible(),true);assert.equal(await page.locator('.alba-dialogue__choice').count(),3);await page.locator('.alba-dialogue__close').click();await page.close();
  const assets={};for(const file of ['manuel-portrait.webp','dialogue-parchment.webp'])assets[file]=(await stat(`public/assets/dialogues/${file}`)).size;
- assert.equal((await readFile('src/main.js','utf8')).includes('DialoguePanel'),false);
+ assert.equal((await readFile('src/main.js','utf8')).includes('previews/dialogue-preview'),false);
  await writeFile('test-results/dialogue-report.json',JSON.stringify({profiles:report,reuse:'PASS',missingImage:'PASS (deliberate 404)',assets},null,2));
 }finally{await browser.close();}

@@ -7,6 +7,8 @@ import {villageGroundHeight,villagePathCover,villagePlantSite,villageTreeVariati
 import {villageSurfaceTexel,villageSurfaceMaterial} from './village-materials.js';
 import {villageAtmosphere,advanceVillageWetness,villageRainMaterial} from './village-atmosphere.js';
 import {makeVillageHorizon} from './village-horizon.js';
+import {makeManuelSign,makeCharacterSign} from './manuel-sign.js';
+import {SHOPKEEPER,SHOPKEEPER_SIGN} from '../dialogues/shopkeeper.js';
 
 export function makeVillageTrailSign(){
   const group=new THREE.Group(),c=document.createElement('canvas');c.width=512;c.height=128;
@@ -140,6 +142,8 @@ export class VillageView {
     this.batches=new Map();this.cube=new THREE.BoxGeometry(1,1,1);this.tiles=[];
     for(const h of VILLAGE_HOUSES)this.house(h);
     this.details();this.finishBatches();
+    this.manuelSign=makeManuelSign(this.materials.wood,this.materials.iron);this.scene.add(this.manuelSign.group,this.manuelSign.icon);
+    this.shopkeeperSign=makeCharacterSign(this.materials.wood,this.materials.iron,{config:SHOPKEEPER_SIGN,id:SHOPKEEPER.id,name:SHOPKEEPER.name,portraitAspect:SHOPKEEPER.aspect,portraitUrl:`${import.meta.env.BASE_URL}assets/dialogues/${SHOPKEEPER.portrait}`,resources:this.manuelSign.resources});this.scene.add(this.shopkeeperSign.group,this.shopkeeperSign.icon);
     this.plants=[];this.vegetation(world);
     this.horizon=makeVillageHorizon(groundMat,[this.scene.getObjectByName('village-oaks'),this.scene.getObjectByName('village-chestnuts')]);
     this.scene.add(this.horizon.group);this.plants.push(...this.horizon.plants);
@@ -305,6 +309,8 @@ export class VillageView {
     seedVegetationPhases(ferns,VEGETATION_PROFILES.grass);padVegetationBounds(ferns,VEGETATION_PROFILES.grass,1.2);this.scene.add(ferns);this.plants.push({mesh:ferns,count:80});
   }
   update(world,environment){
+    this.manuelSign.update(world.camera,environment.time,world.dialogueMarkersHidden||!world.exploring);
+    this.shopkeeperSign.update(world.camera,environment.time,world.dialogueMarkersHidden||!world.exploring);
     const view=villageAtmosphere(world.environmentView.atmosphere,environment.daylight,environment.weather,this.atmosphere);
     const elapsed=this.lastEnvironmentTime===null?0:Math.max(0,environment.time-this.lastEnvironmentTime);
     this.wetness.value=advanceVillageWetness(this.wetness.value,environment.weather.rain,elapsed);this.lastEnvironmentTime=environment.time;

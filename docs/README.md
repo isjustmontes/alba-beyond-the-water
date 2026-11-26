@@ -1,5 +1,11 @@
 # Documentación de ALBA
 
+**Current M10:** accepted Manuel system reused for the [shopkeeper encounter and existing-store handoff](milestones/M10-stories-of-the-village/README.md). Same approved illustrated design, second supplied portrait; owner validation pending, no commit/publication.
+
+**Current M10:** conversation C accepted; [portrait sign and speech-bubble discoverability](milestones/M10-stories-of-the-village/README.md) implemented, pending visual acceptance. No changes to narrative, controls or collision footprints; no commit/publication.
+
+**Current M10-C:** Manuel conversations and contextual E/mobile interaction are integrated in the village; B accepted in `6086909`. Same artwork/layout, paused controls and no save mutations; manual acceptance pending. See [M10](milestones/M10-stories-of-the-village/README.md). No C commit/publication; earlier B-only status is historical.
+
 **Vigente M10-B:** [interfaz ilustrada y previsualización aislada de Manuel](milestones/M10-stories-of-the-village/README.md). A validada en `49f54c3`; B implementada con recursos aportados, seis perfiles de navegador/build correctos y aceptación visual pendiente. Sin NPC/conversación completa ni cambios jugables; no commit B/publicación. Los estados A inferiores son históricos.
 
 **Vigente: M10 · Stories of the Village · v0.9.0, Etapa A sólo SDD.** [Plan de Manuel y conversación 2D](milestones/M10-stories-of-the-village/README.md), desde v0.8.1 publicada y main verificado. Dirección artística aprobada; plan pendiente de validación del propietario. Sin código, assets, pruebas, build, commit ni publicación. Las entregas anteriores y sus limitaciones conservan su historial.

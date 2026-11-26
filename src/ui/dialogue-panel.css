@@ -1,4 +1,4 @@
-.alba-dialogue{box-sizing:border-box;position:fixed;width:min(1060px,calc(100% - 48px - env(safe-area-inset-left) - env(safe-area-inset-right)));max-width:none;max-height:calc(100dvh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:0;border:0;border-radius:13px;background:transparent;color:#493426;overflow:visible;box-shadow:0 22px 80px #0d1b1799;font-family:system-ui,sans-serif}
+.alba-dialogue,.touch-mode .alba-dialogue{box-sizing:border-box;position:fixed;width:min(1060px,calc(100% - 48px - env(safe-area-inset-left) - env(safe-area-inset-right)));max-width:none;max-height:calc(100dvh - 40px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:0;border:0;border-radius:13px;background:transparent;color:#493426;overflow:visible;box-shadow:0 22px 80px #0d1b1799;font-family:system-ui,sans-serif}
 .alba-dialogue:not([open]){display:none}
 .alba-dialogue::backdrop{background:#142a26c2;backdrop-filter:blur(3px)}
 .alba-dialogue *{box-sizing:border-box}
@@ -26,7 +26,7 @@
 .alba-dialogue__scroll-hint{position:absolute;bottom:5px;right:24px;margin:0;padding:1px 6px;border-radius:3px;background:#efdcbaed;color:#65492f;font:11px/1.4 system-ui,sans-serif;pointer-events:none}
 .alba-dialogue__scroll-hint[hidden]{display:none}
 @media(max-width:620px) and (orientation:portrait){
- .alba-dialogue{width:calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))}
+ .alba-dialogue,.touch-mode .alba-dialogue{width:calc(100% - 24px - env(safe-area-inset-left) - env(safe-area-inset-right))}
  .alba-dialogue__sheet{grid-template-columns:1fr;gap:12px;aspect-ratio:auto;padding:28px 24px 24px}
  .alba-dialogue__portrait{height:clamp(126px,25dvh,215px)}
  .alba-dialogue__image{max-width:220px;object-position:center}
@@ -38,7 +38,7 @@
  .alba-dialogue__choice{min-height:46px;padding:10px;font-size:13px;gap:9px}
 }
 @media(orientation:landscape) and (max-height:500px){
- .alba-dialogue{width:calc(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+ .alba-dialogue,.touch-mode .alba-dialogue{width:calc(100% - 32px - env(safe-area-inset-left) - env(safe-area-inset-right));max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
  .alba-dialogue__sheet{aspect-ratio:auto;grid-template-columns:minmax(0,.6fr) minmax(0,1.4fr);padding:24px;gap:24px;overflow:hidden}
  .alba-dialogue__portrait{height:calc(100dvh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
  .alba-dialogue__content{max-height:calc(100dvh - 88px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain;padding:0 8px 4px 0;touch-action:pan-y}

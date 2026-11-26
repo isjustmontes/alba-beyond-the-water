@@ -1,5 +1,11 @@
 # Hoja de ruta propuesta
 
+**M10 scope extension:** Manuel accepted; second illustrated inhabitant at the existing shop explicitly authorized, sharing conversation/sign/UI and linking the existing catalog. No additional economy, NPC or world features. Stop for visual/functional acceptance; no publication.
+
+**M10 current scope:** conversation C accepted; owner authorizes only a small portrait sign at the existing bench and contextual speech-bubble marker. Stop for visual acceptance; no further RPG/NPC features or publication.
+
+**Current M10-C authorization:** B accepted in `6086909`; current request brings the planned contextual integration into C together with the complete local conversation. Implement only Manuel, E/mobile proximity and modal control handling; no additional RPG/NPC content. Stop for owner acceptance, without publication or advancing to another stage.
+
 **M10-B vigente:** propietario acepta A y autoriza la interfaz ilustrada con assets aportados, sin guion completo ni proximidad. Panel y preview aislada implementados/comprobados, pendientes de validación visual; [alcance y evidencia](../milestones/M10-stories-of-the-village/README.md). El nuevo encargo adelanta sólo presentación de C respecto al plan original: no autoriza conversaciones completas, NPC ni integración D. Presupuesto/variantes/licencia para publicación y límites físicos siguen pendientes; no se publica ni se confirma B todavía.
 
 **Plan vigente, sólo SDD:** [M10 · Stories of the Village · v0.9.0](../milestones/M10-stories-of-the-village/README.md). A documenta el primer habitante Manuel, acuarela 2D/pergamino y diálogo ramificado; B propone guion/arte WebP, C panel accesible, D interacción contextual, E validación/pulido. Dirección visual aprobada; plan A pendiente de validación y ninguna implementación posterior autorizada. No NPC 3D, nuevas zonas ni funciones RPG adicionales. Base v0.8.1 publicada; la propuesta histórica «M10 Experiencia» queda futura sin ID asignado, sin renumerar fichas reales.
