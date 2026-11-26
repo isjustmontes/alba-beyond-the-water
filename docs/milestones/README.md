@@ -12,4 +12,4 @@ Las fichas agrupan especificación, diseño, tareas, aceptación y evidencia. M0
 - [M07 · First Steps · v0.6.0 publicada; límites de aceptación en su ficha](M07-first-steps/README.md)
 - [M08 · The Angler's Village · v0.7.0 MVP cerrado y aceptado, publicación autorizada](M08-anglers-village/README.md)
 
-- [M09 · A Living Village · v0.8.0 · A sólo SDD, pendiente de aprobación](M09-living-village/README.md)
+- [M09 · A Living Village · v0.8.0 · MVP A–E cerrado y aceptado, publicación autorizada; NFR físicos/sostenidos parciales](M09-living-village/README.md)

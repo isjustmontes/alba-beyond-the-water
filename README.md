@@ -2,11 +2,20 @@
 
 ![ALBA — Beyond the Water](alba%20-%20banner.webp)
 
-**v0.7.0 — The Angler's Village · Pre-Alpha.** Explore a Galician-inspired rural village, visit its fishing tackle shop and return to Lago Sereno with your equipped tackle. Existing fishing, environmental simulation, audio and saved catches are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
+**v0.8.0 — A Living Village · Pre-Alpha.** Discover a more natural Galician-inspired village, with Atlantic vegetation, refined rural materials, weather-responsive lighting and a deeper rolling landscape. Explore, visit its fishing tackle shop and return to Lago Sereno with your equipped tackle. Existing fishing, environmental simulation, audio and saved catches are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
 
-[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.7.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.7.0)
+[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.8.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0)
 
 *Every water has a story.*
+
+## A Living Village
+
+- **Atlantic vegetation:** varied oak and chestnut silhouettes, irregular tree groups, grasses and ferns respond to the existing environmental wind. Lago Sereno's trees remain unchanged.
+- **Natural ground and paths:** gentle outer relief, organic grass-to-path transitions and more varied soil detail preserve the existing walkable routes and collision boundaries.
+- **Rural architecture:** granite, aged tiles and natural wood gain subtle joints, grain, moss and localized wear while buildings, signs and shop access retain their layout.
+- **Weather and light:** softer morning mist, balanced daylight and night visibility, and gradual surface wetting and drying follow Living Waters without introducing another simulation.
+- **Landscape depth:** distant rolling hills and clustered woodland blend into atmospheric haze. This background is visual scenery, not a new explorable zone.
+- **Desktop and mobile:** instanced vegetation, shared materials and reduced distant foliage on low/mobile quality keep the additional rendering work bounded. Existing controls, commerce and fishing remain available.
 
 ## The Angler's Village
 
@@ -77,6 +86,7 @@ All releases remain **Pre-Alpha**.
 | [v0.5.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.5.0) | A World Alive: dynamic vegetation, atmosphere, shorelines, natural soundscape and refined cork grip. |
 | [v0.6.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.6.0) | First Steps: exploration, shoreline fishing, sprint and initial connected-zone architecture. |
 | [v0.7.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.7.0) | The Angler's Village: Galician-inspired village, two-way travel, contextual shop, basic currency and persistent inventory/equipped tackle. |
+| [v0.8.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0) | A Living Village: Atlantic vegetation, natural terrain and paths, refined rural materials, weather-responsive lighting and distant rolling hills. |
 
 ## Development
 
@@ -85,6 +95,8 @@ Consult the [project status](docs/project/STATUS.md), [roadmap](docs/project/ROA
 [M08 evidence and acceptance](docs/milestones/M08-anglers-village/README.md) document the village and persistent commerce. The final relevant logic suite passed 35/35 and the production build succeeded. Desktop and emulated portrait/landscape checks cover shop interactions, previous saves, equipment and return fishing. Physical mobile testing and sustained performance profiling remain pending; the existing large-bundle warning remains.
 
 [Archived English v0.5.0 guide](https://github.com/isjustmontes/alba-beyond-the-water/blob/2d5ca938df5987867092774478dbd8a6df3bb0b3/README.md)
+
+[M09 evidence and acceptance](docs/milestones/M09-living-village/README.md) record the accepted v0.8.0 visual scope. The final relevant logic suite passed 60/60 and the production build succeeded, with the existing large-bundle warning. Prior desktop and emulated mobile/tablet checks cover village views, weather, travel and commerce. Short headless measurements show stable resources across five round trips; they do not certify sustained or physical-device performance. Physical Android/iOS and WebKit validation remain pending.
 
 ## Future direction — planned, not implemented
 

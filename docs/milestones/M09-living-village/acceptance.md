@@ -1,5 +1,13 @@
 # Aceptación propuesta · A Living Village
 
+## Decisión final vigente · 26/11/2026
+
+El encargo «Publicación final» del propietario confirma los cambios validados pendientes, incluida Etapa E, y autoriza cerrar y publicar M09. **MVP A–E aceptado para v0.8.0 Pre-Alpha**: AC-LVI-01/02/03/06 y REQ-LVI-001–005 VERIFIED en el alcance visual solicitado. D/E conservadas en `351da15`, sin reescribir A/B/C. La corrección arbórea y el horizonte quedan incluidos en la aceptación final; no se infiere aprobación de otros hitos ni funcionalidades.
+
+AC-LVI-04/05 y T05/NFR-LVI-001/002 permanecen **PARTIAL**: 60/60 pruebas relevantes y build final correctos, evidencia previa PC/móvil/tablet emulados y recursos estables tras cinco viajes; faltan Android/iOS físicos, WebKit y sesión sostenida/térmica. Se acepta publicar el MVP Pre-Alpha con estas limitaciones explícitas, no certificar una Alpha ni rendimiento universal. Sin repetir revisión visual ya validada. Publicación segura autorizada, sujeta a remoto compatible y tag ausente.
+
+## Registro histórico (sustituido por la decisión final)
+
 **Horizonte E:** AC-LVI-06 se amplía por encargo explícito: lomas suaves/irregulares y bosque distante con profundidad atmosférica, sin cortes visibles ni cambios en árboles actuales/recorrido/lago. Evidencia técnica implementada (12/12, build, vistas y coste), aceptación visual humana pendiente. +3 lotes simples de fondo permitidos por esta ampliación, sin mapas nuevos ni efectos pesados. NFR/aceptación final siguen parciales, sin inferir aceptación D/E.
 
 **Incidencia visual E del propietario:** copas ovaladas similares, alineaciones y ramas inferiores dominantes; E no aceptada. Corrección exclusivamente arbórea implementada y comprobada: cuatro variantes, agrupación exterior e integración de ramas, sin alterar Lago Sereno/colisiones. AC-LVI-06 permanece IMPLEMENTED_UNVERIFIED hasta nueva revisión humana; ver evidencia. No se infiere aceptación de D ni se publica.

@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Vigente: v0.8.0 — A Living Village, Pre-Alpha.** [M09 cerrado y aceptado](milestones/M09-living-village/acceptance.md) por autorización final del propietario, incluidas D/E. 60/60 pruebas relevantes y build correctos; vegetación, terreno, materiales, atmósfera y horizonte rural mejorados sin nuevas mecánicas. NFR físicos/WebKit/sostenidos parciales; publicación autorizada tras verificación Git segura. Los estados pendientes inferiores son registro histórico.
+
 **Horizonte M09-E:** colinas y bosque distante exclusivos de aldea, árboles actuales y Lago Sereno intactos; 12/12 relevantes/build correctos. [Revisión visual pendiente](milestones/M09-living-village/README.md). Sin commit ni publicación.
 
 **Corrección M09-E:** árboles de aldea con cuatro variantes de copa y agrupación exterior, lago intacto; 16/16 relevantes/build y tres perfiles emulados correctos. [Revisión pendiente](milestones/M09-living-village/README.md). Sin commit ni publicación; D/E conservadas.

@@ -1,5 +1,16 @@
 # Evidencia · A Living Village
 
+## Cierre y comprobación final · 26/11/2026
+
+- El propietario confirma cambios validados, incluida E, y autoriza cierre/publicación. Commit D/E `351da15`; A/B/C previos conservados. Sin nuevas funciones ni revisión visual repetida; se reutilizan las evidencias reales inferiores.
+- Comprobación final ejecutada: `node --test tests/village-ground.test.js tests/village-materials.test.js tests/village-atmosphere.test.js tests/village-horizon.test.js tests/village.test.js tests/vegetation.test.js tests/atmosphere.test.js tests/zones.test.js tests/shop.test.js tests/fishing.test.js tests/input.test.js tests/journal.test.js`: **60/60**, cero fallos/omitidas. Incluye materiales, humedad, horizonte, recorrido/viajes, compra/equipo/recarga, entrada PC/táctil y pesca/captura/guardados compatibles.
+- `npm.cmd run build`: correcto, Vite 7.3.8, 52 módulos, JS **682,62 kB / gzip 189,89 kB**, CSS 31,84 / 7,14 kB. Se conserva aviso de chunk >500 kB; ninguna dependencia nueva.
+- `git diff --check` correcto. Revisión de lista/diff: sólo aldea/presentación y pruebas/documentación relacionadas. `git ls-files test-results` vacío; prototipos de manos, capturas y temporales ignorados no incluidos. `dartfish` no modificado. No se reescriben commits ni tags anteriores.
+- Tras fetch, `origin/main` en `5793ffbfac44ee097f06ac80a5a7b17f476195c5` es antecesor de la rama; v0.8.0 ausente local/remoto en la comprobación previa. Publicación autorizada por fast-forward, tag anotado y push atómico, con comprobación remota final antes de ejecutar. Resultado del release/Pages se consulta en GitHub tras publicar, sin anticipar éxito.
+- NFR-LVI-001/002 y T05 permanecen PARTIAL: ensayo breve emulado no certifica móviles físicos, WebKit ni rendimiento sostenido. La autorización acepta el MVP visual Pre-Alpha con estas limitaciones, sin convertir las evidencias previas en pruebas físicas.
+
+## Registro histórico
+
 ## Horizonte E · 26/11/2026 · local sin commit
 
 - HEAD sigue `43d4587`, con D/E locales conservadas. Alcance autorizado: sólo fondo lejano rural; árboles actuales, materiales cercanos, edificios, suelo transitable/colisiones y Lago Sereno intactos. `VillageView` añade el grupo generado una vez por `village-horizon.js`; sin nueva zona jugable, gestor ni dependencia.
