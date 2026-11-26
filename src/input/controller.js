@@ -35,13 +35,13 @@ export class GameControls {
     listen(button,'keydown',e=>{if(e.code==='Enter'&&!e.repeat){e.preventDefault();this.actions.hold('enter');}});
     listen(button,'keyup',e=>{if(e.code==='Enter'){e.preventDefault();this.actions.release('enter');}});
     listen(window,'keydown',e=>{
-      if(e.code==='Space'){if(!isPaused()){e.preventDefault();if(!e.repeat)this.actions.hold('space');}return;}
+      if(e.code==='Space'){if(!isPaused()&&!isExploring()){e.preventDefault();if(!e.repeat)this.actions.hold('space');}return;}
       if(e.repeat)return;
       if(e.code==='KeyP'&&!document.querySelector('dialog[open]:not(#pause-dialog)'))onPause(!isPaused());
       if(e.code==='KeyR'&&!isPaused()&&!isExploring()){this.clear();game.reset();}
-      const commands={KeyM:'sound',KeyF:'fullscreen',KeyJ:'journal',KeyH:'help',KeyE:'equipment'};
+      const commands={KeyM:'map',KeyN:'sound',KeyF:'fullscreen',KeyJ:'journal',KeyH:'help',KeyE:'equipment'};
       const command=commands[e.code];
-      if(command&&(!isPaused()||command==='sound'||command==='fullscreen'))onCommand(command);
+      if(command&&(!isPaused()||command==='map'||command==='sound'||command==='fullscreen')){e.preventDefault();onCommand(command);}
     });
     listen(window,'keyup',e=>{if(e.code==='Space')this.actions.release('space');});
     const focusLost=()=>{this.clear();if(!isPaused())onPause(true);};

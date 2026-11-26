@@ -5,6 +5,8 @@ import './phase5.css';
 import './mobile-hud.css';
 import './exploration.css';
 import './shop.css';
+import './zone-map.css';
+import {renderZoneMap} from './zone-map.js';
 import {VillageShop} from './shop.js';
 import {ShopPanel} from './shop-panel.js';
 import {Exploration,ExplorationControls,WALK,bindModeToggle} from './input/exploration.js';
@@ -30,7 +32,7 @@ const zoneHeight=(id,x,z)=>id==='anglers-village'?villageWalkHeight(x,z):walkHei
 const atShop=()=>zones.zoneId==='anglers-village'&&exploration.mode==='exploring'&&nearVillageShop(exploration.x,exploration.z);
 function interact(){if(paused)return;if(atShop())openDialog('shop-dialog');else travel();}
 function travel(){
-  if(paused||exploration.mode!=='exploring'||game.state!=='ready')return;
+  if(paused||exploration.mode!=='exploring'||game.state!=='ready'||!exploration.grounded)return;
   const exit=zones.nearbyExit(exploration.x,exploration.z);if(!exit)return;
   const plan=zones.prepareExit(exit.id);
   // Build before committing the session transition; a construction error cannot strand the player.
@@ -177,6 +179,15 @@ function setPaused(value) {
   $('pause').textContent = value ? '▷' : 'Ⅱ';
 }
 function openDialog(id) { if(document.querySelector('dialog[open]'))return;clearHeld(); paused = true;if(id==='equipment-dialog')renderEquipment();if(id==='shop-dialog')shopPanel.render(); $(id).showModal(); }
+function toggleMap(){
+  if($('map-dialog').open){$('map-dialog').close();return;}
+  if(paused||document.querySelector('dialog[open]'))return;
+  openDialog('map-dialog');
+  const data=renderZoneMap($('zone-map'),{zoneId:zones.zoneId,x:exploration.x,z:exploration.z,yaw:world.yaw,obstacles:world.landscape.waterObstacles});
+  $('map-title').textContent=data.name;$('map-legend').replaceChildren();
+  for(const point of data.points){const item=document.createElement('li');item.textContent=point.name;$('map-legend').append(item);}
+  $('zone-map').setAttribute('aria-label',`Mapa de ${data.name}. Estás en ${exploration.x.toFixed(0)}, ${exploration.z.toFixed(0)}; la flecha indica tu orientación.`);
+}
 function showMobileInfo() {
   // Snapshot the existing HUD while paused; no second simulation or saved data.
   const text=ids=>ids.map(id=>$(id).textContent).join(' · ');
@@ -186,7 +197,7 @@ function showMobileInfo() {
   $('mobile-info-catches').textContent=`${$('catch-count').textContent} capturas · ${text(['total-weight','last-catch'])}`;
   openDialog('mobile-hud-dialog');
 }
-function renderSound() {const label=audio.enabled ? 'Desactivar sonido' : 'Activar sonido';$('sound-status').textContent=audio.enabled ? 'ON' : 'OFF';$('sound').setAttribute('aria-label',label);$('sound').title=`${label} (M)`;}
+function renderSound() {const label=audio.enabled ? 'Desactivar sonido' : 'Activar sonido';$('sound-status').textContent=audio.enabled ? 'ON' : 'OFF';$('sound').setAttribute('aria-label',label);$('sound').title=`${label} (N)`;}
 function sound() { try { audio.toggle(); } catch { toast('El sonido no está disponible en este navegador.'); } finally {renderSound();} }
 function fullscreen() { const promise = document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.(); promise?.catch(()=>toast('El navegador no permite pantalla completa.')); }
 function controls() {
@@ -194,7 +205,8 @@ function controls() {
   const modeButton=document.createElement('button');modeButton.id='mode-toggle';modeButton.textContent='Explorar · V';modeButton.setAttribute('aria-pressed','false');document.body.append(modeButton);
   const walkHint=document.createElement('div');walkHint.id='exploration-hint';walkHint.hidden=true;document.body.append(walkHint);
   const joystick=document.createElement('div');joystick.id='walk-stick';joystick.setAttribute('role','group');joystick.setAttribute('aria-label','Joystick para caminar');joystick.append(document.createElement('span'));document.body.append(joystick);
-  const runButton=document.createElement('button');runButton.id='walk-run';runButton.textContent='CORRER';runButton.setAttribute('aria-label','Alternar carrera, velocidad 1,5×');runButton.setAttribute('aria-pressed','false');document.body.append(runButton);
+  const lookJoystick=document.createElement('div');lookJoystick.id='look-stick';lookJoystick.setAttribute('role','group');lookJoystick.setAttribute('aria-label','Joystick para mirar');lookJoystick.append(document.createElement('span'));document.body.append(lookJoystick);
+  const runButton=document.createElement('button');runButton.id='walk-run';runButton.textContent='CORRER';runButton.setAttribute('aria-label','Alternar carrera');runButton.setAttribute('aria-pressed','false');document.body.append(runButton);
   const toggleMode=()=>{
     if(paused||zones.zoneId!=='lago-sereno')return;
     const error=exploration.toggle(game.state,world.yaw,world.pitch,()=>[.08,.45,1].some(power=>world.canCastFromBank(exploration.x,exploration.z,world.yaw,power,game.environment.weather)));
@@ -212,18 +224,19 @@ function controls() {
     if(world.exploring)toast('Camina por la ribera y apunta hacia agua libre para pescar. Recupera el aparejo antes de explorar.');
   };
   document.documentElement.dataset.playerMode=exploration.mode;
-  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,modeButton,runButton,toggle:toggleMode,isPaused:()=>paused});
+  walkControls=new ExplorationControls({motion:exploration,world,canvas:$('scene'),joystick,lookJoystick,modeButton,runButton,toggle:toggleMode,isPaused:()=>paused,isTouch:()=>touchMode});
   travelButton=document.createElement('button');travelButton.id='zone-travel';travelButton.hidden=true;travelButton.setAttribute('aria-keyshortcuts','T');document.body.append(travelButton);
   bindModeToggle(travelButton,interact);
   window.addEventListener('keydown',e=>{if(e.code==='KeyT'&&!e.repeat&&!document.querySelector('dialog[open]')){e.preventDefault();interact();}});
   const unlockAudio=e=>{
     // The mute control must toggle once without first starting default-on audio.
-    if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyM')return;
+    if(!e.isTrusted||e.target?.closest?.('#sound')||e.code==='KeyN')return;
     try{audio.unlock();}catch{/* Audio is optional; a later gesture or the sound button can retry. */}
   };
   for(const type of ['pointerdown','pointerup','click','keydown'])document.addEventListener(type,unlockAudio,{capture:true});
   input=new GameControls({canvas:$('scene'),button:$('action'),game,world,isExploring:()=>world.exploring,isFishingReady:()=>world.equipment.ready,isPaused:()=>paused,onPause:setPaused,onCommand:command=>{
     if(command==='sound')sound();
+    else if(command==='map')toggleMap();
     else if(command==='fullscreen')fullscreen();
     else openDialog({journal:'log-dialog',help:'help-dialog',equipment:'equipment-dialog'}[command]);
   }});
@@ -236,6 +249,7 @@ function controls() {
   document.querySelectorAll('[data-close]').forEach(button=>button.onclick=()=>button.closest('dialog').close());
   document.querySelectorAll('dialog').forEach(dialog=>dialog.addEventListener('close',()=>{ paused = false; $('pause').textContent = 'Ⅱ'; }));
   $('sound').onclick = sound; $('fullscreen').onclick = fullscreen;
+  bindModeToggle($('map-toggle'),toggleMap);
   $('quality').onclick = ()=>{ highQuality = !highQuality; world.setQuality(highQuality); $('quality').textContent = `GRÁFICOS: ${highQuality ? 'ALTO' : 'BAJO'}`;$('equipment-quality').textContent=`Gráficos: ${highQuality ? 'alto' : 'bajo'}`; };
   $('equipment-quality').onclick=()=>$('quality').click();
   $('hands-toggle').onchange=()=>{$('hands-toggle').checked=world.hands.setEnabled($('hands-toggle').checked);};
@@ -288,14 +302,14 @@ try {
       // Small simulation steps keep tension stable without slowing gameplay at low FPS.
       let remaining=dt;
       while (remaining>0) { const step=Math.min(remaining,1/60); if(zones.zoneId==='lago-sereno')game.update(step);else{game.time+=step;game.environment.update(step);} remaining-=step; }
-      exploration.update(dt,world.yaw);
+      walkControls.update(dt);exploration.update(dt,world.yaw);
     }
     world.camera.position.x=exploration.x;world.camera.position.z=exploration.z;
-    const eye=world.exploring||exploration.spot.id!=='dock' ? exploration.floor+WALK.eye : 3;
+    const eye=world.exploring||exploration.spot.id!=='dock' ? exploration.floor+WALK.eye+exploration.jumpHeight : 3;
     world.camera.position.y+=(eye-world.camera.position.y)*(1-Math.exp(-(paused ? 0 : dt)*10));
     if(world.exploring){
       const {spot,distance}=exploration.nearest;
-      $('exploration-hint').textContent=`${touchMode ? 'Joystick: caminar · Arrastra: mirar' : 'WASD: caminar · Clic: capturar ratón · Esc: liberar'} · ${zones.zoneId==='anglers-village'?'Aldea · Sendero sur: volver al lago':`${spot.name}: ${distance.toFixed(1)} m · Sendero hacia la aldea: tierra adentro · V: pescar`}`;
+      $('exploration-hint').textContent=`${touchMode ? 'Izquierdo: caminar · Derecho: mirar · MAPA' : 'WASD: caminar · Shift: correr · Espacio: saltar · M: mapa'} · ${zones.zoneId==='anglers-village'?'Aldea · Sendero sur: volver al lago':`${spot.name}: ${distance.toFixed(1)} m · Sendero hacia la aldea: tierra adentro · V: pescar`}`;
     }
     const exit=world.exploring?zones.nearbyExit(exploration.x,exploration.z):null,shopNearby=world.exploring&&atShop();
     travelButton.hidden=(!exit&&!shopNearby)||paused;

@@ -31,7 +31,7 @@ try{
     await page.reload();await ready();assert.equal(await status(),'OFF');assert.equal(await count(),0);
     await press('#help');assert.equal(await count(),0,'ordinary gestures respect saved mute');
     await press('#help-dialog .close');
-    if(mobile)await press('#sound');else await page.keyboard.press('KeyM');
+    if(mobile)await press('#sound');else await page.keyboard.press('KeyN');
     await page.waitForFunction(()=>window.__audioContexts[0]?.state==='running');
     assert.equal(await status(),'ON');assert.equal(await count(),1);
     assert.equal(await page.evaluate(()=>localStorage.getItem('alba-audio-v1')),'true');
@@ -39,10 +39,10 @@ try{
     await press('#help');await page.waitForFunction(()=>window.__audioContexts[0]?.state==='running');
     assert.equal(await count(),1);assert.equal(await status(),'ON');
     await press('#help-dialog .close');
-    if(mobile)await press('#sound');else await page.keyboard.press('KeyM');
+    if(mobile)await press('#sound');else await page.keyboard.press('KeyN');
     assert.equal(await status(),'OFF');assert.equal(await count(),1,'mute reuses existing context');
     await context.close();
   }
   assert.deepEqual(errors,[]);
-  console.log('PASS audio desktop/mobile emulation: deferred autoplay, trusted gesture unlock, first-action mute, saved ON/OFF, reload and M/button controls.');
+  console.log('PASS audio desktop/mobile emulation: deferred autoplay, trusted gesture unlock, first-action mute, saved ON/OFF, reload and N/button controls.');
 }finally{await browser.close();}

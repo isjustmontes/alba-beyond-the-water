@@ -6,13 +6,13 @@ import {FishSchool} from '../src/simulation/fish-ai.js';
 import {FishingGame} from '../src/fishing.js';
 import {seededRandom} from '../src/simulation/environment.js';
 
-test('Shift and mobile sprint reach exactly 1.5x with smooth acceleration at different frame rates',()=>{
+test('Shift and mobile sprint reach the configured sprint speed with smooth acceleration at different frame rates',()=>{
   for(const fps of [20,60,120])for(const input of ['ShiftLeft','ShiftRight','touch']){
     const m=new Exploration();m.mode='exploring';m.x=4;m.z=32;m.keys.add('KeyS');
     if(input==='touch')m.sprint=true;else m.keys.add(input);
-    m.update(1/fps,0);assert.ok(m.vz>0&&m.vz<WALK.speed*1.5);
+    m.update(1/fps,0);assert.ok(m.vz>0&&m.vz<WALK.speed*WALK.runMultiplier);
     for(let i=1;i<fps;i++)m.update(1/fps,0);
-    assert.ok(Math.abs(m.vz-WALK.speed*1.5)<.00001);
+    assert.ok(Math.abs(m.vz-WALK.speed*WALK.runMultiplier)<.00001);
     m.keys.delete(input);m.sprint=false;const before=m.vz;m.update(1/fps,0);
     assert.ok(m.vz<before&&m.vz>WALK.speed,'deceleration remains gradual');
   }

@@ -3,8 +3,12 @@
 .touch-mode #zone-travel{top:auto;bottom:calc(250px + env(safe-area-inset-bottom));min-height:46px;font-size:11px}
 @media(orientation:landscape) and (max-height:500px){.touch-mode #zone-travel{top:calc(110px + env(safe-area-inset-top));bottom:auto}}
 #exploration-hint{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:10;max-width:calc(100% - 30px);padding:10px 15px;background:#17382fee;border:1px solid #d6c59b44;border-radius:9px;color:#f1e7cf;font-size:12px;text-align:center;pointer-events:none}
-#walk-stick{display:none;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;z-index:15;width:114px;height:114px;border:1px solid #e4d5ac66;border-radius:50%;background:#16372e88;left:max(16px,env(safe-area-inset-left));bottom:calc(74px + env(safe-area-inset-bottom))}
-#walk-stick span{display:block;position:absolute;width:44px;height:44px;left:34px;top:34px;border-radius:50%;background:#ddceaa88;transform:translate(var(--stick-x,0px),var(--stick-y,0px));pointer-events:none}
+:is(#walk-stick,#look-stick){display:none;touch-action:none;user-select:none;-webkit-user-select:none;position:fixed;z-index:15;width:114px;height:114px;border:1px solid #e4d5ac66;border-radius:50%;background:#16372e88;bottom:calc(74px + env(safe-area-inset-bottom))}
+#walk-stick{left:max(16px,env(safe-area-inset-left))}
+#look-stick{right:max(16px,env(safe-area-inset-right));bottom:calc(250px + env(safe-area-inset-bottom))}
+:is(#walk-stick,#look-stick) span{display:block;position:absolute;width:44px;height:44px;left:34px;top:34px;border-radius:50%;background:#ddceaa88;transform:translate(var(--stick-x,0px),var(--stick-y,0px));pointer-events:none}
+.touch-mode #look-stick{display:block}
+.touch-mode[data-player-mode=exploring] #look-stick{bottom:calc(74px + env(safe-area-inset-bottom))}
 .touch-mode[data-player-mode=exploring] #walk-stick{display:block}
 #walk-run{display:none;position:fixed;z-index:15;left:calc(max(16px,env(safe-area-inset-left)) + 126px);bottom:calc(108px + env(safe-area-inset-bottom));min-width:64px;min-height:44px;padding:6px 8px;border:1px solid #d6c59b66;border-radius:9px;background:#17382fee;color:#f1e7cf;font:600 10px sans-serif;touch-action:manipulation}
 .touch-mode[data-player-mode=exploring] #walk-run{display:block}
@@ -13,5 +17,7 @@
 .touch-mode #mode-toggle{top:calc(100px + env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));font-size:11px;padding:8px 12px}
 .touch-mode #exploration-hint{bottom:calc(195px + env(safe-area-inset-bottom));font-size:11px;width:max-content;max-width:calc(100% - 32px)}
 .touch-mode[data-player-mode=exploring] .toast{top:calc(155px + env(safe-area-inset-top));bottom:auto;max-width:calc(100% - 32px)}
-@media(orientation:landscape) and (max-height:500px){.touch-mode #mode-toggle{top:calc(58px + env(safe-area-inset-top))}.touch-mode #exploration-hint{bottom:calc(70px + env(safe-area-inset-bottom));left:auto;right:12px;transform:none;max-width:55%}.touch-mode #walk-stick{width:100px;height:100px}.touch-mode #walk-stick span{left:27px;top:27px}}
+@media(max-width:380px){.touch-mode .brand svg{display:none}.touch-mode #walk-run{left:calc(50% - 26px);min-width:52px;width:52px;padding:6px 2px}}
+@media(orientation:landscape) and (max-height:500px){.touch-mode #mode-toggle{top:calc(58px + env(safe-area-inset-top))}.touch-mode #exploration-hint{bottom:calc(60px + env(safe-area-inset-bottom));left:calc(max(16px,env(safe-area-inset-left)) + 202px);right:calc(max(16px,env(safe-area-inset-right)) + 114px);width:auto;transform:none;max-width:none;font-size:10px;padding:5px 8px}.touch-mode :is(#walk-stick,#look-stick){width:100px;height:100px}.touch-mode :is(#walk-stick,#look-stick) span{left:27px;top:27px}.touch-mode #look-stick{bottom:calc(174px + env(safe-area-inset-bottom))}.touch-mode[data-player-mode=exploring] #look-stick{bottom:calc(74px + env(safe-area-inset-bottom))}}
 @media(orientation:landscape) and (max-height:500px){.touch-mode[data-player-mode=exploring] .toast{top:calc(96px + env(safe-area-inset-top));max-width:40%}}
+@media(orientation:landscape) and (max-height:360px){.touch-mode #look-stick{right:calc(max(16px,env(safe-area-inset-right)) + 156px);bottom:calc(156px + env(safe-area-inset-bottom))}.touch-mode[data-player-mode=exploring] #look-stick{right:max(16px,env(safe-area-inset-right));bottom:calc(62px + env(safe-area-inset-bottom))}}
