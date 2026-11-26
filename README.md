@@ -2,11 +2,20 @@
 
 ![ALBA — Beyond the Water](alba%20-%20banner.webp)
 
-**v0.8.1 — Movement & Navigation · Pre-Alpha.** Explore Lago Sereno and its Galician-inspired village with faster movement, PC jumping, zone maps and dual virtual joysticks on mobile. Existing fishing, environmental simulation, commerce, audio and saved progress are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
+**v0.9.0 — Stories of the Village · Pre-Alpha.** Meet Manuel and Xosé through narrative watercolor portraits and branching conversations in the Galician-inspired village. Existing fishing, environmental simulation, commerce, audio and saved progress are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
 
-[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.8.1 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.1)
+[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.9.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.9.0)
 
 *Every water has a story.*
+
+## Stories of the Village
+
+- **Two illustrated inhabitants:** meet Manuel, a veteran fisherman by the plaza bench, and Xosé, the owner of ARTES DE PESCA. Their final watercolor portraits retain transparent backgrounds; no 3D character models are introduced.
+- **Handcrafted dialogue interface:** reusable parchment, readable HTML text and real choice buttons preserve ALBA's visual identity. The same panel adapts to desktop, phone and tablet; close, farewell and back options remain available.
+- **Branching conversations:** fishing advice reflects the existing species, tackle and environmental systems. Short family memories and village stories give each inhabitant a distinct voice. Conversations do not grant rewards or modify saved progress.
+- **Clear encounters:** small weathered wooden portrait signs and gently floating, camera-facing speech bubbles identify both locations. Indicators fade with distance and hide during menus; existing navigation boundaries remain intact.
+- **Talk or shop:** press E near an inhabitant or use the mobile contextual button. Xosé's catalog option opens the existing tackle shop; T retains direct shop access on PC. Existing money, purchases and equipment remain compatible.
+- **Safe controls:** conversations pause the session and clear held keys, both mobile joysticks and captured mouse input. Closing restores play; switching to the catalog keeps one paused modal open. The original fishing, weather, exploration and audio systems are preserved.
 
 ## Movement & Navigation
 
@@ -26,7 +35,7 @@
 
 ## The Angler's Village
 
-- **A small explorable village:** traditional granite houses, tiled roofs, wooden doors and shutters, a village square, natural paths and Atlantic-inspired vegetation. The fishing tackle shop occupies the exterior of a traditional house; there are no interiors or NPCs.
+- **A small explorable village:** traditional granite houses, tiled roofs, wooden doors and shutters, a village square, natural paths and Atlantic-inspired vegetation. The fishing tackle shop occupies the exterior of a traditional house; there are no interiors or 3D NPCs; illustrated inhabitants are described above.
 - **Two-way travel:** follow the inland path from the dock to the ALDEA sign and use the nearby contextual interaction. Return through the village's southern path toward LAGO SERENO. Each zone remembers your position and view during the session.
 - **Fishing tackle shop:** approach ARTES DE PESCA and open its catalog. New commerce progress starts with 100 test credits; buy existing bait, lures and replacement monofilament with balance checks and duplicate-purchase protection. There are no sales or recurring income yet.
 - **Persistent equipment:** select purchased lure types or mount a replacement line from the shop or Equipment. Money, quantities, purchase receipts and equipped tackle survive reloads; previous catches and preferences remain compatible. Inventory quantities include owned equipment and are not consumed by fishing. Replacement line uses the existing properties rather than adding a new advantage.
@@ -52,12 +61,13 @@ Human hands remain disabled. Provisional visual wildlife is not available in gam
 - **T / contextual button:** travel near a zone exit or open ARTES DE PESCA near its door. The prompt disappears outside interaction range; fishing is available at the lake, not inside the village.
 - **WASD:** walk; **Shift:** hold to sprint while exploring; **Space:** jump while exploring, with automatic landing and no double jump. Mouse movement controls exploration view; **Esc** releases captured mouse input. Fishing retains right-button drag to aim.
 - **Left mouse / Space in fishing mode:** hold and release to cast, press during a bite to set the hook, and hold to retrieve. Release periodically to manage fight tension.
-- **R:** recover tackle; **E:** equipment; **J:** journal; **P:** pause; **H:** help; **M:** open/close the current-zone map; **N:** sound; **F:** fullscreen.
+- **E / contextual button:** talk to Manuel near the plaza bench or Xosé by the shop door; E opens equipment elsewhere. Back/farewell/×/Esc leave the conversation.
+- **R:** recover tackle; **J:** journal; **P:** pause; **H:** help; **M:** open/close the current-zone map; **N:** sound; **F:** fullscreen.
 
 ### Mobile
 
 - Use the mode button to explore or fish. In exploration, use the left joystick to move and the matching right joystick to look continuously while tilted; both work with independent fingers. Toggle **CORRER** to sprint. The right joystick also works in fishing mode, within the existing camera limits; scenery dragging remains available.
-- Tap the contextual travel/shop button when it appears near an exit or the shop door. Choose an item to buy, select a lure or mount replacement line; close the panel to continue exploring.
+- Tap the contextual travel/talk button near an exit or an inhabitant. At the shop door, speak to Xosé and choose the catalog option to buy, select a lure or mount replacement line through the existing store. Close or say farewell to continue exploring.
 - In fishing mode, hold **LANZAR** and release to cast. The contextual action changes to **CLAVAR** during a bite and **RECOGER** for retrieval and fighting.
 - **MAPA** opens the current-zone map; close it with × to resume. Jump is currently a PC keyboard action.
 - **EQUIPO** opens equipment and lures; **CUADERNO** opens catches and records. Compact contextual indicators, safe areas and portrait/landscape layouts remain supported.
@@ -96,6 +106,7 @@ All releases remain **Pre-Alpha**.
 | [v0.7.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.7.0) | The Angler's Village: Galician-inspired village, two-way travel, contextual shop, basic currency and persistent inventory/equipped tackle. |
 | [v0.8.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0) | A Living Village: Atlantic vegetation, natural terrain and paths, refined rural materials, weather-responsive lighting and distant rolling hills. |
 | [v0.8.1](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.1) | Movement & Navigation: faster walking/running, PC jumping, zone maps and dual mobile joysticks. |
+| [v0.9.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.9.0) | Stories of the Village: illustrated Manuel and Xosé, branching dialogue, contextual signs and direct catalog access. |
 
 ## Development
 
@@ -109,9 +120,11 @@ Consult the [project status](docs/project/STATUS.md), [roadmap](docs/project/ROA
 
 [v0.8.1 SDD acceptance and evidence](docs/milestones/M09-living-village/navigation-0.8.1.md) record the accepted movement and navigation update. The final relevant suite passed 76/76 and the production build succeeded. Existing browser evidence covers six desktop/mobile/tablet profiles, independent two-finger controls, maps and fishing. The 688.39 kB JavaScript chunk (191.84 kB gzip) retains the known >500 kB warning; no dependency or bundling refactor was added. Physical mobile, WebKit and sustained performance checks remain pending.
 
+[M10 acceptance and evidence](docs/milestones/M10-stories-of-the-village/acceptance.md) record the owner-validated inhabitants, reusable dialogue and existing-shop integration. Final validation includes 169/169 logic tests and production/Pages builds; PC and mobile/tablet emulation cover dialogue, controls, commerce, travel and saved progress. The known large-bundle warning, physical-device/WebKit checks and sustained performance remain explicit Pre-Alpha limitations.
+
 ## Future direction — planned, not implemented
 
-Further connected areas, recurring income, equipment progression and broader RPG systems remain planning goals without a committed release date. The current village has one exterior shop, finite test currency and no NPCs, interiors or quests. Physical mobile validation, sustained performance profiling and gameplay refinement remain priorities.
+Further connected areas, recurring income, equipment progression and broader RPG systems remain planning goals without a committed release date. The current village has one exterior shop, finite test currency, two illustrated inhabitants and no 3D NPCs, interiors or quests. Physical mobile validation, sustained performance profiling and gameplay refinement remain priorities.
 
 **ALBA — Beyond the Water**
 

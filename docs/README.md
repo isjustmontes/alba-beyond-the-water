@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Current delivery: v0.9.0 - Stories of the Village (Pre-Alpha).** [M10 accepted scope and final evidence](milestones/M10-stories-of-the-village/acceptance.md): Manuel and Xosé validated by the owner, final publication authorized. Shared illustrated conversations, portrait signs/indicators and existing-shop handoff preserve prior systems. Historical pending notes below are superseded; physical/WebKit/sustained and asset-budget/provenance limitations remain explicit.
+
 **Current M10:** accepted Manuel system reused for the [shopkeeper encounter and existing-store handoff](milestones/M10-stories-of-the-village/README.md). Same approved illustrated design, second supplied portrait; owner validation pending, no commit/publication.
 
 **Current M10:** conversation C accepted; [portrait sign and speech-bubble discoverability](milestones/M10-stories-of-the-village/README.md) implemented, pending visual acceptance. No changes to narrative, controls or collision footprints; no commit/publication.

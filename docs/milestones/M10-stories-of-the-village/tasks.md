@@ -1,6 +1,8 @@
 # Tareas · Stories of the Village
 
-**Shopkeeper - current:** T10 / REQ-NAR-006 / AC-NAR-08 - IMPLEMENTED_UNVERIFIED: reuse accepted Manuel panel/session/sign for shopkeeper, add concise branching script and existing-catalog handoff, focused logic/browser/build evidence. Do not commit any pending work; preserve dartfish.
+**Final task disposition:** T01/T03/T04/T06/T07/T08/T09/T10 VERIFIED for accepted local implementation and release preparation. T02/T05 PARTIAL only for documented original image-budget/variant/provenance and physical/WebKit/sustained checks. Owner accepts both inhabitants and authorizes publication, superseding prior no-commit/pending notes. No new feature scope opened.
+
+**Shopkeeper - current:** T10 / REQ-NAR-006 / AC-NAR-08 - VERIFIED: reuse accepted Manuel panel/session/sign for shopkeeper, add concise branching script and existing-catalog handoff, focused logic/browser/build evidence. Do not commit any pending work; preserve dartfish.
 
 **M10-T09 / REQ-NAR-005 / AC-NAR-07 - VERIFIED:** accepted conversation retained; implement portrait sign and contextual billboard only, validate geometry/visibility conditions and PC/mobile captures/build. No navigation, narrative or gameplay edits.
 
@@ -16,8 +18,8 @@
 | M10-T02 - B/C - REQ-NAR-001/002, NFR-NAR-001 | B accepted | Supplied artwork unchanged; full local script integrated | Script owner review pending; asset budget/variants/public license remain partial | PARTIAL |
 | M10-T03 - C - REQ-NAR-001/002/004, NFR-NAR-002 | B accepted | Original panel connected to pure 13-node conversation | Graph and modal/input regression checks; owner acceptance pending | VERIFIED |
 | M10-T04 - C - REQ-NAR-003/004, NFR-NAR-003 | Current C request supersedes original D schedule | Existing bench, E/mobile contextual action, clearHeld/pause/return | Proximity/blockers, shop/travel/map coexistence and held-input tests | VERIFIED |
-| M10-T05 · E · NFR-NAR-001/002/003 | D aceptada, E autorizada | Validación final acotada, recursos y documentación; sin ampliar contenido | Ejecutar sólo entonces tests pertinentes/build, PC y teléfonos/tablet emulados; registrar errores/bytes/recursos y límites físicos. Esfuerzo pequeño/medio | NOT_STARTED |
-| M10-T06 · E · todos | Evidencia técnica y revisión humana | Registrar aceptación final y preparar propuesta de entrega | Publicación/commit/tag requieren autorización posterior expresa; no inferir aceptación por pasar tests | NOT_STARTED |
+| M10-T05 · E · NFR-NAR-001/002/003 | D aceptada, E autorizada | Validación final acotada, recursos y documentación; sin ampliar contenido | Ejecutar sólo entonces tests pertinentes/build, PC y teléfonos/tablet emulados; registrar errores/bytes/recursos y límites físicos. Esfuerzo pequeño/medio | PARTIAL |
+| M10-T06 · E · todos | Evidencia técnica y revisión humana | Registrar aceptación final y preparar propuesta de entrega | Publicación/commit/tag requieren autorización posterior expresa; no inferir aceptación por pasar tests | VERIFIED |
 | M10-T07 - B - REQ-NAR-001, NFR-NAR-002 | A accepted, supplied art | Reusable illustrated panel and isolated preview | Six profiles/build passed; owner visually accepted B, commit 6086909 | VERIFIED |
 | M10-T08 · C · REQ-NAR-002/003/004 | B aceptada | Manuel integrado, conversaciones y control modal | Grafo puro, proximidad, regresiones PC/móvil, build | VERIFIED |
 

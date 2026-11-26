@@ -1,5 +1,7 @@
 # Especificación · Stories of the Village
 
+**Final scope accepted:** REQ-NAR-001 through REQ-NAR-006 delivered and owner accepted for v0.9.0. Two final supplied portraits, same reusable parchment/HTML buttons, complete authored branches, contextual E/mobile actions, small wooden signs/billboards and existing catalog handoff. Existing controls, commerce, travel and saved progress preserved. Publication authorized only after final checks and fast-forward safety; no extra feature scope.
+
 **Shopkeeper - current:** REQ-NAR-006 / AC-NAR-08 / T10: add the second illustrated inhabitant, provisional shopkeeper name configured once, supplied final transparent WebP, same approved panel and small sign. E/mobile talks by the shop door; existing direct shop T remains available. A named dialogue action hands off to the existing shop, with no duplicate economy or overlapping modals. Manuel unchanged in content/appearance/interaction. No NPC, new dependencies, commit or publication.
 
 **Current extension:** The owner accepts the Stage C conversation. Add only a small handcrafted wooden portrait sign at the existing bench and a parchment speech-bubble billboard, moderately visible, subtly bobbing, hidden by distance or any modal. Preserve portrait transparency, contextual E/mobile action, all collision footprints and narrative content. No NPC, new asset/dependency or commit/publication. REQ-NAR-005 / AC-NAR-07 / M10-T09 identify this visual discoverability extension; owner visual acceptance remains pending.

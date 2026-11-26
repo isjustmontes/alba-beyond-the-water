@@ -1,6 +1,19 @@
 # Evidencia · Stories of the Village
 
 
+## Final v0.9.0 validation and accepted release - 26/11/2026
+
+- Owner confirms both Manuel and Xosé visually/functionally validated and explicitly authorizes committing/publishing the definitive portraits, illustrated dialogue, signs and indicators. This supersedes previous local-only/pending-acceptance entries, without inventing an external artwork license. Accepted functional scope closes M10 for Pre-Alpha; physical Android/iOS/WebKit, sustained performance, smaller image variants/original budgets and formal public provenance remain recorded partial limits.
+- Worktree wolffish / `feature/v0.9.0-stories-of-the-village`; dartfish unchanged at `7ecc8f7`. Verified fetch: origin points to the requested repository, `origin/main` = published v0.8.1 commit `6a1724084133006b4aec1152ada9fe839e425f4b`, annotated v0.8.1 tag object `16241f98d67a9d6bc2653c7e30eac0d8055bbb7c`; no v0.9.0 local/remote tag or release existed. A/B retained in `49f54c3` / `6086909`; validated integrated implementation committed as `3da1581` (no history rewritten).
+- Review: staged files restricted to M10 source, three definitive owner-supplied portraits/parchment, relevant browser/unit tests and canonical docs. No secrets, hands prototypes, test-results, build output or dependencies included. Existing isolated DEV dialogue preview from B remains a development reference, not a production entry. Final WebP bytes unchanged.
+- `npm.cmd test`: **169/169 PASS**, zero failed/skipped, including authored graphs, signs/proximity, PC/touch controls, navigation, zones, fishing/AI/environment and old-save/shop/journal compatibility. Ignored raw log `test-results/v0.9.0-unit.log`.
+- `node tests/shopkeeper-browser.mjs`: **4/4 PASS**, PC 1280x800, phone 390x844, landscape 844x390 and tablet 1024x768, Edge headless Windows / SwiftShader. Both inhabitants, shared panel, independent held touches and pause cleanup, catalog handoff without advancing time, normal T/direct catalog and one purchase despite rapid activation. No JS/shader errors.
+- `node tests/manuel-browser.mjs --profile=pc`: PASS, accepted Manuel branches/closing/reopening, input restoration, map/equipment, shop, travel village/lake, return cast and unchanged localStorage.
+- `node tests/shop-browser.mjs --profile=phone`: PASS, old commerce/catch/equipment save upgrade, one charge per purchase, mounted line/lure use, reload and two-way zone travel, return fishing with saved purchases/currency/preferences intact. This explicitly validates the updated mobile conversational shop entry. No physical-device tests claimed.
+- `npm.cmd run build` and `npm.cmd run build -- --base=./`: both PASS, Vite 7.3.8 / 61 modules. JS **719.60 kB**, gzip 202.76 (normal) / 202.77 (Pages); CSS **39.61 / 8.67 kB**, HTML **11.30 / 4.51 kB**. Known >500 kB warning retained without refactoring. Final build is the same relative-base form used by Pages.
+- README updated in English with v0.9.0 release link, inhabitants, reusable art/sign design, E/mobile conversation and T/direct shop instructions, retained banner/setup/links/full version history and Pre-Alpha state. Canonical controls, release history, STATUS, acceptance/tasks/traceability synchronized; no new functionality. Only safe normal fast-forward/tag/atomic publication is authorized, subject to final remote checks; resulting tag/release/Pages records are verified after push.
+
+
 ## Second inhabitant / shopkeeper - 26/11/2026
 
 - Owner explicitly accepts Manuel system; no pending changes committed or discarded. `feature/v0.9.0-stories-of-the-village` in wolffish, HEAD remains `6086909`; dartfish unchanged. T10 / REQ-NAR-006 / AC-NAR-08 implemented, owner visual/functional acceptance pending; no push/tag/release.

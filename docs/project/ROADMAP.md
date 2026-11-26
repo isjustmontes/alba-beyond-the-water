@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M10 closed for v0.9.0 Pre-Alpha:** two illustrated inhabitants and reusable dialogue/sign/store handoff are accepted by the owner; safe final publication authorized. No further feature milestone is opened. Follow-up physical/WebKit checks, sustained performance, supplied-asset provenance and smaller image variants remain documented limitations, not implemented work.
+
 **M10 scope extension:** Manuel accepted; second illustrated inhabitant at the existing shop explicitly authorized, sharing conversation/sign/UI and linking the existing catalog. No additional economy, NPC or world features. Stop for visual/functional acceptance; no publication.
 
 **M10 current scope:** conversation C accepted; owner authorizes only a small portrait sign at the existing bench and contextual speech-bubble marker. Stop for visual acceptance; no further RPG/NPC features or publication.
