@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Vigente: M11 · The First Morning · v0.10.0, Etapa A sólo SDD.** [Plan de inicio en aldea e introducción accesible](milestones/M11-first-morning/README.md), desde v0.9.0 publicada y `origin/main` verificado en `f7751bf`. Sin implementación, tests/build, commit ni publicación. Plan pendiente de aprobación; los estados de entregas anteriores se conservan como historial.
+
 **Current delivery: v0.9.0 - Stories of the Village (Pre-Alpha).** [M10 accepted scope and final evidence](milestones/M10-stories-of-the-village/acceptance.md): Manuel and Xosé validated by the owner, final publication authorized. Shared illustrated conversations, portrait signs/indicators and existing-shop handoff preserve prior systems. Historical pending notes below are superseded; physical/WebKit/sustained and asset-budget/provenance limitations remain explicit.
 
 **Current M10:** accepted Manuel system reused for the [shopkeeper encounter and existing-store handoff](milestones/M10-stories-of-the-village/README.md). Same approved illustrated design, second supplied portrait; owner validation pending, no commit/publication.

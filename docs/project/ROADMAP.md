@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M11 abierto por encargo explícito: The First Morning · v0.10.0.** [Etapa A de planificación](../milestones/M11-first-morning/README.md) desde v0.9.0 publicada; pendiente de aprobación. B clasificación segura y aparición en plaza; C introducción al amanecer de unos 12 s, salto y movimiento reducido; D objetivo discreto e integración; E regresiones/evidencia. Sin nuevas zonas, tutorial obligatorio, misiones ni cambios de pesca/economía. B–E requieren autorización posterior; la nota anterior de «ningún hito siguiente» pasa a ser histórica.
+
 **M10 closed for v0.9.0 Pre-Alpha:** two illustrated inhabitants and reusable dialogue/sign/store handoff are accepted by the owner; safe final publication authorized. No further feature milestone is opened. Follow-up physical/WebKit checks, sustained performance, supplied-asset provenance and smaller image variants remain documented limitations, not implemented work.
 
 **M10 scope extension:** Manuel accepted; second illustrated inhabitant at the existing shop explicitly authorized, sharing conversation/sign/UI and linking the existing catalog. No additional economy, NPC or world features. Stop for visual/functional acceptance; no publication.

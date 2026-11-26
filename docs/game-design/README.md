@@ -1,5 +1,7 @@
 # Diseño de Lago Sereno
 
+**M11-A · propuesta, no disponible:** [The First Morning](../milestones/M11-first-morning/spec.md) planifica primera llegada a la plaza, presentación de amanecer saltable y «Explora la aldea» sin tutorial obligatorio. Habitantes, tienda y sendero siguen disponibles sin desbloqueos. Preservar progreso y omitir introducción en perfiles anteriores; política de aparición y accesibilidad pendientes de aprobación. No modifica el diseño de pesca descrito abajo.
+
 ## Pesca y equilibrio
 
 La distancia se calcula como 9 + 31 × potencia, en metros. La carga comienza en 0,08 y crece 0,58 por segundo hasta 1. Una suelta inmediata desde el estado normal da aproximadamente 11,48 m; 9 m es la ordenada de la fórmula. Tras el impacto, la profundidad del cebo se limita por el fondo. El banco evalúa posición, apetito, cautela, memoria de escape, competencia y afinidad. La picada requiere un atacante próximo. Durante el combate, recoger reduce distancia y aumenta tensión; soltar permite recuperarse. La fatiga y los tirones modifican ese intercambio.

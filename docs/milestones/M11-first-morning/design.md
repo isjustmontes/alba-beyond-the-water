@@ -1,0 +1,59 @@
+# Diseño · The First Morning
+
+## Diagnóstico de la base publicada
+
+- `main.js` crea `LakeWorld`, `ZoneManager` por defecto en `lago-sereno`, `Environment` y `FishingGame`; `Exploration` comienza en modo pesca en (0,7). Se restauran capturas/equipo y después se construye `VillageShop`.
+- `VillageShop` escribe `alba-village-progress-v1` en su constructor si no existe. Clasificar después de construirlo convertiría una partida nueva en anterior. `LakeAudio` se crea antes, pero su constructor sólo lee preferencias; el contexto sonoro se desbloquea mediante interacción.
+- El bucle principal asigna x/z de cámara cada frame y suaviza y con el suelo del jugador. `LakeWorld.setView()` aplica yaw/pitch. Una animación paralela sin arbitraje quedaría sobrescrita.
+- `ZoneManager` admite zona/entrada iniciales, pero la aldea sólo tiene entrada `lakePath` (0,29); las poses de viaje se guardan en memoria, no en localStorage. `LakeWorld.setZone` crea `VillageView` de forma diferida y reutiliza renderer/cámara.
+- `villageWalkHeight` comparte suelo y obstáculos. La plaza contiene bancos en (5,7), (-4,9) y pozo en (3.5,3); (0,11) es candidato analítico transitable, no un encuadre validado visualmente.
+- `Environment` comienza a las 06:24 y el día dura 3600 s reales. Hora/clima no persisten. El panel de diálogo y los menús ya limpian entradas y pausan; ambos joysticks pertenecen a los controles existentes.
+
+## Estado propietario
+
+Proponer un controlador pequeño, independiente de DOM/Three.js, con estados `inactive → presenting → handing-off → complete`. `main` posee su instancia y decide exclusivamente quién escribe la cámara: controlador durante presentación/entrega; exploración después. Completar, saltar, cambiar a movimiento reducido o recuperarse de un fallo converge en una finalización idempotente. No usar el booleano de pausa de un diálogo como sustituto de toda la secuencia.
+
+Un reloj local acumula tiempo visible; ocultar página o perder foco detiene la secuencia y limpia entradas, sin avanzar de golpe al regresar. La escena puede seguir renderizándose; la actualización ambiental existente avanza durante la presentación visible, sin controlar al jugador ni simular peces del lago desde la aldea. No reiniciar el reloj climático cada frame ni cambiar su modelo.
+
+## Módulos y contratos afectados — propuestos, no implementados
+
+| Área | Cambio mínimo previsto | Contrato que se conserva |
+| --- | --- | --- |
+| Nuevo controlador de introducción, ruta a fijar al implementar B/C | Decisión de elegibilidad, tiempo/estado y finalización comprobables con almacenamiento/reloj inyectados | Sin dependencia del renderer ni estado comercial propio |
+| `main.js` | Leer clasificación antes de inicializadores; activar zona/modo; arbitrar cámara, overlay y entradas; aplicar pose final coherente | Una escena activa, acciones de pesca/diálogo/tienda existentes |
+| `zones.js` y composición de inicio | Añadir entrada de plaza sólo si hace falta; inicialización segura de aldea sin fingir viaje desde una salida | IDs/salidas actuales, poses de retorno y validación de suelo |
+| `world.js`, controles | Reutilizar cámara/village cacheada y bloqueo compartido de entrada; evitar escrituras competidoras | Límites de mirada, colisiones, Pointer Lock voluntario y joysticks independientes |
+| HTML/CSS de presentación | Overlay encapsulado de título/frase/salto y objetivo discreto | HUD previo sin rediseño; sin nuevo menú permanente |
+
+No crear un framework de cinemáticas, bus global, segunda cámara, gestor de misiones o servicio de guardado nuevo. Una función acotada de activación de zona puede reutilizar las operaciones actuales de viaje; no refactorizar el sistema de viajes entero.
+
+## Compatibilidad de guardados
+
+1. Antes de construir tienda o cualquier escritor, leer sin mutar `alba-catches-v1`, `alba-equipment-v1`, `alba-village-progress-v1`, `alba-audio-v1` y la nueva clave propuesta `alba-onboarding-v1`.
+2. Sólo ausencia total confirmada permite clasificar como nueva. No inferirlo de capturas cero, saldo inicial, stock o JSON vacío. Claves existentes malformadas y marcadores desconocidos excluyen la introducción; nunca sobrescribirlos ni eliminarlos.
+3. Para un perfil nuevo, guardar y verificar un marcador mínimo versionado `{version:1,introSeen:true}` **antes** de presentar la secuencia. Significa «introducción consumida», también si se salta, se recarga a mitad o falla la escena. No esperar al final para guardarlo. Releer inmediatamente antes de escribir para reducir carreras entre pestañas; no afirmar atomicidad entre pestañas.
+4. Un marcador válido de M11 selecciona aparición en plaza sin repetir la presentación; un perfil legado sin ese marcador conserva el inicio actual del muelle. No escribir marcadores de actualización en los perfiles legados ni cambiar su progreso.
+5. Lectura/escritura/verificación fallida: omitir introducción y usar inicio compatible, sin impedir jugar ni tocar datos antiguos. Un indicador en memoria evita reentrada dentro de la sesión; almacenamiento borrado manualmente es indistinguible de un perfil nuevo. No prometer persistencia cuando el navegador la prohíbe.
+6. La clave nueva es aditiva; no cambia esquemas comercial/journal/audio ni migra posiciones inexistentes. Probar bytes de claves anteriores antes/después, separando escrituras normales de compra/equipo del flujo de introducción.
+
+## Cámara, amanecer y entrega
+
+Preparar la aldea antes de retirar la carga; comprobar aparición con `villageWalkHeight`, modo exploración, caña guardada, altura suelo + `WALK.eye`, yaw/pitch coherentes. Candidato final (0,11), yaw 0, pitch 0, pendiente de revisión de encuadre. Proponer recorrido corto sobre el espacio central abierto, nunca dentro de casas/pozo/bancos, con posición y objetivo interpolados mediante curvas suaves y orientación sin saltos angulares. Las coordenadas definitivas se validarán en C con la geometría visible, no se consideran aceptadas en A.
+
+Secuencia propuesta: 0–2 s establecimiento y aparición de ALBA; 2–9 s desplazamiento lento con la frase; 9–12 s convergencia a ojos del jugador y retirada gradual del overlay. Usar el amanecer existente de 06:24, sin forzar clima despejado ni sustituir Living Waters. Al saltar, convergencia breve y suave desde la pose actual; con movimiento reducido, ninguna traslación animada. La duración de salida forma parte del presupuesto nominal salvo salto anticipado.
+
+Antes de devolver entrada, sincronizar posición del jugador, suelo, altura, yaw/pitch, modo y targets de cámara; anular velocidad/salto/inputs retenidos. El siguiente frame normal no debe corregir una pose distinta. Si cargar/validar la aldea falla, liberar recursos del overlay y volver al arranque compatible, sin borrar progreso ni dejar pantalla bloqueada.
+
+## Entrada, accesibilidad y objetivo
+
+Mientras presenta, bloquear movimiento, ambos joysticks, pesca, cambio de modo, mapa, interacciones y menús que compitan; conservar salto de introducción y preferencias de audio. Enrutar Espacio/Escape sólo a finalizar, consumiendo repetición de tecla y click compatible táctil. Mantener bloqueo hasta liberar la tecla/dedo que saltó, para impedir salto físico, lanzamiento o diálogo accidental. Blur/visibility/cancel limpian pulsaciones. No solicitar Pointer Lock ni audio al cargar; un gesto válido puede usar el desbloqueo sonoro existente respetando mute.
+
+Botón HTML «Saltar introducción», foco visible y ≥44 px, safe areas y buen contraste; título/frase en texto real, sin texto en texturas. Comprobar Tab/Enter/Espacio/Escape, lector de pantalla (anuncio una vez, no por frame), zoom de texto, vertical/horizontal y tablets. `prefers-reduced-motion: reduce` al iniciar o cambiar evita recorrido y oscilaciones: vista fija final, texto breve no bloqueante y control inmediato; no exigir esperar 12 s. Resize no reinicia reloj ni marcador.
+
+Tras completar/saltar, «Explora la aldea» aparece sin modal y se desvanece tras unos 8 s visibles; no requiere visitar puntos, no da recompensas y no crea una misión persistente. No se vuelve a mostrar en sesiones posteriores. Manuel, Xosé, catálogo y sendero siguen usando exactamente sus condiciones existentes, sin desbloqueos.
+
+## Coste gráfico, riesgos y alternativa descartada
+
+Reutilizar Three.js y la escena cacheada; vectores/orientaciones preasignados y overlay CSS sin trabajo DOM por frame. Sin texturas, luces, partículas, pases o librerías adicionales. Medir por separado carga inicial rural (ahora adelantada al inicio) y ejecución estable con calidad/perfil iguales a v0.9.0. Presupuesto propuesto: mediana de frame estable ≤10% sobre base equivalente, sin acumulación de recursos tras finalizar y cinco viajes. Si la base no permite esa comparación, registrar límite y no certificar rendimiento móvil físico.
+
+Descartados vídeo pregrabado, escena duplicada y reinicio general de guardados: coste/fragilidad innecesarios. Riesgos abiertos: encuadre real, carga rural en móviles, eventos de tecla al saltar, navegación asistiva y carrera de dos pestañas. Recuperación: omitir presentación y conservar el juego; no compensar fallos reseteando datos. Requieren validación en etapas posteriores y aprobación del presente plan.

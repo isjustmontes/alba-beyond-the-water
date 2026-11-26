@@ -6,6 +6,15 @@ Cada fila define un criterio acotado. El origen de los requisitos funcionales es
 
 | ID | Hito | Prioridad | Comportamiento | Criterio | Implementación | Prueba | Estado | Límite |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQ-INTRO-001 | M11-B | P1 | Inicio nuevo en plaza | AC-INTRO-01 | Propuesta: composición de inicio/zonas | M11-T02/03; procedimiento futuro en aceptación | NOT_STARTED | A sólo SDD; aprobación pendiente |
+| REQ-INTRO-002 | M11-C | P1 | Cámara al amanecer, unos 12 s | AC-INTRO-02 | Propuesta: controlador pequeño y cámara existente | M11-T04; reloj inyectado y revisión visual futuros | NOT_STARTED | Sin recorrido implementado/validado |
+| REQ-INTRO-003 | M11-C | P1 | ALBA y frase exacta en HTML | AC-INTRO-03 | Propuesta: overlay DOM | M11-T05; inspección responsive futura | NOT_STARTED | Sin assets nuevos |
+| REQ-INTRO-004 | M11-C | P1 | Salto PC/móvil y entrega única | AC-INTRO-04 | Propuesta: entrada compartida y finalización idempotente | M11-T04/05; eventos/repetición/cancelación futuros | NOT_STARTED | Sin alterar controles actuales |
+| REQ-INTRO-005 | M11-D | P1 | Objetivo opcional y aldea disponible | AC-INTRO-05 | Propuesta: aviso temporal, sin misión/gates | M11-T06; recorrido funcional futuro | NOT_STARTED | Habitantes/tienda existentes |
+| REQ-INTRO-006 | M11-B/E | P0 | No repetir ni perder progreso | AC-INTRO-06 | Propuesta: clasificación previa a escritores y marcador aditivo | M11-T02/03/07; fixtures de storage futuras | NOT_STARTED | Sin datos del usuario modificados |
+| NFR-INTRO-001 | M11-C/E | P1 | Accesibilidad y movimiento reducido | AC-INTRO-07 | Propuesta: vista fija, DOM/foco/safe areas | M11-T05/07; pruebas accesibles futuras | NOT_STARTED | Física/WebKit aún sin comprobar |
+| NFR-INTRO-002 | M11-E | P1 | Coste gráfico acotado | AC-INTRO-08 | Propuesta: recursos/cámara actuales | M11-T07; comparación equivalente futura | NOT_STARTED | Presupuesto propuesto, sin métricas M11 |
+| NFR-INTRO-003 | M11-D/E | P1 | Preservar sistemas y controles | AC-INTRO-09 | Propuesta: bloqueo temporal sin duplicar acciones | M11-T06/07; regresiones futuras | NOT_STARTED | A no ejecuta tests/build |
 | REQ-NAR-001 | M10-B/C | P1 | Illustrated Manuel dialogue | Same approved parchment/portrait and DOM interface | ui/dialogue-panel.js/.css, main.js | B owner acceptance, six browser profiles | VERIFIED | Owner acceptance confirmed for v0.9.0; final M10 evidence records automated/emulated scope |
 | REQ-NAR-002 | M10-C | P1 | Branching fishing/lake conversations | Complete reachable graph, back/goodbye/close/reset | dialogues/manuel.js | manuel.test.js, manuel-browser.mjs - AC-NAR-02 | VERIFIED | Owner acceptance confirmed for v0.9.0; final M10 evidence records automated/emulated scope |
 | REQ-NAR-003 | M10-C | P1 | Contextual Manuel encounter | E/mobile only near safe existing bench, no shop/travel collision | nearManuel, main.js | manuel.test.js, manuel-browser.mjs - AC-NAR-03 | VERIFIED | Owner acceptance confirmed for v0.9.0; final M10 evidence records automated/emulated scope |
