@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M09-B · presentación de terreno y vegetación rural
+
+`visuals/village-ground.js` calcula mezcla de caminos, exclusiones de plantas y altura exterior visual; conserva exactamente `villageHeight` en el rectángulo transitable. `village-layout.js`, límites, colisiones e interacciones no cambian. `VillageView` mantiene la escena y objetos actuales; dos lotes de robles/castaños reutilizan tarjetas y viento existentes con texturas propias, helechos curvos y hierba por manchas. 38 árboles en posiciones existentes, 720 grupos de hierba y 80 helechos, con reducción del 40% de sotobosque en móvil/baja. Sin nuevos sistemas ni persistencia; [diseño/evidencia M09](../milestones/M09-living-village/design.md).
+
 ### M08-D · selección y montaje persistentes
 
 El mismo documento alba-village-progress-v1 incorpora esquema interno 2 con `equipment` (lureId, lineId, lineUnit). Leer esquema C 1 adapta en memoria sin regalar crédito ni tocar cantidades/recibos; el siguiente cambio confirmado persiste todo el candidato. `VillageShop.equip` valida propiedad/unidad y guarda antes de aplicar. `main.equipItem` comparte esta acción entre ShopPanel y Equipo y utiliza FishingGame.selectLure después del guardado; monta unidades del monofilamento existente sin cambiar resistencia/stock. Inicio restaura equipo del documento nuevo; alba-equipment-v1 queda como espejo legado. Fallo de escritura mantiene equipo anterior; progreso comercial ilegible se preserva sin impedir la pesca compatible. Capturas/audio y otros guardados conservan sus claves y formatos. [Diseño/evidencia M08](../milestones/M08-anglers-village/design.md).

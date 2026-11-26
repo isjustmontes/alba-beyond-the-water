@@ -1,5 +1,7 @@
 # Aceptación propuesta · A Living Village
 
+**Actualización B:** A aceptada explícitamente por el propietario y guardada en `585e1dc`. AC-LVI-01 IMPLEMENTED_UNVERIFIED: regresión de alturas/recorrido y revisión técnica de capturas PC/táctiles correctas, pendiente aceptación visual del propietario. AC-LVI-04/05 PARTIAL: ensayo breve de tres perfiles, cinco viajes con recursos estables, tienda/recarga/pesca de regreso correctas; sin hardware físico, WebKit ni rendimiento sostenido. AC-LVI-02/03 NOT_STARTED. No cerrar B, C/D ni M09 con esta evidencia; los estados inferiores pertenecen a A.
+
 **Criterio** — Todos los criterios de producto están NOT_STARTED; A pendiente de aprobación del propietario. Matriz de trazabilidad local:
 
 | Criterio / requisito / tarea | Entrada y acción | Resultado esperado / evidencia futura |

@@ -1,5 +1,9 @@
 # Diseño propuesto · A Living Village
 
+**B implementada:** `village-ground.js` contiene únicamente altura visual exterior, mezcla de caminos y exclusión de plantas. `village-layout.js` y su navegación permanecen sin cambios; la malla usa altura original en todo el rectángulo transitable y desniveles suaves fuera. Caminos/plaza/ramales se mezclan con ruido suave por vértice; textura de suelo existente repetida a escala menor, sin cambiar materiales de edificios. `VillageView` conserva casas, detalles, carteles y escena cacheada.
+
+38 árboles en las mismas posiciones/alturas y huellas: se reutilizan tarjetas cruzadas subdivididas y se generan dos mapas con transparencia, ramas y hojas diferenciadas para roble/castaño; sin copas sólidas geométricas ni recursos externos. 720 grupos de hierba y 80 helechos distribuidos por manchas deterministas, excluyendo puertas, plaza, senderos, señales y muros; frondas curvas con foliolos recortados. Instancing y viento GPU existentes, geometrías independientes del lago; helechos/hierba al 60% y menos flutter en móvil/baja calidad. El aumento de anchura es sólo de copa, sin nuevos obstáculos. No se promete detalle botánico de cerca equivalente a un modelo escaneado. Aprobación humana B pendiente; los apartados propuestos inferiores conservan el diseño A.
+
 **Estado propietario** — Sólo A autorizada; plan y presupuesto pendientes de aprobación. B–D no iniciadas. Se parte del contrato M08 de escena rural cacheada y navegación compartida, no de una reconstrucción del pueblo.
 
 **Módulos y contratos afectados** — Mapa documental de candidatos, por confirmar mediante inspección acotada al iniciar cada etapa:

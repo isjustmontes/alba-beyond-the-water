@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M09-B:** A aprobada en `585e1dc`; terreno/caminos/vegetación implementados y comprobados, pendientes de revisión visual humana. Detenerse aquí; C materiales/arquitectura y D luz/clima/optimización requieren autorización posterior. [Estado M09](../milestones/M09-living-village/README.md). Sin nuevas zonas, NPC ni RPG.
+
 **Plan vigente autorizado sólo para documentación:** [M09 · A Living Village · v0.8.0](../milestones/M09-living-village/README.md). A pendiente de aprobación; B relieve/caminos/vegetación atlántica, C granito/teja/madera y detalles rurales, D iluminación/atmósfera/clima y optimización PC/móvil. Refinar la aldea existente sin NPC, nuevas zonas ni funciones RPG. Cada implementación requiere autorización y termina con evidencia/aceptación visual. El candidato histórico «M09 Ecología y entorno» queda como propuesta sin ID; no se renumeran hitos existentes.
 
 **Cierre M08:** The Angler's Village v0.7.0 aceptado como MVP Pre-Alpha y publicación autorizada; D conservada en `92d2548`. Próximo trabajo pendiente de priorización: móviles físicos/WebKit, rendimiento sostenido y balance de economía. No se autoriza implementar ingresos, misiones, interiores, NPC ni ampliar zonas. Propuestas inferiores permanecen como historial/planificación.

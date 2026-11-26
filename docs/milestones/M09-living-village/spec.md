@@ -1,5 +1,7 @@
 # Especificación · A Living Village
 
+**B autorizada, 26/11/2026:** el propietario aprueba A y solicita terreno/vegetación conservando zonas transitables y colisiones. REQ-LVI-001/002 IMPLEMENTED_UNVERIFIED hasta aceptación visual; NFR-LVI-001/002 PARTIAL en el alcance B. C/D siguen NOT_STARTED. El relieve adicional se limita al exterior no transitable; dentro se conserva exactamente `villageHeight`, incluidas casas, plaza y accesos. La malla anterior añadía una elevación radial también en esquinas transitables: ahora respeta la altura de navegación. No se amplían huellas ni cambian colisiones para justificar el acabado. El presupuesto propuesto queda como referencia del plan aprobado, sin certificar rendimiento sostenido/físico con el ensayo breve. El estado NOT_STARTED inferior describe A antes de este encargo.
+
 **Problema del jugador** — La aldea es explorable y funcional, pero necesita relieve, transiciones, materiales y luz más naturales para integrarse visualmente con Lago Sereno.
 
 **Requisito estable y origen** — Encargo v0.8.0 Etapa A del propietario, 26/11/2026. Todos los requisitos de producto siguientes están NOT_STARTED; la planificación no constituye implementación ni aceptación visual.
