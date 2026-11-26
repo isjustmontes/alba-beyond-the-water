@@ -1,5 +1,15 @@
 # Evidencia · First Steps · Etapa A
 
+## D · zonas conectadas, preparación · 26/11/2026
+
+Tras revisar sólo cambios C y excluir `test-results/`/prototipos, commit local `b7ae02500a0cebbd978644a9ac153e2c30c195ce`, `feat: add free shoreline fishing and exploration sprint`; Git limpio antes de D. Rama `feature/v0.6.0-first-steps`, `wolffish`; `dartfish` intacto en `7ecc8f7`.
+
+D modifica sólo integración de `ZoneManager` en `main.js`, añade `zones.js`, sus pruebas y documentación. Se asocia `world.scene` existente, sin aplicar aparición ni reconstruir recursos. Lago Sereno tiene entrada `dock`, aparición histórica y salidas vacías. `prepareExit` devuelve un plan independiente validado sin ejecutarlo; zonas adicionales sólo existen como fixtures de pruebas. No hay carga/descarga, transición visual, triggers, UI, persistencia de zona ni destinos nuevos jugables.
+
+Windows/PowerShell, Node 24.20.0, Vite 7.3.8: `node --test tests/zones.test.js tests/exploration.test.js tests/shore-stage-c.test.js tests/fishing.test.js tests/input.test.js` **27/27**. Incluye contrato de zonas, scene por identidad, aparición original, planes sin mutación, IDs/entradas/datos no finitos inválidos, pesca/captura, entradas y carrera. `npm.cmd run build` correcto, 43 módulos, JS 640,16 kB / gzip 175,51 kB; CSS 29,94 kB / gzip 6,76 kB. Aviso >500 kB preexistente; +1,24 kB JS respecto al ajuste C. Sin dependencias, assets, mallas ni trabajo por frame nuevos.
+
+No se repite suite completa, pruebas gráficas o dispositivos físicos para esta preparación sin cambios visuales. Los tests de zonas son puros y usan una escena de prueba por referencia; el diff de arranque conserva constructor/posiciones/actualizaciones reales de LakeWorld. Revisar `src/zones.js` y ejecutar `node --test tests/zones.test.js`; el juego debe verse/funcionar igual. **D pendiente de aceptación humana**, sin commit D, push, tags ni releases.
+
 **Aceptación posterior C · 26/11/2026:** el propietario declara validada C y autoriza guardarla en un commit local antes de preparar D. Se conservan los resultados/limitaciones históricos; no se atribuyen nuevas pruebas ni publicación a esta aceptación.
 
 ## C · carrera y auditoría de picadas alejadas · 26/11/2026

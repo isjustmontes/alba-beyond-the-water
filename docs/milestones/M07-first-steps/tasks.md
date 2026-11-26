@@ -1,8 +1,18 @@
 # Tareas · First Steps · Etapa A
 
+## Etapa D · tareas autorizadas
+
+| ID | Requisito / alcance | Prueba | Estado |
+| --- | --- | --- | --- |
+| M07-T12 | REQ-ZONE-001 · Registro y sesión de Lago Sereno con escena existente | Aparición histórica, escena por identidad, salidas vacías | IMPLEMENTED_UNVERIFIED |
+| M07-T13 | REQ-ZONE-002 · Plan de transición sin efectos | Destinos válidos/inválidos y ausencia de mutación | IMPLEMENTED_UNVERIFIED |
+| M07-T14 | NFR-EXP-001 · Preservar juego, evidencia y build D | Tests relevantes y producción, diff acotado | IMPLEMENTED_UNVERIFIED |
+
+C aceptada por el propietario; T07–T11 VERIFIED dentro de sus límites documentados. D no se confirma ni publica.
+
 ## Etapa C · tareas autorizadas
 
-M07-T11 · REQ-EXP-009: carrera 1,5× Shift/botón táctil sólo exploración, con suavizado, colisión y limpieza (IMPLEMENTED_UNVERIFIED). T10 añade auditoría de picadas lejanas: sin límites adicionales del muelle reproducidos; regresión de 3 zonas/8 semillas y agua vacía, sin alterar IA/probabilidades. C pendiente de validación humana.
+M07-T11 · REQ-EXP-009: carrera 1,5× Shift/botón táctil sólo exploración, con suavizado, colisión y limpieza (VERIFIED). T10 añade auditoría de picadas lejanas: sin límites adicionales del muelle reproducidos; regresión de 3 zonas/8 semillas y agua vacía, sin alterar IA/probabilidades. C validada por el propietario en `b7ae025`; notas posteriores conservan el historial previo.
 
 Tras la prueba del propietario se reabren T07/T09 para guardas espaciales, distribución y regresiones. Añadir M07-T10 · REQ-EXP-008: hogares/hábitat fuera del muelle y movimiento válido (IN_PROGRESS). C no está aceptada; los resultados anteriores son históricos y no cubrían estas direcciones ni distribución.
 
@@ -10,10 +20,10 @@ Implementación corregida: T07/T09/T10 **IMPLEMENTED_UNVERIFIED**; T10 incluye 7
 
 | ID | Requisito / alcance | Dependencia | Validación | Estado |
 | --- | --- | --- | --- | --- |
-| M07-T07 | REQ-EXP-006 · Pesca libre en ribera navegable segura | B aceptada `00208d9` | Suelo/agua/cuenca, origen actual y guardas; lances fuera de radios B | IMPLEMENTED_UNVERIFIED |
-| M07-T08 | REQ-EXP-007 · Transiciones y entradas | T07, rig y controles existentes | Suavidad, equipar/guardar, entradas mantenidas y giros | IMPLEMENTED_UNVERIFIED |
-| M07-T09 | NFR-EXP-001 ampliado a C · Compatibilidad y evidencia | T07/T08 | Flujo muelle/ambas calas PC/táctil, pruebas y build | IMPLEMENTED_UNVERIFIED |
-| M07-T10 | REQ-EXP-008 · Hábitat y distribución fuera del muelle | T07; geometría real y FishSchool | 27 agentes, riberas/interior, patrulla, obstáculos, persecución y combate | IMPLEMENTED_UNVERIFIED |
+| M07-T07 | REQ-EXP-006 · Pesca libre en ribera navegable segura | B aceptada `00208d9` | Suelo/agua/cuenca, origen actual y guardas; lances fuera de radios B | VERIFIED |
+| M07-T08 | REQ-EXP-007 · Transiciones y entradas | T07, rig y controles existentes | Suavidad, equipar/guardar, entradas mantenidas y giros | VERIFIED |
+| M07-T09 | NFR-EXP-001 ampliado a C · Compatibilidad y evidencia | T07/T08 | Flujo muelle/ambas calas PC/táctil, pruebas y build | VERIFIED |
+| M07-T10 | REQ-EXP-008 · Hábitat y distribución fuera del muelle | T07; geometría real y FishSchool | 27 agentes, riberas/interior, patrulla, obstáculos, persecución y combate | VERIFIED |
 
 T04/T05/T06 (B) VERIFIED por aceptación del propietario. No publicar ni confirmar C hasta nueva autorización.
 

@@ -7,6 +7,7 @@ import './exploration.css';
 import {Exploration,ExplorationControls,WALK} from './input/exploration.js';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
+import {ZoneManager} from './zones.js';
 import { FishingGame, LURES, EQUIPMENT } from './fishing.js';
 import {getLure} from './simulation/config.js';
 import {migrateCatches,personalRecords,exportCatches,captureConditions} from './journal.js';
@@ -19,7 +20,7 @@ const number = (n, places = 0) => n.toLocaleString('es-ES',{ minimumFractionDigi
 const audio = new LakeAudio();
 const storageKey = 'alba-catches-v1';
 let world, game, input, inputMode, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
-const exploration=new Exploration();let walkControls;
+const exploration=new Exploration();let walkControls,zones;
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('visible'),5000); }
 function fatal(error) { console.error(error); $('loading').hidden = true; $('fatal').hidden = false; $('fatal-message').textContent = `Este juego necesita un navegador con WebGL 2 y aceleración gráfica. ${error.message}`; }
 function renderJournal() {
@@ -204,6 +205,7 @@ function controls() {
 }
 try {
   world = new LakeWorld($('scene'));
+  zones=new ZoneManager({scene:world.scene});
   exploration.obstacles=world.landscape.walkObstacles;
   const environmentOptions={};
   // Development-only observation links; ordinary play and production always use the normal clock.

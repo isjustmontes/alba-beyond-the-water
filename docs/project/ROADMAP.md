@@ -4,7 +4,7 @@ La línea publicada es M06. Antes de ampliar el lago conviene decidir si las ent
 
 **Actualización autorizada:** M07 identifica ahora [First Steps · v0.6.0](../milestones/M07-first-steps/README.md), con Etapa A validada y sin publicar. La anterior propuesta «M07 Calidad de entrega» permanece como candidata sin ID asignado; no se renumeran requisitos o tareas existentes.
 
-La **Etapa B** (conexión a tierra, sendero y dos calas, incluidas correcciones) está aceptada y conservada en `00208d9`. El propietario autoriza **Etapa C**: pesca libre segura en la ribera existente y transiciones entre modos, sin nuevas zonas ni RPG. C queda local, sin commit ni publicación y pendiente de aceptación.
+La **Etapa B** está aceptada en `00208d9` y **C** en `b7ae025` (pesca libre, correcciones y carrera). El propietario autoriza **D**, arquitectura mínima de zonas sobre Lago Sereno: datos y planificación, sin destinos nuevos jugables ni transición visual. D queda sin commit y pendiente de aceptación. No se autoriza publicación ni otra etapa.
 
 | Orden | Hito candidato | Valor y dependencia | Coste y salida |
 | --- | --- | --- | --- |

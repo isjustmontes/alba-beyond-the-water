@@ -1,5 +1,9 @@
 # Especificación · First Steps · Etapa A
 
+## Etapa D · arquitectura de zonas · autorizada 26/11/2026
+
+C validada y guardada en `b7ae025`. REQ-ZONE-001: registrar Lago Sereno con ID, entrada predeterminada, aparición y mapa de salidas vacío; reutilizar la escena existente sin modificar arranque o sistemas. REQ-ZONE-002: preparar planes de salida hacia zona/entrada válidas, sin aplicarlos, mover al jugador, cambiar recursos ni guardar estado. Rechazar IDs/descriptores inválidos. Sin zonas extra, interfaz, dependencias o transiciones visuales. D pendiente de aceptación; pruebas puras de contrato e integración inicial y build.
+
 ## Etapa C · pesca libre en la orilla existente · autorizada 26/11/2026
 
 **Ampliación acotada:** REQ-EXP-009: carrera suave 1,5× únicamente en exploración (Shift PC, botón táctil compacto), con colisiones y limpieza al cambiar modo, cancelar o perder foco. REQ-EXP-008: revisar picadas alejadas y añadir regresión de presencia real/ausencia de peces, sin elevar probabilidades ni forzar ataques. Mantener C pendiente de aceptación.

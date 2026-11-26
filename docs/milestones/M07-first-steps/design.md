@@ -1,5 +1,9 @@
 # Diseño · First Steps · Etapa A
 
+## Diseño D · mínimo previo a implementar
+
+Un módulo `zones.js` contendrá registro inmutable y `ZoneManager` independiente de Three.js. Cada zona tiene ID, entrada por defecto, entradas con posición/orientación y salidas que apuntan a otra zona/entrada. Lago Sereno registra únicamente la entrada del muelle (0,3,7; yaw=0, pitch=−0,065), sin salidas activas. `main` asociará la sesión a `world.scene` ya creada; no reconstruye escena ni aplica otra aparición. `prepareExit` valida el destino y devuelve datos copiados sin mutar sesión, escena o jugador; una etapa futura implementará la aplicación/carga. Sin lifecycle asíncrono, fábricas de render, persistencia ni gestor global adicional. Recuperación: D queda sin commit sobre C `b7ae025`.
+
 ## Diseño C · antes de implementar
 
 **Carrera y auditoría acotada:** aplicar multiplicador 1,5 al objetivo de velocidad existente, conservando amortiguación y subpasos de colisión. Shift se mantiene y botón táctil alterna carrera; ambos se limpian con `clear`. Botón sólo visible en exploración táctil, junto al joystick, con safe areas y sin modificar HUD de pesca. Auditar flujo FishingGame → FishSchool: las picadas dependen de coordenadas reales, proximidad, profundidad y condiciones, no de distancia al muelle. Si no se reproduce otra restricción, no tocar probabilidades; verificar con varias semillas lejos del origen.

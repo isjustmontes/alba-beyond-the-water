@@ -1,5 +1,11 @@
 # Aceptación · First Steps · Etapa A
 
+## D · criterios previos · aceptación PENDIENTE
+
+REQ-ZONE-001: iniciar con Lago Sereno, escena previa por identidad y aparición del muelle original; ninguna salida activada. REQ-ZONE-002: con registros de prueba, preparar una salida devuelve ID de destino, entrada y aparición; nunca cambia zona/escena/jugador y no admite destino inexistente o posición no finita. NFR-EXP-001: mantener código de pesca, exploración, clima, audio, HUD y guardados; ejecutar sólo pruebas relevantes y build. Sin nueva zona jugable ni transición visual.
+
+Resultado técnico D: **27/27** relevantes y build correctos. Registro/planes comprobados sin renderer, sin cambiar escena ni coordenadas reales de arranque. No se prueban carga/descarga o transición visual porque no se implementan. **D pendiente de aceptación del propietario.** [Evidencia](evidence.md).
+
 **Aceptación posterior C · 26/11/2026:** el propietario confirma validada la Etapa C al autorizar D y su commit local, incluidas correcciones de pesca, distribución y carrera. REQ-EXP-006/007/008/009 y extensión NFR-EXP-001 quedan VERIFIED dentro del alcance y límites registrados. Los pendientes inferiores se conservan como históricos; esta aceptación no publica v0.6.0.
 
 ## C · criterios previos a implementar · aceptación PENDIENTE

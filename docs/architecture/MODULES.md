@@ -2,6 +2,7 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [zones.js](../../src/zones.js) | Registro de Lago Sereno y planes de salidas sin efectos; conserva referencia de escena existente | ZONES, ZoneManager | — |
 | [lake-habitat.js](../../src/simulation/lake-habitat.js) | Profundidad de hábitat, margen al agua/rocas y hogares individuales en riberas/interior | habitatDepth, fishWater, fishHome | lake.js, alturas compartidas de shore-route.js |
 | [equipment-transition.js](../../src/animation/equipment-transition.js) | Equipar/guardar el rig existente con un escalar reversible; bloqueo de entrada durante equipamiento | EquipmentTransition | `./fishing-motion.js` |
 | [ambient-life.js](../../src/ambient-life.js) | Calcula actividad acústica según hora y clima; conserva funciones de poses de fauna experimental. | faunaConditions, makeFaunaSlots, birdPose, insectPose | — |
