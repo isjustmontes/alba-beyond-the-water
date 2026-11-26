@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M11-C vigente:** B aceptada en `094ee84`. Inicio real una sola vez, ubicación persistente compatible y aviso inicial opcional implementados por encargo C; pendientes de aceptación manual. Persistencia de ubicación actual es ampliación explícitamente autorizada del plan A. No añadir misiones ni otros desbloqueos; validación final/NFR y publicación requieren pasos posteriores. [Estado y evidencia](../milestones/M11-first-morning/README.md).
+
 **M11-B autorizado:** adelantar presentación cinematográfica con preview explícito; posponer clasificación, guardado y aparición real del plan original. Aprobación A conservada en `107ac34`; B pendiente de revisión visual/funcional, siguientes etapas sin autorizar. [Estado/diseño vigentes](../milestones/M11-first-morning/README.md).
 
 **M11 abierto por encargo explícito: The First Morning · v0.10.0.** [Etapa A de planificación](../milestones/M11-first-morning/README.md) desde v0.9.0 publicada; pendiente de aprobación. B clasificación segura y aparición en plaza; C introducción al amanecer de unos 12 s, salto y movimiento reducido; D objetivo discreto e integración; E regresiones/evidencia. Sin nuevas zonas, tutorial obligatorio, misiones ni cambios de pesca/economía. B–E requieren autorización posterior; la nota anterior de «ningún hito siguiente» pasa a ser histórica.

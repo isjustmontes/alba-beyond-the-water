@@ -1,5 +1,7 @@
 # Aceptación · The First Morning
 
+**Decisión C vigente:** B aceptada visual/funcionalmente por el propietario y conservada en `094ee84`. C implementada; AC-INTRO-01/05/06 y restauración de ubicación cuentan con 41/41 pruebas de lógica relevantes y nueve escenarios integrados PASS, pero siguen pendientes de aceptación manual C. AC-INTRO-02/03/04 mantienen aceptación de presentación B; movimiento reducido y controles se comprueban también con inicio real. NFR físicos/WebKit/lector de pantalla y medición sostenida continúan parciales. No cerrar M11 ni certificar dispositivos físicos. Los estados inferiores son históricos.
+
 **Decisión humana vigente:** A aprobada al encargar B; guardada en `107ac34`. B entregada para validación visual/funcional, aún no aceptada. AC-INTRO-02/03/04 tienen evidencia de lógica/emulación en alcance de previsualización; AC-INTRO-07/09 parciales. AC-INTRO-01/05/06 y medición comparativa completa AC-INTRO-08 no se completan en B. No inferir aceptación física, accesible o de rendimiento de capturas automatizadas. Los procedimientos/estados A inferiores son históricos; [resultados B](evidence.md).
 
 **Decisión humana** — Plan A pendiente de aprobación. Ningún criterio de producto ejecutado ni aceptado en esta etapa; todos **NOT_STARTED**. La dirección solicitada no equivale a aceptación visual de un recorrido aún inexistente.

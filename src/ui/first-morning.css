@@ -12,3 +12,4 @@
 .first-morning--caption h1{font-size:32px}.first-morning--caption .first-morning__subtitle{font-size:14px;margin:4px 0 12px}.first-morning--caption .first-morning__phrase{font-size:16px}
 @media(max-height:480px){.first-morning__copy{transform:translateY(-4vh)}.first-morning h1{font-size:52px}.first-morning__subtitle{margin:6px 0 16px}.first-morning__phrase{font-size:18px}.first-morning__skip{bottom:max(12px,env(safe-area-inset-bottom));right:max(14px,env(safe-area-inset-right))}}
 @media(prefers-reduced-motion:reduce){.first-morning *{transition:none!important;animation:none!important}}
+.first-morning-objective{position:fixed;top:calc(env(safe-area-inset-top) + 112px);left:50%;transform:translateX(-50%);z-index:8;max-width:calc(100vw - 32px);box-sizing:border-box;padding:9px 18px;border:1px solid rgba(191,173,124,.5);border-radius:5px;background:rgba(23,48,37,.86);color:#f2eddd;font:15px Georgia,serif;letter-spacing:.05em;text-align:center;pointer-events:none}

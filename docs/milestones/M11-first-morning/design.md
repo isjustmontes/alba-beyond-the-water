@@ -1,5 +1,15 @@
 # Diseño · The First Morning
 
+## C · diseño autorizado de inicio y persistencia
+
+**Implementado, pendiente de aceptación:** `PlayerProgress` aplica este contrato sin renderer; `main` resuelve inicio antes de inicializar comercio, prepara la ubicación después de registrar controles y bloquea entrada durante la espera de carga/cinemática. Se conserva también un registro de ubicación versión 1 anterior sin `introSeen`: su propia presencia excluye la introducción y sus campos adicionales se mantienen. Documentos/versiones desconocidos no se reemplazan. La entrada DEV repetible no instancia PlayerProgress ni guarda su cámara.
+
+Añadir `player-progress.js`, adaptador localStorage pequeño y comprobable sin renderer. Clasificar antes de VillageShop u otros escritores. Documento aditivo `alba-player-v1`: versión 1, `introSeen:true` y `location:{zoneId,position:{x,y,z},yaw,pitch,mode}`; guardar marca y aparición inicial juntas antes de reproducir para que recargar durante la secuencia no la repita. Reconocer también la presencia de la clave de onboarding propuesta en A, sin escribirla ni inferir que su ausencia significa partida nueva. No migrar ni sobrescribir documentos de capturas/comercio/equipo/audio.
+
+Restaurar sólo ubicaciones de zonas conocidas con números finitos y suelo transitable usando alturas/obstáculos existentes. Normalizar altura al ojo sobre suelo (no conservar salto/velocidad ni combate incompleto). Mantener x/z y orientación válidas; sólo restaurar pesca donde sea segura. Sin ubicación disponible, muelle compatible; documento de jugador corrupto/desconocido o con ubicación insegura se conserva sin sobrescribir y permite jugar mediante fallback. Si almacenamiento falla o cambia desde la lectura, no iniciar presentación ni sobrescribirlo. No se promete atomicidad entre pestañas.
+
+Al terminar/saltar/reducir movimiento, una sola ruta aplica plaza, libera controles y muestra «Explora la aldea» durante 8 s sin bloquear. Guardar ubicación al viajar, periódicamente cada 2 s sólo si cambió y al ocultar/salir de página; nunca guardar la cámara cinematográfica, una posición en el aire o la preview DEV. Persiste sólo ubicación actual, no mapa completo de retornos ni hora/clima. Esta ampliación de persistencia reemplaza la exclusión del plan A por instrucción C; integración, pruebas y aceptación se registrarán sin certificar resultados antes de ejecutarlos.
+
 ## B implementada · contrato actual
 
 `animation/first-morning.js` posee sólo estado/tiempo/pose: 12 s, interpolación quíntica con velocidad inicial/final nula, salida anticipada amortiguada de 0,65 s, tiempo suspendible y final exacto e idempotente. `ui/first-morning.js` adapta la cámara existente y el overlay DOM/CSS: captura de entradas antes de los controles normales, limpieza de teclas/dedos, foco, bloqueo hasta liberar el gesto de salto y retirada de listeners al terminar. No utiliza almacenamiento ni decide elegibilidad/aparición.

@@ -1,5 +1,7 @@
 # Especificación · The First Morning
 
+**C autorizada · alcance vigente:** B aceptada en `094ee84`. Implementar REQ-INTRO-001/005/006 y la integración de la presentación: nuevas partidas en plaza, introducción consumida antes de reproducir, aviso no bloqueante y recuperación de ubicación válida al recargar. La solicitud C amplía explícitamente el plan original para persistir la ubicación actual (zona, x/z, orientación y modo seguro), sin historial completo de posiciones por zona. Fuente real inspeccionada: versiones previas no escriben ubicación. Capturas/comercio/equipo/audio conservan claves y bytes. Guardados antiguos sin ubicación usan muelle; presencia de cualquier dato previo excluye la introducción, incluso vacío/corrupto. Sin commit C ni publicación; aceptación pendiente.
+
 **Alcance B vigente:** A aprobada en `107ac34`; REQ-INTRO-002/003/004 y parte de NFR-INTRO-001/003 se implementan ahora como presentación opt-in DEV `?intro=1`. Título completo «ALBA — Beyond the Water». No clasificación de perfiles, nuevas claves, objetivo inicial ni cambio de aparición normal; REQ-INTRO-001/005/006 continúan NOT_STARTED. La Etapa C original de cámara se adelanta a B por instrucción explícita; persistencia/aparición se aplazan a autorización posterior. Resultados y aceptación actual prevalecen sobre estados/etapas del plan original inferior.
 
 **Problema del jugador** — El inicio actual coloca a todas las sesiones en el muelle, en modo pesca. Falta una primera llegada que presente la aldea y permita descubrirla libremente.

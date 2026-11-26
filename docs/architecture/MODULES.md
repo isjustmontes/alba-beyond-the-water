@@ -2,6 +2,7 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [player-progress.js](../../src/player-progress.js) | Clasificar inicio, consumir introducción y persistir ubicación local aditiva sin tocar progreso previo | PlayerProgress, PLAYER_STORAGE_KEY, PLAZA_LOCATION, DOCK_LOCATION, safeLocation | zones.js |
 | [animation/first-morning.js](../../src/animation/first-morning.js) | Tiempo y pose de presentación opt-in, sin renderer/guardados | FirstMorningTimeline, INTRO_DURATION, INTRO_HANDOFF | — |
 | [ui/first-morning.js](../../src/ui/first-morning.js) | Overlay DOM, cámara actual y entrada temporal; se retira al completar | FirstMorning | animation/first-morning.js, CSS propio |
 | [dialogues/conversation.js](../../src/dialogues/conversation.js) | Shared authored-node sessions and safe encounter proximity, no persistence | Conversation, nearEncounter | village-layout.js |

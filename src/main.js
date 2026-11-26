@@ -15,7 +15,7 @@ import {renderZoneMap} from './zone-map.js';
 import {VillageShop} from './shop.js';
 import {ShopPanel} from './shop-panel.js';
 import {Exploration,ExplorationControls,WALK,bindModeToggle} from './input/exploration.js';
-import {walkHeight} from './input/shore-route.js';
+import {walkHeight,atSpot} from './input/shore-route.js';
 import {villageWalkHeight,nearVillageShop} from './village-layout.js';
 import {Environment,WEATHER,formatHour} from './simulation/environment.js';
 import { LakeWorld } from './world.js';
@@ -27,14 +27,19 @@ import {GameControls} from './input/controller.js';
 import {InputMode} from './input/touch-mode.js';
 import { LakeAudio } from './audio.js';
 import {FirstMorning} from './ui/first-morning.js';
+import {PlayerProgress,PLAZA_LOCATION} from './player-progress.js';
 
 const $ = id => document.getElementById(id);
 const number = (n, places = 0) => n.toLocaleString('es-ES',{ minimumFractionDigits: places, maximumFractionDigits: places });
+// Resolve presence before VillageShop (or any future startup writer) creates data.
+const previewIntro=import.meta.env.DEV&&new URLSearchParams(location.search).get('intro')==='1';
+let playerProgress=null;
+if(!previewIntro){try{playerProgress=new PlayerProgress(localStorage);}catch{playerProgress=new PlayerProgress(null);}}
 const audio = new LakeAudio();
 const storageKey = 'alba-catches-v1';
 let world, game, input, inputMode, shop, shopPanel, touchMode=false, toastTimer, paused = false, highQuality = true, lastTime = performance.now();
 const exploration=new Exploration();let walkControls,zones,travelButton,dialoguePanel,characters,activeCharacter,pendingDialogueMenu=null;
-let introduction=null;
+let introduction=null,introPending=false,playerSaveElapsed=0;
 const zoneHeight=(id,x,z)=>id==='anglers-village'?villageWalkHeight(x,z):walkHeight(x,z,world.landscape.walkObstacles);
 const atShop=()=>zones.zoneId==='anglers-village'&&exploration.mode==='exploring'&&nearVillageShop(exploration.x,exploration.z);
 const atManuel=()=>nearManuel({zone:zones.zoneId,mode:exploration.mode,state:game.state,grounded:exploration.grounded,x:exploration.x,z:exploration.z});
@@ -66,6 +71,33 @@ function travel(){
   document.documentElement.dataset.zone=result.to;$('mode-toggle').hidden=result.to!=='lago-sereno';
   const zoneName=result.to==='anglers-village'?'ALDEA':'LAGO SERENO';$('location-name').textContent=zoneName;$('mobile-zone-name').textContent=zoneName;
   toast(result.to==='anglers-village'?'Aldea · Acércate a ARTES DE PESCA para preparar tu equipo.':'De vuelta en Lago Sereno.');
+  savePlayerLocation();
+}
+function savePlayerLocation(){
+  if(!playerProgress||introPending||introduction?.blocking||!exploration.grounded)return;
+  playerProgress.save({zoneId:zones.zoneId,position:{x:exploration.x,y:world.camera.position.y,z:exploration.z},yaw:world.yaw,pitch:world.pitch,mode:exploration.mode},zoneHeight);
+}
+function applyPlayerLocation(location){
+  const {zoneId,position,yaw,pitch}=location;
+  world.setZone(zoneId);zones=new ZoneManager({scene:world.scene,zoneId});
+  exploration.heightAt=(x,z)=>zoneHeight(zones.zoneId,x,z);
+  exploration.x=position.x;exploration.z=position.z;
+  const spot=zoneId==='lago-sereno'?atSpot(position.x,position.z,world.landscape.walkObstacles):null;
+  // Do not restore active tackle/combat or force an unsafe saved view into fishing limits.
+  const fishing=location.mode==='fishing'&&spot&&pitch>=-.48&&pitch<=.25&&(spot.id!=='dock'||Math.abs(yaw)<=spot.look);
+  exploration.mode=fishing?'fishing':'exploring';if(spot)exploration.spot=spot;
+  world.setExploring(!fishing);world.equipment.value=fishing?1:0;
+  if(fishing){world.fishingYaw=spot.yaw;world.fishingLook=spot.look;game.setOrigin(spot.id==='dock'?spot.originX:position.x-3*Math.sin(yaw),spot.id==='dock'?spot.originZ:position.z-3*Math.cos(yaw));}
+  world.yaw=yaw;world.pitch=pitch;world.viewPitchTarget=null;world.setView();
+  world.camera.position.set(position.x,fishing&&spot.id==='dock'?3:exploration.floor+WALK.eye,position.z);
+  document.documentElement.dataset.playerMode=exploration.mode;document.documentElement.dataset.zone=zoneId;
+  $('mode-toggle').hidden=zoneId!=='lago-sereno';$('mode-toggle').textContent=fishing?'Explorar · V':'Pescar · V';$('mode-toggle').setAttribute('aria-pressed',String(!fishing));
+  $('exploration-hint').hidden=!!fishing;
+  $('location-name').textContent=$('mobile-zone-name').textContent=zoneId==='anglers-village'?'ALDEA':'LAGO SERENO';
+}
+function showInitialObjective(){
+  const hint=document.createElement('div');hint.className='first-morning-objective';hint.setAttribute('role','status');hint.textContent='Explora la aldea';
+  document.body.append(hint);setTimeout(()=>hint.remove(),8000);
 }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('visible'),5000); }
 function fatal(error) { console.error(error); $('loading').hidden = true; $('fatal').hidden = false; $('fatal-message').textContent = `Este juego necesita un navegador con WebGL 2 y aceleración gráfica. ${error.message}`; }
@@ -316,6 +348,8 @@ function controls() {
 }
 try {
   world = new LakeWorld($('scene'));
+  const startup=previewIntro?{playIntro:true,location:PLAZA_LOCATION}:playerProgress.begin(zoneHeight);
+  introPending=startup.playIntro;
   zones=new ZoneManager({scene:world.scene});
   exploration.obstacles=world.landscape.walkObstacles;
   const environmentOptions={};
@@ -345,23 +379,17 @@ try {
   try{shop=new VillageShop(localStorage);}catch{shop=new VillageShop(null);}
   game.lureId=shop.equipment.lureId;
   shopPanel=new ShopPanel({shop,game,dialog:$('shop-dialog'),onChange:renderEquipment,onEquip:equipItem});
-  // Stage B is opt-in DEV presentation only. Normal startup/storage/spawn are unchanged.
-  // A later stage can call FirstMorning after deciding new-game eligibility.
-  const previewIntro=import.meta.env.DEV&&new URLSearchParams(location.search).get('intro')==='1';
-  if(previewIntro){
+  if(startup.playIntro){
     introduction=new FirstMorning({world,target:{x:0,y:villageWalkHeight(0,11)+WALK.eye,z:11,yaw:0,pitch:-.055},clearHeld,onFinish:pose=>{
       clearHeld();exploration.x=pose.x;exploration.z=pose.z;exploration.jumpHeight=exploration.verticalSpeed=0;
+      introPending=false;savePlayerLocation();if(!previewIntro)showInitialObjective();
     }});
+    introduction.blocking=true; // Gate inputs while the existing loading overlay is still fading.
   }
   renderJournal();renderEquipment(); controls(); updateUI();
-  if(previewIntro){
-    world.setZone('anglers-village');zones=new ZoneManager({scene:world.village.scene,zoneId:'anglers-village'});
-    exploration.mode='exploring';exploration.heightAt=villageWalkHeight;exploration.x=0;exploration.z=11;
-    world.setExploring(true);world.equipment.value=0;
-    document.documentElement.dataset.playerMode='exploring';document.documentElement.dataset.zone='anglers-village';
-    $('mode-toggle').hidden=true;$('exploration-hint').hidden=false;
-    $('location-name').textContent=$('mobile-zone-name').textContent='ALDEA';
-  }
+  applyPlayerLocation(startup.location);
+  addEventListener('pagehide',savePlayerLocation);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)savePlayerLocation();});
   $('scene').addEventListener('webglcontextlost',e=>{ e.preventDefault(); setPaused(true); toast('Se ha perdido la conexión con la GPU. Recarga para volver al lago.'); });
   function frame(now) {
     const dt = Math.min(.25,Math.max(0,(now-lastTime)/1000)); lastTime=now;
@@ -386,10 +414,11 @@ try {
     if(exit||shopNearby||character){const name=character?`Hablar con ${character.speaker.name}${character.location?` · ${character.location}`:''}`:shopNearby?'Abrir ARTES DE PESCA':exit.name,key=character?'E':'T',label=touchMode?name:`${key} · ${name}`;if(travelButton.textContent!==label)travelButton.textContent=label;travelButton.setAttribute('aria-keyshortcuts',key);}
     world.dialogueMarkersHidden=paused||!!introduction?.blocking;
     world.update(paused ? 0 : dt,game); updateUI();
+    playerSaveElapsed+=dt;if(playerSaveElapsed>=2){playerSaveElapsed=0;savePlayerLocation();}
     requestAnimationFrame(frame);
   }
   world.update(0,game);
-  $('loading').style.opacity = '0'; setTimeout(()=>{$('loading').hidden=true;if(previewIntro)introduction.start();},800);
+  $('loading').style.opacity = '0'; setTimeout(()=>{$('loading').hidden=true;if(startup.playIntro)introduction.start();},800);
   requestAnimationFrame(frame);
   // Expose read-only diagnostics in development, without gameplay shortcuts.
   if (import.meta.env.DEV) window.__alba = { snapshot:()=>({ zone:zones.zoneId,playerMode:exploration.mode,playerPosition:world.camera.position.toArray(),walkingKeys:exploration.keys.size,walkStick:{...exploration.stick},state:game.state,time:game.time,environment:game.environment.snapshot(),daylight:game.environment.daylight,rain:game.environment.weather.rain,cloud:game.environment.weather.cloud,tension:game.tension,distance:game.distance,catchCount:game.catches.length,paused,lureId:game.lureId,reeling:game.reeling,touchMode,heldInputs:input.actions.sources.size,casts:game.actionCounts.casts,hooks:game.actionCounts.hooks,cameraYaw:world.yaw,cameraPitch:world.pitch,webgl:world.renderer.capabilities.isWebGL2,...world.diagnostics() }) };

@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Vigente M11-C:** [primera llegada y ubicación persistente](milestones/M11-first-morning/README.md), implementadas y pendientes de validación manual. B aceptada en `094ee84`; 41/41 relevantes, nueve escenarios emulados y build correctos. Perfiles antiguos sin introducción ni reinicio; C sin commit/publicación. Las notas de preview B/A inferiores son históricas.
+
 **Vigente M11-B:** [cinemática de The First Morning](milestones/M11-first-morning/README.md), previsualizable en desarrollo con `?intro=1`, pendiente de validación visual/funcional. A aprobada en `107ac34`; sin activación automática, cambios de guardado o aparición normal, commit B ni publicación. Las notas de planificación inferiores son históricas.
 
 **Vigente: M11 · The First Morning · v0.10.0, Etapa A sólo SDD.** [Plan de inicio en aldea e introducción accesible](milestones/M11-first-morning/README.md), desde v0.9.0 publicada y `origin/main` verificado en `f7751bf`. Sin implementación, tests/build, commit ni publicación. Plan pendiente de aprobación; los estados de entregas anteriores se conservan como historial.
