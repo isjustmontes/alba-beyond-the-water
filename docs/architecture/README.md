@@ -1,5 +1,17 @@
 # Arquitectura del cliente
 
+### M09-E · horizonte rural
+
+`visuals/village-horizon.js` genera una malla de colinas lejanas y dos lotes de arbolado distante, sólo dentro de `VillageView`. Reutiliza mapa de suelo, materiales/atlas arbóreos y niebla/luz de la escena rural; geometrías y buffers de instancias propios. La calidad reduce conteos por el bucle de plantas existente; no modifica árboles actuales, suelo transitable, escenas del lago ni navegación. Sin nueva simulación/persistencia; [diseño/evidencia M09](../milestones/M09-living-village/design.md).
+
+### M09-E · pulido visual acotado
+
+`village-ground.js` añade variación determinista de árboles y ruido continuo del mapa de suelo; `VillageView` conserva lotes y recursos, con proporciones/copas menos repetidas y sotobosque por manchas. Sólo árboles exteriores pueden cambiar de anclaje visual y permanecen fuera de navegación; huellas y alturas transitables intactas. Variación adicional del suelo exterior y ajustes menores del adaptador atmosférico D, sin nuevas mecánicas ni trabajo CPU por frame para vegetación. [Diseño M09](../milestones/M09-living-village/design.md).
+
+### M09-D · atmósfera y humedad rural
+
+`visuals/village-atmosphere.js` adapta la presentación Living Waters ya calculada, sin modificarla: luz/reflexión, niebla limitada y contraste de sombras PCFSoft existentes. `VillageView.update` recibe el entorno desde `world.js` y actualiza una humedad uniforme compartida según lluvia/tiempo simulado, con entrada y secado exponenciales; no añade mapas/mallas/pases ni cambia guardados. Un wrapper preserva hooks C al humedecer piedra, madera, teja y suelo, con brillo acotado. La paleta atlántica se conserva; no existe simulación estacional nueva. [Diseño M09](../milestones/M09-living-village/design.md).
+
 ### M09-C · materiales rurales
 
 `visuals/village-materials.js` genera muestras deterministas para mapas propios al crear `VillageView` y adapta sólo materiales existentes: color/bump a escala métrica, variación de rugosidad y desgaste localizado por posición. Un mapa adicional para piedra labrada; tejas mantienen UV locales. Sin nuevas mallas/instancias, actualizaciones CPU por frame, contratos de navegación/interacción o cambios persistentes. [Diseño M09](../milestones/M09-living-village/design.md).

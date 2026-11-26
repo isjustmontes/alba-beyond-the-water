@@ -3,8 +3,10 @@ import {VILLAGE_HOUSES,VILLAGE_TREES,villageHeight} from '../village-layout.js';
 import {noise} from '../terrain-height.js';
 import {seedVegetationPhases,padVegetationBounds,VEGETATION_PROFILES,vegetationMaterial} from './vegetation-wind.js';
 import {shoreHeight} from '../input/shore-route.js';
-import {villageGroundHeight,villagePathCover,villagePlantSite} from './village-ground.js';
+import {villageGroundHeight,villagePathCover,villagePlantSite,villageTreeVariation,villageSoilNoise} from './village-ground.js';
 import {villageSurfaceTexel,villageSurfaceMaterial} from './village-materials.js';
+import {villageAtmosphere,advanceVillageWetness,villageRainMaterial} from './village-atmosphere.js';
+import {makeVillageHorizon} from './village-horizon.js';
 
 export function makeVillageTrailSign(){
   const group=new THREE.Group(),c=document.createElement('canvas');c.width=512;c.height=128;
@@ -22,28 +24,33 @@ function random(seed=8172){return ()=>{seed=(seed*1664525+1013904223)>>>0;return
 // Locally drawn cutouts, not solid geometric crowns. Separate branch structures,
 // lobed oak leaves and long chestnut leaves keep the two silhouettes distinct.
 function atlanticTreeTexture(chestnut){
-  const c=document.createElement('canvas');c.width=512;c.height=768;
+  const c=document.createElement('canvas');c.width=512;c.height=1024;
   const ctx=c.getContext('2d'),rand=random(chestnut?149:877);
-  ctx.lineCap='round';
-  for(let i=0;i<10;i++){
-    const y=535-i*35,side=i%2?1:-1,reach=(chestnut?100:130)*( .65+rand()*.4);
-    ctx.strokeStyle=chestnut?'#514933':'#58533f';ctx.lineWidth=12-i*.8;
-    ctx.beginPath();ctx.moveTo(255,680);ctx.bezierCurveTo(252,y+75,255+side*reach*.5,y+12,255+side*reach,y-65);ctx.stroke();
-  }
-  const trunk=ctx.createLinearGradient(245,0,270,0);trunk.addColorStop(0,'#393d2e');trunk.addColorStop(.5,chestnut?'#766447':'#73705b');trunk.addColorStop(1,'#424536');
-  ctx.fillStyle=trunk;ctx.beginPath();ctx.moveTo(240,768);ctx.bezierCurveTo(249,660,244,490,253,364);ctx.lineTo(261,364);ctx.bezierCurveTo(258,540,265,660,275,768);ctx.closePath();ctx.fill();
-  // Interlocking, irregular clusters leave small gaps for sky and branches.
-  const clusters=chestnut?[[257,151,90,116],[174,258,101,125],[324,251,111,139],[220,365,137,134],[334,392,96,103]]:
-    [[221,146,111,100],[124,257,105,118],[335,218,119,110],[379,347,96,107],[204,364,133,126],[282,437,116,86]];
-  for(let i=0;i<4900;i++){
-    const [cx,cy,rx,ry]=clusters[i%clusters.length],a=rand()*Math.PI*2,r=Math.sqrt(rand());
-    const x=cx+Math.cos(a)*rx*r,y=cy+Math.sin(a)*ry*r;
-    const shade=rand(),light=1-y/650;
-    ctx.fillStyle=`hsl(${chestnut?77+rand()*14:85+rand()*17},${23+rand()*18}%,${16+shade*16+light*9}%)`;
-    ctx.save();ctx.translate(x,y);ctx.rotate(rand()*Math.PI);ctx.beginPath();
-    if(chestnut){ctx.moveTo(-6,0);ctx.quadraticCurveTo(0,-3.5,8,0);ctx.quadraticCurveTo(0,3.5,-6,0);}
-    else{ctx.moveTo(-5,0);ctx.bezierCurveTo(-3,-5,-1,-1,0,-4);ctx.bezierCurveTo(3,-5,2,-1,6,0);ctx.bezierCurveTo(3,4,1,1,0,4);ctx.bezierCurveTo(-3,4,-2,1,-5,0);}
-    ctx.fill();ctx.restore();
+  // Two independently drawn crowns per species in the same material/atlas.
+  // Branch forks end inside foliage, instead of an exposed repeated Y shape.
+  for(let variant=0;variant<2;variant++){
+    ctx.save();ctx.translate(0,variant*512);ctx.beginPath();ctx.rect(0,0,512,512);ctx.clip();ctx.lineCap='round';
+    const trunk=ctx.createLinearGradient(243,0,270,0);trunk.addColorStop(0,'#393d2e');trunk.addColorStop(.5,chestnut?'#766447':'#73705b');trunk.addColorStop(1,'#424536');
+    ctx.fillStyle=trunk;ctx.beginPath();ctx.moveTo(244,512);ctx.bezierCurveTo(250,453,245,377,252,292);ctx.lineTo(262,292);ctx.bezierCurveTo(255,379,265,456,272,512);ctx.closePath();ctx.fill();
+    for(let i=0;i<7;i++){
+      const side=i%2?1:-1,reach=60+rand()*75,y=265+rand()*75;
+      ctx.strokeStyle=chestnut?'#514933':'#58533f';ctx.lineWidth=4+rand()*3;
+      ctx.beginPath();ctx.moveTo(256,416-i*7);ctx.bezierCurveTo(255,y+60,256+side*reach*.6,y+15,256+side*reach,y);ctx.stroke();
+    }
+    const cx=variant?237:267,cy=chestnut?229:208,rx=(chestnut?158:190)+(variant?-12:0),ry=(chestnut?164:139)+(variant?16:0),phase=variant*2.1+(chestnut?.8:0);
+    for(let i=0;i<(variant?5700:6600);i++){
+      const a=rand()*Math.PI*2,r=Math.sqrt(rand()),lower=i%5===0;
+      const edge=1+.11*Math.sin(a*3+phase)+.06*Math.sin(a*7-phase);
+      const x=(lower?252:cx)+Math.cos(a)*r*(lower?135:rx)*edge;
+      const y=(lower?334:cy)+Math.sin(a)*r*(lower?72:ry)*edge;
+      const shade=rand(),light=1-y/520;
+      ctx.fillStyle=`hsl(${chestnut?77+rand()*14:85+rand()*17},${23+rand()*18}%,${14+shade*16+light*10}%)`;
+      ctx.save();ctx.translate(x,y);ctx.rotate(rand()*Math.PI);ctx.beginPath();
+      if(chestnut){ctx.moveTo(-5,0);ctx.quadraticCurveTo(0,-3,7,0);ctx.quadraticCurveTo(0,3,-5,0);}
+      else{ctx.moveTo(-4,0);ctx.bezierCurveTo(-3,-4,-1,-1,0,-3);ctx.bezierCurveTo(3,-4,2,-1,5,0);ctx.bezierCurveTo(3,3,1,1,0,3);ctx.bezierCurveTo(-3,3,-2,1,-4,0);}
+      ctx.fill();ctx.restore();
+    }
+    ctx.restore();
   }
   const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;map.anisotropy=4;return map;
 }
@@ -81,7 +88,10 @@ function texture(kind){
     if(kind!=='soil'){
       villageSurfaceTexel(kind,x,y,pixel);r=pixel.r;g=pixel.g;b=pixel.b;
     }else{
-      r=98+n*27+grain*27;g=91+n*25+grain*23;b=64+n*22+grain*18;
+      // Neutral mineral detail lets vertex grass/soil colors read naturally,
+      // rather than multiplying both by the same dark brown wash.
+      const mineral=villageSoilNoise(x,y,.012),v=150+villageSoilNoise(x,y,.035)*25+grain*20+mineral*12;
+      r=v;g=v*.97;b=v*.89;
     }
     image.data.set([r,g,b,255],i);
   }
@@ -108,20 +118,21 @@ export class VillageView {
     this.scene.add(this.ambient,this.sun,this.sun.target,this.moon);
     // Rain geometry/material and atmospheric uniforms already belong to the lake.
     this.rain=world.environmentView.rain.clone();this.scene.add(this.rain);
+    this.atmosphere={};this.wetness={value:world.landscape.rain.value};this.lastEnvironmentTime=null;
     const granite=texture('granite'),trim=texture('trim'),wood=texture('wood'),tile=texture('tile'),soil=texture('soil');
     const material=(map,roughness=.94)=>new THREE.MeshStandardMaterial({map,bumpMap:map,bumpScale:.035,roughness});
-    const surface=(map,kind)=>villageSurfaceMaterial(material(map),kind);
+    const surface=(map,kind)=>villageRainMaterial(villageSurfaceMaterial(material(map),kind),this.wetness);
     this.materials={granite:surface(granite,'granite'),trim:surface(trim,'trim'),wood:surface(wood,'wood'),tile:surface(tile,'tile'),dark:new THREE.MeshStandardMaterial({color:0x202d2b,roughness:.44,metalness:.12}),iron:new THREE.MeshStandardMaterial({color:0x373a35,roughness:.72,metalness:.7})};
     this.materials.trim.color.set(0xbdbbb0);this.materials.granite.bumpScale=.018;this.materials.trim.bumpScale=.012;this.materials.wood.bumpScale=.004;this.materials.tile.bumpScale=.009;this.materials.tile.side=THREE.DoubleSide;
     soil.repeat.set(30,30);
-    const groundMat=material(soil);groundMat.vertexColors=true;groundMat.bumpScale=.055;
+    const groundMat=villageRainMaterial(material(soil),this.wetness);groundMat.vertexColors=true;groundMat.bumpScale=.055;
     const groundGeo=new THREE.PlaneGeometry(170,170,128,128);groundGeo.rotateX(-Math.PI/2);
     const p=groundGeo.attributes.position,colors=[];
     for(let i=0;i<p.count;i++){
       const x=p.getX(i),z=p.getZ(i);p.setY(i,villageGroundHeight(x,z));
       const cover=villagePathCover(x,z),patch=noise(x*.27+6,z*.27);
-      const col=new THREE.Color(0x647049).lerp(new THREE.Color(0x8b8a5b),patch*.3).lerp(new THREE.Color(0xb5a280),cover);
-      col.multiplyScalar(.88+noise(x*.65,z*.65)*.2);
+      const col=new THREE.Color(0x586c43).lerp(new THREE.Color(0x879062),patch*.58).lerp(new THREE.Color(0x9e8c6e),cover);
+      col.multiplyScalar(.86+noise(x*.65,z*.65)*.09+noise(x*.10+8,z*.10)*.14);
       colors.push(col.r,col.g,col.b);
     }
     groundGeo.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));groundGeo.computeVertexNormals();
@@ -130,6 +141,8 @@ export class VillageView {
     for(const h of VILLAGE_HOUSES)this.house(h);
     this.details();this.finishBatches();
     this.plants=[];this.vegetation(world);
+    this.horizon=makeVillageHorizon(groundMat,[this.scene.getObjectByName('village-oaks'),this.scene.getObjectByName('village-chestnuts')]);
+    this.scene.add(this.horizon.group);this.plants.push(...this.horizon.plants);
     this.lastQuality=null;
   }
   box(key,x,y,z,w,h,d,rotation=0){
@@ -253,37 +266,56 @@ export class VillageView {
     const dummy=new THREE.Object3D(),rand=random(128),color=new THREE.Color();
     this.plantDetail={value:1};const uniforms={time:world.landscape.clock,flow:world.landscape.wind,detail:this.plantDetail};
     for(const chestnut of [false,true]){
-      const sites=VILLAGE_TREES.filter((_,i)=>(i%3===0)===chestnut);
-      const geometry=source.geometry.clone();geometry.scale(chestnut?1.35:1.65,1,1);
+      const sites=VILLAGE_TREES.filter((_,i)=>(noise(i*9.7+8,3.2)>.6)===chestnut);
+      const geometry=source.geometry.clone(),spread=chestnut?1.45:1.65;geometry.scale(spread,1,spread);
       const mat=vegetationMaterial(new THREE.MeshStandardMaterial({map:atlanticTreeTexture(chestnut),alphaTest:.43,side:THREE.DoubleSide,roughness:.95,color:0xc5d1bb,emissive:0x152317,emissiveIntensity:.14}),uniforms,VEGETATION_PROFILES.birch);
+      const compileTree=mat.onBeforeCompile.bind(mat),treeKey=mat.customProgramCacheKey();
+      mat.onBeforeCompile=shader=>{
+        compileTree(shader);shader.vertexShader='attribute float villageTreeFrame;\n'+shader.vertexShader;
+        shader.vertexShader=shader.vertexShader.replace('#include <uv_vertex>','#include <uv_vertex>\n#ifdef USE_MAP\nvMapUv.y=(clamp(vMapUv.y,.001,.999)+villageTreeFrame)*.5;\n#endif');
+        // A soft sky-facing foliage normal avoids dark vertical card seams.
+        shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_begin>','#include <normal_fragment_begin>\nnormal=normalize(normal*.3+(viewMatrix*vec4(0.,1.,0.,0.)).xyz*.7);');
+      };
+      mat.customProgramCacheKey=()=>`${treeKey}-village-crowns-v2`;
       const trees=new THREE.InstancedMesh(geometry,mat,sites.length);trees.name=chestnut?'village-chestnuts':'village-oaks';
+      const frames=new Float32Array(sites.length);
       sites.forEach((t,i)=>{
-        dummy.position.set(t.x,villageGroundHeight(t.x,t.z),t.z);dummy.rotation.set(0,i*2.4,0);dummy.scale.set(t.height*(.91+rand()*.18),t.height,t.height);dummy.updateMatrix();trees.setMatrixAt(i,dummy.matrix);
-        trees.setColorAt(i,color.setHSL(.20+rand()*.05,.08,.85+rand()*.12));
+        const v=villageTreeVariation(t,VILLAGE_TREES.indexOf(t));
+        dummy.position.set(v.x,villageGroundHeight(v.x,v.z),v.z);dummy.rotation.set(0,v.yaw,v.lean);dummy.scale.set(v.height*v.width,v.height,v.height*v.depth);dummy.updateMatrix();trees.setMatrixAt(i,dummy.matrix);
+        trees.setColorAt(i,color.setHSL(.20+rand()*.065,.10,.78+rand()*.19));
+        frames[i]=v.frame;
       });
-      seedVegetationPhases(trees,VEGETATION_PROFILES.birch);padVegetationBounds(trees,VEGETATION_PROFILES.birch,11);this.scene.add(trees);
+      geometry.setAttribute('villageTreeFrame',new THREE.InstancedBufferAttribute(frames,1));
+      seedVegetationPhases(trees,VEGETATION_PROFILES.birch);padVegetationBounds(trees,VEGETATION_PROFILES.birch,14);this.scene.add(trees);
     }
     const grassSource=world.landscape.group.getObjectByName('vegetation-grass'),grass=new THREE.InstancedMesh(grassSource.geometry.clone(),grassSource.material,720);
-    const site=fern=>{let x,z;do{x=-32+rand()*64;z=-28+rand()*60;}while(!villagePlantSite(x,z,fern));return {x,z};};
+    const site=fern=>{let x,z;do{x=-32+rand()*64;z=-28+rand()*60;}while(!villagePlantSite(x,z,fern)||rand()>(.25+noise(x*.18+7,z*.18)*.75));return {x,z};};
     for(let i=0;i<720;i++){
-      const {x,z}=site(false),size=.25+rand()*.55;
-      dummy.position.set(x,villageGroundHeight(x,z),z);dummy.rotation.set(0,rand()*Math.PI,0);dummy.scale.set(size*(.8+rand()*.6),size,size);dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);
+      const {x,z}=site(false),size=.2+rand()*.46;
+      dummy.position.set(x,villageGroundHeight(x,z),z);dummy.rotation.set(0,rand()*Math.PI,0);dummy.scale.set(size*(1.1+rand()*.8),size,size*(1+rand()*.5));dummy.updateMatrix();grass.setMatrixAt(i,dummy.matrix);
       grass.setColorAt(i,color.setHSL(.20+rand()*.055,.12+rand()*.13,.66+rand()*.2));
     }
     seedVegetationPhases(grass,VEGETATION_PROFILES.grass);padVegetationBounds(grass,VEGETATION_PROFILES.grass,1);this.scene.add(grass);this.plants.push({mesh:grass,count:720});
     const fern=fernFronds(),fernMat=vegetationMaterial(new THREE.MeshStandardMaterial({map:fern.map,alphaTest:.4,side:THREE.DoubleSide,roughness:.95}),uniforms,VEGETATION_PROFILES.grass);
     const ferns=new THREE.InstancedMesh(fern.geometry,fernMat,80);ferns.name='village-ferns';
     for(let i=0;i<80;i++){
-      const {x,z}=site(true);dummy.position.set(x,villageGroundHeight(x,z),z);dummy.rotation.set(0,rand()*6.28,0);dummy.scale.setScalar(.65+rand()*.55);dummy.updateMatrix();ferns.setMatrixAt(i,dummy.matrix);
+      const {x,z}=site(true),size=.48+rand()*.65;dummy.position.set(x,villageGroundHeight(x,z),z);dummy.rotation.set(0,rand()*6.28,0);dummy.scale.set(size*(.9+rand()*.3),size,size);dummy.updateMatrix();ferns.setMatrixAt(i,dummy.matrix);
       ferns.setColorAt(i,color.setHSL(.23,.1,.8+rand()*.2));
     }
     seedVegetationPhases(ferns,VEGETATION_PROFILES.grass);padVegetationBounds(ferns,VEGETATION_PROFILES.grass,1.2);this.scene.add(ferns);this.plants.push({mesh:ferns,count:80});
   }
-  update(world){
-    this.ambient.color.copy(world.ambient.color);this.ambient.groundColor.copy(world.ambient.groundColor);this.ambient.intensity=world.ambient.intensity;
-    this.sun.color.copy(world.sun.color);this.sun.intensity=world.sun.intensity;this.sun.position.copy(world.sunDirection).multiplyScalar(90);
+  update(world,environment){
+    const view=villageAtmosphere(world.environmentView.atmosphere,environment.daylight,environment.weather,this.atmosphere);
+    const elapsed=this.lastEnvironmentTime===null?0:Math.max(0,environment.time-this.lastEnvironmentTime);
+    this.wetness.value=advanceVillageWetness(this.wetness.value,environment.weather.rain,elapsed);this.lastEnvironmentTime=environment.time;
+    this.ambient.color.copy(world.ambient.color);this.ambient.groundColor.copy(world.ambient.groundColor);
+    this.ambient.groundColor.r+=view.groundLift*.8;this.ambient.groundColor.g+=view.groundLift;this.ambient.groundColor.b+=view.groundLift*.75;
+    this.ambient.intensity=world.ambient.intensity*view.ambientScale;
+    this.sun.color.copy(world.sun.color);this.sun.intensity=world.sun.intensity*view.sunScale;this.sun.position.copy(world.sunDirection).multiplyScalar(90);
+    this.sun.shadow.intensity=view.shadowStrength;
     this.moon.color.copy(world.environmentView.moon.color);this.moon.intensity=world.environmentView.moon.intensity;this.moon.position.copy(world.sunDirection).multiplyScalar(-90);
-    this.scene.fog.color.copy(world.scene.fog.color);this.scene.fog.density=Math.max(.006,world.scene.fog.density);
+    this.scene.environmentIntensity=view.reflection;
+    this.scene.fog.color.copy(world.scene.fog.color);this.scene.fog.density=view.fogDensity;
     this.rain.visible=world.environmentView.rain.visible;
     const low=world.touchMode||!world.highQuality;
     this.plantDetail.value=low?0:1;

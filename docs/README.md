@@ -1,5 +1,13 @@
 # Documentación de ALBA
 
+**Horizonte M09-E:** colinas y bosque distante exclusivos de aldea, árboles actuales y Lago Sereno intactos; 12/12 relevantes/build correctos. [Revisión visual pendiente](milestones/M09-living-village/README.md). Sin commit ni publicación.
+
+**Corrección M09-E:** árboles de aldea con cuatro variantes de copa y agrupación exterior, lago intacto; 16/16 relevantes/build y tres perfiles emulados correctos. [Revisión pendiente](milestones/M09-living-village/README.md). Sin commit ni publicación; D/E conservadas.
+
+**M09-E vigente:** pulido de vegetación/suelo/contraste implementado sin nuevos lotes/mapas/pases; arquitectura y navegación intactas. 19/19 y build correctos; [revisión/evidencia](milestones/M09-living-village/README.md). D/E sin commit ni publicación, pendientes de validación visual. Historial inferior conservado.
+
+**M09-D vigente:** C validada en `43d4587`; luz/bruma/sombras y humedad rural por lluvia implementadas, pendientes de aceptación visual. [Resumen y evidencia](milestones/M09-living-village/README.md). 14/14, build, cuatro perfiles ambientales emulados y tienda/retorno correctos; sin nuevos recursos gráficos. D sin commit/publicación; M09 no cerrado. Notas inferiores históricas.
+
 **M09-C vigente:** B validada y guardada en `333ebb6`; materiales de arquitectura/desgaste local implementados, pendientes de aceptación visual. [Resumen y evidencia](milestones/M09-living-village/README.md). Geometría, rutas e interacciones conservadas; C sin commit/publicación, D no iniciada. Notas inferiores históricas.
 
 **M09-B vigente:** A aprobada en `585e1dc`; terreno exterior/caminos y vegetación atlántica implementados localmente, pendientes de aceptación visual. [Resumen, pruebas y revisión](milestones/M09-living-village/README.md). 18/18, build y PC/móvil emulado correctos; navegación e interacciones conservadas. Sin commit B/publicación; C/D no iniciadas. Notas inferiores históricas.

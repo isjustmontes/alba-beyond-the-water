@@ -1,7 +1,15 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {villageHeight,villageWalkHeight,VILLAGE_HOUSES,VILLAGE_TREES} from '../src/village-layout.js';
-import {villageGroundHeight,villagePathCover,villagePlantSite} from '../src/visuals/village-ground.js';
+import {villageGroundHeight,villagePathCover,villagePlantSite,villageTreeVariation,villageSoilNoise} from '../src/visuals/village-ground.js';
+
+test('soil macro detail tiles without visible edge jumps in either direction',()=>{
+  for(const scale of [.012,.035])for(let i=0;i<=512;i+=8){
+    assert.ok(Math.abs(villageSoilNoise(0,i,scale)-villageSoilNoise(512,i,scale))<1e-12);
+    assert.ok(Math.abs(villageSoilNoise(i,0,scale)-villageSoilNoise(i,512,scale))<1e-12);
+    const n=villageSoilNoise(i,133,scale);assert.ok(n>=0&&n<=1);
+  }
+});
 
 test('visual ground keeps every existing navigable point at its original height, including outer corners',()=>{
   for(let x=-23.5;x<=23.5;x+=.5)for(let z=-29;z<=32;z+=.5){
@@ -10,6 +18,23 @@ test('visual ground keeps every existing navigable point at its original height,
   }
   for(const h of VILLAGE_HOUSES)assert.equal(villageGroundHeight(h.x,h.z),villageHeight(h.x,h.z));
   for(const t of VILLAGE_TREES)assert.ok(Number.isFinite(villageGroundHeight(t.x,t.z)));
+});
+
+test('tree variety preserves collision anchors and never moves peripheral trunks into navigation',()=>{
+  const shapes=new Set();let shifted=0;
+  const outside=(x,z)=>x< -24.5||x>24.5||z< -30||z>33;
+  for(const [i,t]of VILLAGE_TREES.entries()){
+    const v=villageTreeVariation(t,i),out={};assert.equal(villageTreeVariation(t,i,out),out);assert.deepEqual(out,v);
+    if(!outside(t.x,t.z)){assert.equal(v.x,t.x);assert.equal(v.z,t.z);}
+    else assert.ok(outside(v.x,v.z),'new invisible obstacles cannot enter playable ground');
+    assert.ok(Math.hypot(v.x,v.z+2)<50,'groves remain inside the existing rural backdrop');
+    assert.ok(v.frame===0||v.frame===1);
+    assert.ok(v.height>=t.height*.84&&v.height<=t.height*1.18);
+    assert.ok(v.width>=.76&&v.width<=1.32&&Math.abs(v.lean)<.023);
+    if(v.x!==t.x||v.z!==t.z)shifted++;
+    shapes.add([v.width.toFixed(2),v.height.toFixed(2),v.yaw.toFixed(2)].join(','));
+  }
+  assert.ok(shifted>10);assert.ok(shapes.size>30,'silhouettes must not repeat on a small fixed cycle');
 });
 
 test('outer banks join continuously without changing navigation or introducing sharp steps',()=>{

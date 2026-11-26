@@ -7,11 +7,18 @@ const segmentDistance=(x,z,ax,az,bx,bz)=>{
   return Math.hypot(x-ax-t*dx,z-az-t*dz);
 };
 
+// Seamless macro detail for the existing repeated 512px soil map.
+export function villageSoilNoise(x,y,scale){
+  const u=x/512,v=y/512;
+  return noise(x*scale,y*scale)*(1-u)*(1-v)+noise((x-512)*scale,y*scale)*u*(1-v)
+    +noise(x*scale,(y-512)*scale)*(1-u)*v+noise((x-512)*scale,(y-512)*scale)*u*v;
+}
+
 // Visual banks only: retain the exact existing walking height throughout the
 // navigable rectangle, including its corners (the old radial rise did not).
 export function villageGroundHeight(x,z){
   const outside=Math.max(Math.abs(x)-24, -29.5-z,z-32.5,0);
-  return villageHeight(x,z)+smooth(0,8,outside)*(.35+noise(x*.08,z*.08)*1.3)+Math.max(0,outside-12)*.045;
+  return villageHeight(x,z)+smooth(0,8,outside)*(.35+noise(x*.08,z*.08)*1.3+(noise(x*.6,z*.6)-.5)*.09)+Math.max(0,outside-12)*.045;
 }
 
 export function villagePathCover(x,z){
@@ -34,5 +41,21 @@ export function villagePlantSite(x,z,fern=false){
   // Avoid the existing low field walls; vegetation can grow on either side.
   if(Math.abs(Math.abs(x)-24.5)<.6)return false;
   const patch=noise(x*.31+18,z*.31-4);
-  return patch>(fern?.46:.28)&&(!fern||Math.abs(x)>12);
+  return patch>(fern?.46:.28)&&(!fern||Math.abs(x)>9);
+}
+
+// Visual variety only. Interior trunks keep their exact collision anchors;
+// peripheral trees can shift only if they remain outside navigation entirely.
+export function villageTreeVariation(tree,index,out={}){
+  const a=noise(index*7.13,21.4),b=noise(index*3.97+8,7.2),c=noise(index*11.7+4,16.8);
+  const outside=(x,z)=>x< -24.5||x>24.5||z< -30||z>33;
+  // Uneven groves replace the old concentric perimeter rows. Keep clear of
+  // the playable rectangle; original collidable trunks are never relocated.
+  const group=Math.floor(index/3),slot=index%3,angle=group*2.399963+(slot-1)*.12+(a-.5)*.07;
+  const radius=35+noise(group*5.4+6,8.2)*10+(slot-1)*2.4;
+  const x=Math.cos(angle)*radius,z=Math.sin(angle)*radius-2;
+  out.x=outside(tree.x,tree.z)&&outside(x,z)?x:tree.x;
+  out.z=outside(tree.x,tree.z)&&outside(x,z)?z:tree.z;
+  out.height=tree.height*(.84+c*.34);out.width=.76+a*.56;out.depth=.8+b*.42;
+  out.yaw=c*Math.PI*2;out.lean=(b-.5)*.045;out.frame=noise(index*5.3+3,6.1)>.5?1:0;return out;
 }

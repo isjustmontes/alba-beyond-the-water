@@ -278,7 +278,7 @@ export class LakeWorld {
     if(this.activeZone==='anglers-village'){
       this.environmentView.update(game.environment,game.time);this.landscape.clock.value=game.time;
       this.equipment.update(dt,false);this.rod.visible=false;this.camera.updateMatrixWorld();
-      this.village.update(this);this.renderer.info.reset();this.renderer.render(this.village.scene,this.camera);return;
+      this.village.update(this,game.environment);this.renderer.info.reset();this.renderer.render(this.village.scene,this.camera);return;
     }
     if(this.viewPitchTarget!=null){
       this.pitch+=(this.viewPitchTarget-this.pitch)*(1-Math.exp(-dt*12));

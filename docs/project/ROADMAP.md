@@ -1,5 +1,9 @@
 # Hoja de ruta propuesta
 
+**M09-E:** pulido visual adicional autorizado e implementado, pendiente de aceptación. D se conserva local sin inferir aceptación; no se confirma ni publica D/E. Sin NPC, zonas, mecánicas o RPG nuevos. [M09](../milestones/M09-living-village/README.md).
+
+**M09-D:** C aceptada en `43d4587`; iluminación/atmósfera/humedad rural implementadas y comprobadas, pendientes de aceptación visual D. No se abre otro hito ni se publica; conservar pendientes físicos/WebKit/rendimiento sostenido. [M09](../milestones/M09-living-village/README.md).
+
 **M09-C:** B aceptada en `333ebb6`; granito/teja/madera y envejecimiento local implementados, pendientes de aceptación visual C. D iluminación/atmósfera/clima no iniciada; no ampliar alcance ni publicar. [M09](../milestones/M09-living-village/README.md).
 
 **M09-B:** A aprobada en `585e1dc`; terreno/caminos/vegetación implementados y comprobados, pendientes de revisión visual humana. Detenerse aquí; C materiales/arquitectura y D luz/clima/optimización requieren autorización posterior. [Estado M09](../milestones/M09-living-village/README.md). Sin nuevas zonas, NPC ni RPG.
