@@ -1,5 +1,7 @@
 # Aceptación propuesta · A Living Village
 
+**Actualización C:** el propietario confirma B validada; AC-LVI-01 VERIFIED en su alcance, commit `333ebb6`. AC-LVI-02/REQ-LVI-003 IMPLEMENTED_UNVERIFIED hasta revisión visual humana C. AC-LVI-04/05 siguen PARTIAL: sólo regresión acotada y medición breve emulada; dispositivos físicos/rendimiento sostenido pendientes. AC-LVI-03/D NOT_STARTED. Aceptar B no certifica hardware ni autoriza D; las anotaciones inferiores son históricas.
+
 **Actualización B:** A aceptada explícitamente por el propietario y guardada en `585e1dc`. AC-LVI-01 IMPLEMENTED_UNVERIFIED: regresión de alturas/recorrido y revisión técnica de capturas PC/táctiles correctas, pendiente aceptación visual del propietario. AC-LVI-04/05 PARTIAL: ensayo breve de tres perfiles, cinco viajes con recursos estables, tienda/recarga/pesca de regreso correctas; sin hardware físico, WebKit ni rendimiento sostenido. AC-LVI-02/03 NOT_STARTED. No cerrar B, C/D ni M09 con esta evidencia; los estados inferiores pertenecen a A.
 
 **Criterio** — Todos los criterios de producto están NOT_STARTED; A pendiente de aprobación del propietario. Matriz de trazabilidad local:

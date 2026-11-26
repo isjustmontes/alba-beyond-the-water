@@ -4,6 +4,7 @@ import {noise} from '../terrain-height.js';
 import {seedVegetationPhases,padVegetationBounds,VEGETATION_PROFILES,vegetationMaterial} from './vegetation-wind.js';
 import {shoreHeight} from '../input/shore-route.js';
 import {villageGroundHeight,villagePathCover,villagePlantSite} from './village-ground.js';
+import {villageSurfaceTexel,villageSurfaceMaterial} from './village-materials.js';
 
 export function makeVillageTrailSign(){
   const group=new THREE.Group(),c=document.createElement('canvas');c.width=512;c.height=128;
@@ -73,20 +74,12 @@ function fernFronds(){
 // Generated locally; masonry is staggered, granular and weathered rather than flat blocks.
 function texture(kind){
   const c=document.createElement('canvas');c.width=c.height=512;
-  const ctx=c.getContext('2d'),rand=random(),image=ctx.createImageData(512,512);
+  const ctx=c.getContext('2d'),rand=random(),image=ctx.createImageData(512,512),pixel={};
   for(let y=0;y<512;y++)for(let x=0;x<512;x++){
-    const row=Math.floor(y/64),column=(x+(row%2)*83)%170,edge=Math.min(column,170-column,y%64,64-y%64);
     const grain=rand(),n=noise(x*.035,y*.035),i=(y*512+x)*4;
     let r,g,b;
-    if(kind==='granite'){
-      const stone=noise(Math.floor((x+(row%2)*83)/170)*9,row*7)*24;
-      const v=edge<2?65+grain*18:135+stone+n*35+(grain-.5)*53;
-      const moss=Math.max(0,n-.58)*30;r=v-3-moss;g=v+1;b=v-7-moss;
-    }else if(kind==='wood'){
-      const streak=Math.sin(x*.32+Math.sin(y*.024)*1.1)+Math.sin(x*1.3+y*.004)*.22;
-      r=67+streak*11+n*19+grain*13;g=r*.73;b=r*.49;
-    }else if(kind==='tile'){
-      r=137+n*44+grain*17;g=65+n*26+grain*12;b=40+n*18+grain*10;
+    if(kind!=='soil'){
+      villageSurfaceTexel(kind,x,y,pixel);r=pixel.r;g=pixel.g;b=pixel.b;
     }else{
       r=98+n*27+grain*27;g=91+n*25+grain*23;b=64+n*22+grain*18;
     }
@@ -115,10 +108,11 @@ export class VillageView {
     this.scene.add(this.ambient,this.sun,this.sun.target,this.moon);
     // Rain geometry/material and atmospheric uniforms already belong to the lake.
     this.rain=world.environmentView.rain.clone();this.scene.add(this.rain);
-    const granite=texture('granite'),wood=texture('wood'),tile=texture('tile'),soil=texture('soil');
+    const granite=texture('granite'),trim=texture('trim'),wood=texture('wood'),tile=texture('tile'),soil=texture('soil');
     const material=(map,roughness=.94)=>new THREE.MeshStandardMaterial({map,bumpMap:map,bumpScale:.035,roughness});
-    this.materials={granite:material(granite),trim:material(granite),wood:material(wood),tile:material(tile),dark:new THREE.MeshStandardMaterial({color:0x202d2b,roughness:.44,metalness:.12}),iron:new THREE.MeshStandardMaterial({color:0x373a35,roughness:.72,metalness:.7})};
-    this.materials.trim.color.set(0xc2bcab);this.materials.tile.side=THREE.DoubleSide;
+    const surface=(map,kind)=>villageSurfaceMaterial(material(map),kind);
+    this.materials={granite:surface(granite,'granite'),trim:surface(trim,'trim'),wood:surface(wood,'wood'),tile:surface(tile,'tile'),dark:new THREE.MeshStandardMaterial({color:0x202d2b,roughness:.44,metalness:.12}),iron:new THREE.MeshStandardMaterial({color:0x373a35,roughness:.72,metalness:.7})};
+    this.materials.trim.color.set(0xbdbbb0);this.materials.granite.bumpScale=.018;this.materials.trim.bumpScale=.012;this.materials.wood.bumpScale=.004;this.materials.tile.bumpScale=.009;this.materials.tile.side=THREE.DoubleSide;
     soil.repeat.set(30,30);
     const groundMat=material(soil);groundMat.vertexColors=true;groundMat.bumpScale=.055;
     const groundGeo=new THREE.PlaneGeometry(170,170,128,128);groundGeo.rotateX(-Math.PI/2);

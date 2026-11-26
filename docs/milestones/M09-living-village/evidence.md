@@ -1,5 +1,22 @@
 # Evidencia · A Living Village
 
+## C · 26/11/2026 · local, pendiente de aceptación visual
+
+- Propietario confirma B validada; commit local `333ebb6`, `feat: refine village terrain and Atlantic vegetation`, conserva sólo B y su SDD. C no se confirma ni publica; dartfish permanece en `7ecc8f7`.
+- `node --test tests/village-materials.test.js tests/village-ground.test.js tests/village.test.js`: **9/9**. Dos casos nuevos comprueban muestras deterministas/acotadas por superficie, reutilización de salida/mapas y coordinación color/bump, instancing y UV de tejas. Tras ajustes visuales de escala y reducción del relieve/veteado de madera se repitieron sólo los dos casos de materiales: **2/2**. No cambios de navegación ni mecánica; recorrido/colisiones y cinco viajes lógicos cubiertos por las pruebas existentes incluidas.
+- Build final `npm.cmd run build`: correcto, Vite 7.3.8, 50 módulos; JS **676,16 kB / gzip 187,67 kB** (B: 673,41 / 186,70). Aviso conocido >500 kB, sin errores. Sin dependencias/recursos externos nuevos.
+- `node tests/village-visuals.mjs stage-b` antes del cambio y `node tests/village-visuals.mjs candidate` después, con ALBA_TEST_URL `http://127.0.0.1:5175`. Windows/Edge headless, DPR 1; PC 1280×800 alta, teléfono vertical 390×844 y horizontal 844×390 baja; hora 09:00 y clima inicial despejado, mismos encuadres. 30 frames de calentamiento y 120 muestras; cinco viajes de escena por perfil. Sin errores JS/shaders; capturas de conjunto y acercamiento a fachada/puerta/letrero revisadas en PC y móvil emulado. Se ajustó escala del granito y se suavizó el veteado tras primeras capturas; resultados inferiores corresponden al acabado final.
+
+| Perfil | Mediana/p95 B → C, ms | CPU mediana/p95 B → C, ms | Calls y triángulos (sin cambio) | Recursos C tras cinco viajes |
+| --- | --- | --- | --- | --- |
+| PC | 16,7/17,2 → 16,7/17,1 | 1,3/2,3 → 1,3/2,2 | 30; 110882 | 86 geometrías, 25 texturas |
+| Vertical | 16,7/16,9 → 16,7/17,0 | 0,8/1,2 → 1,0/2,0 | 20; 99450 | 71 geometrías, 23 texturas |
+| Horizontal | 16,7/17,1 → 16,7/17,1 | 1,4/2,3 → 1,2/2,1 | 30; 99490 | 86 geometrías, 24 texturas |
+
+Un mapa 512² de piedra labrada adicional (+1 textura por perfil); geometrías/triángulos/draw calls idénticos a B y sin crecimiento de recursos en los viajes. Microensayo headless breve: no certifica FPS sostenido, temperatura ni dispositivos físicos/WebKit; NFR sigue PARTIAL. Mapas y sombreado estáticos, sin trabajo CPU por fotograma añadido. Capturas/JSON locales ignorados: `test-results/m09-stage-b*` y `m09-candidate*` (estos últimos sustituyen las capturas B del mismo nombre; sus cifras históricas se conservan en la sección B). Sin repetir shop-browser: los contratos/controles no han cambiado, la regresión de tienda validada en B sigue como antecedente, no como nueva prueba C.
+
+Revisión manual pendiente: entrar en ALDEA, acercarse a ARTES DE PESCA y comparar granito, esquinas, puerta/contraventanas, zócalo húmedo y tejas; mirar desde plaza y regresar al lago. Limitación: materiales procedurales propios, sin escaneado; humedad/musgo visual estático, integración climática/luz reservada a D. Sin cambios de geometría, edificios, disposición, caminos B, colisiones, señales, interacciones ni transiciones.
+
 ## B · 26/11/2026 · local, pendiente de aceptación visual
 
 - Base A: `585e1dc`, commit local `docs: plan living village visual improvements`. Propietario aprueba A y autoriza únicamente B. Sin commit B ni publicación, sin cambios en dartfish.

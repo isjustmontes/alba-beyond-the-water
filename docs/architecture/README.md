@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M09-C · materiales rurales
+
+`visuals/village-materials.js` genera muestras deterministas para mapas propios al crear `VillageView` y adapta sólo materiales existentes: color/bump a escala métrica, variación de rugosidad y desgaste localizado por posición. Un mapa adicional para piedra labrada; tejas mantienen UV locales. Sin nuevas mallas/instancias, actualizaciones CPU por frame, contratos de navegación/interacción o cambios persistentes. [Diseño M09](../milestones/M09-living-village/design.md).
+
 ### M09-B · presentación de terreno y vegetación rural
 
 `visuals/village-ground.js` calcula mezcla de caminos, exclusiones de plantas y altura exterior visual; conserva exactamente `villageHeight` en el rectángulo transitable. `village-layout.js`, límites, colisiones e interacciones no cambian. `VillageView` mantiene la escena y objetos actuales; dos lotes de robles/castaños reutilizan tarjetas y viento existentes con texturas propias, helechos curvos y hierba por manchas. 38 árboles en posiciones existentes, 720 grupos de hierba y 80 helechos, con reducción del 40% de sotobosque en móvil/baja. Sin nuevos sistemas ni persistencia; [diseño/evidencia M09](../milestones/M09-living-village/design.md).

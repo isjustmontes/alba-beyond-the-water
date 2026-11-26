@@ -28,6 +28,7 @@ for(const [name,width,height,mobile]of [['pc',1280,800,false],['phone',390,844,t
  await page.screenshot({path:`test-results/m09-${stage}-${name}.png`});
  if(stage==='candidate'){
   await page.evaluate(()=>{m09Pose(-3,12,-.8);world.update(0,game);});await page.screenshot({path:`test-results/m09-${stage}-${name}-edge.png`});
+  await page.evaluate(()=>{world.pitch=.12;m09Pose(-6,6.5,.55);world.update(0,game);});await page.screenshot({path:`test-results/m09-${stage}-${name}-materials.png`});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(stats.resources[4],stats.resources[1]);
  results.push({name,width,height,quality:mobile?'low':'high',...stats,errors});console.log(stage,name,JSON.stringify(stats));await page.close();

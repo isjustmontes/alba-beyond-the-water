@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**M09-C vigente:** B validada y guardada en `333ebb6`; materiales de arquitectura/desgaste local implementados, pendientes de aceptación visual. [Resumen y evidencia](milestones/M09-living-village/README.md). Geometría, rutas e interacciones conservadas; C sin commit/publicación, D no iniciada. Notas inferiores históricas.
+
 **M09-B vigente:** A aprobada en `585e1dc`; terreno exterior/caminos y vegetación atlántica implementados localmente, pendientes de aceptación visual. [Resumen, pruebas y revisión](milestones/M09-living-village/README.md). 18/18, build y PC/móvil emulado correctos; navegación e interacciones conservadas. Sin commit B/publicación; C/D no iniciadas. Notas inferiores históricas.
 
 **Planificación vigente v0.8.0 — A Living Village:** [M09 · Etapa A](milestones/M09-living-village/README.md), sólo SDD pendiente de aprobación. Base v0.7.0 publicada en `5793ffb`, release y Pages verificados al publicar. B terreno/caminos/vegetación; C materiales/arquitectura; D luz/clima/optimización. Sin implementación ni validación técnica M09. Las notas inferiores conservan el historial.

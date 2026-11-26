@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M09-C:** B aceptada en `333ebb6`; granito/teja/madera y envejecimiento local implementados, pendientes de aceptación visual C. D iluminación/atmósfera/clima no iniciada; no ampliar alcance ni publicar. [M09](../milestones/M09-living-village/README.md).
+
 **M09-B:** A aprobada en `585e1dc`; terreno/caminos/vegetación implementados y comprobados, pendientes de revisión visual humana. Detenerse aquí; C materiales/arquitectura y D luz/clima/optimización requieren autorización posterior. [Estado M09](../milestones/M09-living-village/README.md). Sin nuevas zonas, NPC ni RPG.
 
 **Plan vigente autorizado sólo para documentación:** [M09 · A Living Village · v0.8.0](../milestones/M09-living-village/README.md). A pendiente de aprobación; B relieve/caminos/vegetación atlántica, C granito/teja/madera y detalles rurales, D iluminación/atmósfera/clima y optimización PC/móvil. Refinar la aldea existente sin NPC, nuevas zonas ni funciones RPG. Cada implementación requiere autorización y termina con evidencia/aceptación visual. El candidato histórico «M09 Ecología y entorno» queda como propuesta sin ID; no se renumeran hitos existentes.
