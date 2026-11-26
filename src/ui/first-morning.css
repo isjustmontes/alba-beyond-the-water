@@ -1,0 +1,14 @@
+.first-morning[hidden],.first-morning [hidden]{display:none!important}
+.first-morning{position:fixed;inset:0;z-index:19;display:flex;align-items:center;justify-content:center;color:#f2eddd;text-align:center;background:linear-gradient(180deg,rgba(15,29,24,.25),transparent 30%,transparent 62%,rgba(15,29,24,.32));touch-action:none;padding:max(24px,env(safe-area-inset-top)) max(22px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));box-sizing:border-box}
+.first-morning__copy{opacity:var(--intro-copy-opacity,1);text-shadow:0 2px 20px #172a22,0 1px 3px #172a22;max-width:780px;pointer-events:none;transform:translateY(-7vh)}
+.first-morning h1{font-family:Georgia,serif;font-size:clamp(52px,10vw,112px);font-weight:400;letter-spacing:.25em;margin:0 -.25em 0 0;line-height:1.2;color:inherit}
+.first-morning__subtitle{font-family:Georgia,serif;font-size:clamp(15px,2vw,23px);letter-spacing:.18em;margin:12px 0 32px;color:inherit}
+.first-morning__phrase{font-family:Georgia,serif;font-style:italic;font-size:clamp(18px,2.5vw,26px);line-height:1.6;margin:0;max-width:34em;color:inherit}
+.first-morning__skip{position:absolute;bottom:max(25px,calc(env(safe-area-inset-bottom) + 14px));right:max(25px,calc(env(safe-area-inset-right) + 14px));min-height:48px;padding:12px 22px;background:rgba(20,43,33,.9);border:1px solid #baa976;border-radius:5px;color:#f2eddd;font:inherit;font-size:14px;cursor:pointer;touch-action:manipulation}
+.first-morning__skip:focus-visible{outline:3px solid #f2eddd;outline-offset:4px}
+.intro-active body>:not(#scene):not(.first-morning):not(#loading):not(#fatal):not(script){visibility:hidden!important;pointer-events:none!important}
+.first-morning--caption{pointer-events:none;background:none;align-items:center}
+.first-morning--caption .first-morning__copy{transform:none}
+.first-morning--caption h1{font-size:32px}.first-morning--caption .first-morning__subtitle{font-size:14px;margin:4px 0 12px}.first-morning--caption .first-morning__phrase{font-size:16px}
+@media(max-height:480px){.first-morning__copy{transform:translateY(-4vh)}.first-morning h1{font-size:52px}.first-morning__subtitle{margin:6px 0 16px}.first-morning__phrase{font-size:18px}.first-morning__skip{bottom:max(12px,env(safe-area-inset-bottom));right:max(14px,env(safe-area-inset-right))}}
+@media(prefers-reduced-motion:reduce){.first-morning *{transition:none!important;animation:none!important}}

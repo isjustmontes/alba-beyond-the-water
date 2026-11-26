@@ -1,5 +1,7 @@
 # Especificación · The First Morning
 
+**Alcance B vigente:** A aprobada en `107ac34`; REQ-INTRO-002/003/004 y parte de NFR-INTRO-001/003 se implementan ahora como presentación opt-in DEV `?intro=1`. Título completo «ALBA — Beyond the Water». No clasificación de perfiles, nuevas claves, objetivo inicial ni cambio de aparición normal; REQ-INTRO-001/005/006 continúan NOT_STARTED. La Etapa C original de cámara se adelanta a B por instrucción explícita; persistencia/aparición se aplazan a autorización posterior. Resultados y aceptación actual prevalecen sobre estados/etapas del plan original inferior.
+
 **Problema del jugador** — El inicio actual coloca a todas las sesiones en el muelle, en modo pesca. Falta una primera llegada que presente la aldea y permita descubrirla libremente.
 
 **Requisito estable y origen** — Encargo del propietario de ALBA v0.10.0, Etapa A, 26/11/2026. Sólo planificación autorizada. Todos los requisitos de implementación están **NOT_STARTED**.

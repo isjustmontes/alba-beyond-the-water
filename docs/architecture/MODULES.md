@@ -2,6 +2,8 @@
 
 | Ruta | Responsabilidad | Símbolos exportados o función | Imports directos |
 | --- | --- | --- | --- |
+| [animation/first-morning.js](../../src/animation/first-morning.js) | Tiempo y pose de presentación opt-in, sin renderer/guardados | FirstMorningTimeline, INTRO_DURATION, INTRO_HANDOFF | — |
+| [ui/first-morning.js](../../src/ui/first-morning.js) | Overlay DOM, cámara actual y entrada temporal; se retira al completar | FirstMorning | animation/first-morning.js, CSS propio |
 | [dialogues/conversation.js](../../src/dialogues/conversation.js) | Shared authored-node sessions and safe encounter proximity, no persistence | Conversation, nearEncounter | village-layout.js |
 | [dialogues/shopkeeper.js](../../src/dialogues/shopkeeper.js) | Provisional shopkeeper identity, nine authored topics and catalog action | SHOPKEEPER, SHOPKEEPER_SIGN, SHOPKEEPER_NODES, nearShopkeeper | conversation.js, village-layout.js, config.js |
 | [visuals/manuel-sign.js](../../src/visuals/manuel-sign.js) | Existing-bench wooden portrait sign and bounded conversation billboard | MANUEL_SIGN, manuelMarkerState, makeManuelSign | Three.js, village-layout.js; existing wood/iron supplied by VillageView |

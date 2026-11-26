@@ -1,5 +1,7 @@
 # Diseño de Lago Sereno
 
+**M11-B · presentación en revisión:** la cinemática se prueba sólo en DEV con `?intro=1`: unos 12 s hacia la plaza, título/frase, salto y movimiento reducido. Arranque habitual, guardados y pesca intactos. La bienvenida automática del plan inferior todavía no está activada. [Revisión y límites](../milestones/M11-first-morning/README.md).
+
 **M11-A · propuesta, no disponible:** [The First Morning](../milestones/M11-first-morning/spec.md) planifica primera llegada a la plaza, presentación de amanecer saltable y «Explora la aldea» sin tutorial obligatorio. Habitantes, tienda y sendero siguen disponibles sin desbloqueos. Preservar progreso y omitir introducción en perfiles anteriores; política de aparición y accesibilidad pendientes de aprobación. No modifica el diseño de pesca descrito abajo.
 
 ## Pesca y equilibrio

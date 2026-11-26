@@ -1,5 +1,13 @@
 # Diseño · The First Morning
 
+## B implementada · contrato actual
+
+`animation/first-morning.js` posee sólo estado/tiempo/pose: 12 s, interpolación quíntica con velocidad inicial/final nula, salida anticipada amortiguada de 0,65 s, tiempo suspendible y final exacto e idempotente. `ui/first-morning.js` adapta la cámara existente y el overlay DOM/CSS: captura de entradas antes de los controles normales, limpieza de teclas/dedos, foco, bloqueo hasta liberar el gesto de salto y retirada de listeners al terminar. No utiliza almacenamiento ni decide elegibilidad/aparición.
+
+`main.js` instancia la presentación únicamente con DEV y `?intro=1`, antes de registrar controles, y prepara temporalmente la escena rural y la plaza para esa previsualización. No toca el arranque habitual ni los inicializadores de guardado. Reutiliza `ZoneManager`, `VillageView`, renderer/cámara, altura y controles actuales; el bucle cede cámara mientras la presentación bloquea, mantiene el entorno existente y oculta HUD/indicadores mediante una clase temporal. Finaliza en (0, suelo+1,7, 11), yaw 0 y pitch -0,055; recargar sin parámetro vuelve al comportamiento normal. Preparado para un llamador futuro que resuelva partida nueva, sin conectarlo todavía.
+
+Recorrido elegido: (1,4; 7,8; 24) hacia (0; 2,788; 11), sobre corredor central sin huellas de casas, bancos o pozo. Los textos se retiran gradualmente antes de la entrega normal. Movimiento reducido omite el recorrido, devuelve control inmediatamente y conserva título/frase como breve aviso no bloqueante de 2,4 s; cambio de preferencia durante recorrido también lo finaliza sin traslación animada. Blur/ocultación suspenden el reloj y limpian entradas. No nuevos assets, luces, pases, vídeos ni dependencias. Clasificación/clave de onboarding, aparición real y objetivo del diseño original inferior permanecen propuestos.
+
 ## Diagnóstico de la base publicada
 
 - `main.js` crea `LakeWorld`, `ZoneManager` por defecto en `lago-sereno`, `Environment` y `FishingGame`; `Exploration` comienza en modo pesca en (0,7). Se restauran capturas/equipo y después se construye `VillageShop`.

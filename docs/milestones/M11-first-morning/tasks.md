@@ -1,5 +1,7 @@
 # Tareas · The First Morning
 
+**Estado B vigente:** M11-T01 VERIFIED en alcance de planificación: aprobación explícita del propietario y commit `107ac34`. M11-T04/T05 IMPLEMENTED_UNVERIFIED hasta validación visual/funcional humana; 25/25 pruebas relevantes y build correctos, evidencia de navegador separada. Se ejecutan en B antes de T02/T03, por encargo explícito y con previsualización DEV aislada del arranque normal. M11-T02/T03 (clasificación/aparición real) se aplazan a C autorizada; T06/T07 siguen NOT_STARTED en su alcance completo. La tabla inferior conserva el plan original, no el orden vigente.
+
 **Dependencias** — v0.9.0 publicada, arquitectura de zonas M07/M08, aldea M09, habitantes M10. Sólo A autorizada. Las pruebas citadas abajo son futuras, no ejecutadas.
 
 | ID y requisito | Etapa / dependencias | Cambio acotado | Prueba y esfuerzo restante | Estado / bloqueo |

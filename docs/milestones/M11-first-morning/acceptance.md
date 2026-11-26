@@ -1,5 +1,7 @@
 # Aceptación · The First Morning
 
+**Decisión humana vigente:** A aprobada al encargar B; guardada en `107ac34`. B entregada para validación visual/funcional, aún no aceptada. AC-INTRO-02/03/04 tienen evidencia de lógica/emulación en alcance de previsualización; AC-INTRO-07/09 parciales. AC-INTRO-01/05/06 y medición comparativa completa AC-INTRO-08 no se completan en B. No inferir aceptación física, accesible o de rendimiento de capturas automatizadas. Los procedimientos/estados A inferiores son históricos; [resultados B](evidence.md).
+
 **Decisión humana** — Plan A pendiente de aprobación. Ningún criterio de producto ejecutado ni aceptado en esta etapa; todos **NOT_STARTED**. La dirección solicitada no equivale a aceptación visual de un recorrido aún inexistente.
 
 | Criterio / requisito | Entrada y acción futura | Resultado esperado | Evidencia obtenida |
