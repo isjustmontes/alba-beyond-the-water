@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**Plan vigente, sólo SDD:** [M10 · Stories of the Village · v0.9.0](../milestones/M10-stories-of-the-village/README.md). A documenta el primer habitante Manuel, acuarela 2D/pergamino y diálogo ramificado; B propone guion/arte WebP, C panel accesible, D interacción contextual, E validación/pulido. Dirección visual aprobada; plan A pendiente de validación y ninguna implementación posterior autorizada. No NPC 3D, nuevas zonas ni funciones RPG adicionales. Base v0.8.1 publicada; la propuesta histórica «M10 Experiencia» queda futura sin ID asignado, sin renumerar fichas reales.
+
 **Current delivery:** v0.8.1 — Movement & Navigation is accepted and authorized for Pre-Alpha publication. [Scope and final evidence](../milestones/M09-living-village/navigation-0.8.1.md). No next milestone or feature is opened; physical mobile/WebKit and sustained performance remain follow-up validation work. Earlier pending approvals below are historical.
 
 **Siguiente validación autorizada:** cámara móvil con doble joystick en el candidato v0.8.1. Movimiento/mapa ya aceptados; falta aceptar esta ampliación, sin commit ni publicación todavía. [Alcance](../milestones/M09-living-village/navigation-0.8.1.md).
@@ -42,6 +44,6 @@ La **Etapa B** está aceptada en `00208d9` y **C** en `b7ae025` (pesca libre, co
 | 2 | Calidad de entrega (candidato sin ID asignado) | Evitar publicar regresiones; parte de una baseline reproducible | M. Gates aprobados, versión coherente y ensayo de recuperación |
 | 3 | M08 Técnicas de pesca | Probar primero el spinning sin boya y un único equipo alternativo; cambia el contrato visual del lanzamiento | L. Un ciclo completo por técnica con pruebas de equilibrio |
 | 4 | M09 Ecología y entorno | Persistir condiciones antes de ampliar especies y obstáculos. Estaciones y nuevos lagos requieren datos y presupuesto de escena | L–XL. Migración compatible y comportamiento espacial repetible |
-| 5 | M10 Experiencia | Priorizar ayuda contextual y accesibilidad antes de ampliar progresión y desafíos | M–L. Prueba con jugadores y restauración segura de datos |
+| 5 | Experiencia (candidato sin ID asignado; anterior propuesta M10) | Priorizar ayuda contextual y accesibilidad antes de ampliar progresión y desafíos | M–L. Prueba con jugadores y restauración segura de datos |
 
 Reelaborar carrete, física de sedal, interacción con cebo y combate sólo tras acordar qué decisión nueva ofrece al jugador. Las manos articuladas requieren modelo, licencia, validación de agarre y medición física. Una importación del diario requiere definir conflictos y validar datos externos. [Backlog](BACKLOG.md)

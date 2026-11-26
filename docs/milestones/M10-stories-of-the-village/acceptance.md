@@ -1,0 +1,18 @@
+# Aceptación propuesta · Stories of the Village
+
+**Decisión sobre A:** el propietario confirma M10 validado al encargar «Etapa B: interfaz ilustrada de diálogos» y solicita guardar la planificación. A VERIFIED en su alcance documental. La autorización de B sustituye su secuencia original sólo para la interfaz/previsualización solicitada; no acepta todavía arte integrado ni autoriza NPC/conversaciones completas. Las decisiones inferiores son históricas.
+
+**Criterio de A** — Alcance pequeño, diseño aprobado reflejado fielmente, trazabilidad completa y compatibilidad explícita, sin cambios fuera de docs. Entrega documental pendiente de validación del propietario; aprobar A no implementa el producto.
+
+| Criterio / requisito / tarea | Entrada y acción futuras | Resultado esperado |
+| --- | --- | --- |
+| AC-NAR-01 · REQ-NAR-001 · T02/T03 | Abrir Manuel en PC y móvil, ampliar texto e inspeccionar DOM | Acuarela a la izquierda y contenido a la derecha cuando hay espacio; versión vertical legible. Pergamino y retrato distintos, nombre/texto/opciones HTML, sin personaje 3D ni texto pintado en botones |
+| AC-NAR-02 · REQ-NAR-002 · T02/T03 | Recorrer todos los nodos de pesca y Lago Sereno, volver, despedirse, reabrir; intentar selección repetida | Al menos dos ramas con respuestas distintas, destinos válidos, ningún callejón sin cierre. No saltos dobles por un toque/clic ni cambios de equipo/recompensas; reapertura en bienvenida |
+| AC-NAR-03 · REQ-NAR-003 · T04 | Llegar a pie desde sendero/plaza, entrar/salir del radio, aproximarse desde lados bloqueados, probar lago/tienda/salida | Prompt T o botón táctil sólo en zona/estado/proximidad válida; acceso sin atravesar obstáculos. Una sola acción contextual; hablar no compra ni viaja y tienda/viajes siguen disponibles en sus puntos |
+| AC-NAR-04 · REQ-NAR-004, NFR-NAR-003 · T03/T04/T05 | Abrir con WASD/Shift o ambos joysticks activos; navegar con teclado/tacto, cerrar por botón/Esc; probar mapa y menús | Entradas liberadas, reloj pausado como otros modales, sin giro/movimiento/salto/lance residual al cerrar. Foco visible/restaurado, sin modal anidado ni bloqueo permanente; controles PC y móviles conservados |
+| AC-NAR-05 · NFR-NAR-001/002 · T02/T03/T05 | Inspeccionar solicitudes y arte final, tamaños 1280×800, 390×844, 320×568, 844×390, 568×320 y tablet 1024×768; orientación y safe areas | Una variante responsive de retrato + papel dentro del presupuesto acordado, procedencia/licencia documentadas; sin rutas rotas ni carga por respuesta. Texto, botones ≥44 px, scroll y cierre alcanzables; imágenes sin deformación. Fallo de imagen no bloquea cierre/lectura ni se oculta como éxito artístico |
+| AC-NAR-06 · NFR-NAR-003 · T05/T06 | Registrar saves antes/después de conversación, viaje/recarga y un ciclo de pesca; probar tienda/mapa/audio; revisar build/errores y reaperturas | Mismos datos de capturas, saldo, compras, equipo y preferencias; regresiones acotadas correctas, sin listeners/nodos duplicados al reabrir. Build y pruebas relevantes correctos, recursos estables; límite físico/WebKit explícito |
+
+**Evidencia obtenida** — Sólo revisión Git/remoto y planificación descritas en [evidence.md](evidence.md). No recursos producidos ni pruebas/build/capturas nuevos. Las pruebas de v0.8.1 no demuestran funcionalidades de M10.
+
+**Decisión humana** — Dirección visual aprobada en el encargo; Etapa A pendiente de validación. REQ-NAR-001–004, NFR-NAR-001–003 y AC-NAR-01–06 **NOT_STARTED**. B–E no autorizadas todavía; ninguna aceptación técnica/visual se infiere de esta documentación. Pruebas físicas, WebKit y rendimiento sostenido no se certifican por emulación futura.

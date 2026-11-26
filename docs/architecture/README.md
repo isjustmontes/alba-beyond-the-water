@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M10 · planificación de conversación 2D (no implementada)
+
+La [Etapa A de Stories of the Village](../milestones/M10-stories-of-the-village/design.md) propone un grafo local de diálogo y un panel HTML/CSS con WebP independientes, sin sistema de NPC 3D. Reutilizar pausa/modal/limpieza de entradas y proximidad contextual de la aldea, preservando tienda, viaje, mapa, ambos joysticks y controles PC. No persistir elecciones ni modificar contratos de progreso en este MVP. Los módulos nuevos sólo se planifican; el inventario de módulos implementados no cambia. B–E requieren autorización posterior.
+
 ### Ajuste menor de navegación posterior a v0.8.0
 
 `input/camera-stick.js` es un adaptador de entrada táctil: captura propia, deadzone radial, velocidad proporcional y amortiguación exponencial integrada por tiempo, sin asignaciones por frame. Llama a `world.look` y conserva sus límites. ExplorationControls actualiza el adaptador antes del movimiento y separa la liberación del dedo izquierdo de la limpieza global: cada joystick cancela sólo su captura; menús, resize, blur y modo de entrada limpian ambos. CSS común conserva aspecto/medidas del izquierdo; derecho simétrico al explorar y separado de acción/HUD al pescar. No cambia Pointer Lock, sensibilidad PC, escenas ni guardados.
