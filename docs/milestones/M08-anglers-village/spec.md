@@ -1,5 +1,9 @@
 # Especificación · Angler's Village
 
+## D autorizada · persistencia e integración de equipo
+
+C validada y conservada en `19d31c5`, incluido cartel orientado hacia el pueblo. D completa REQ-INV-001/REQ-SAVE-001: integrar selección de cebo y montaje de sedal en el progreso comercial existente, con lectura compatible del guardado C y del equipo legado. Seleccionar desde tienda o Equipo debe aplicar la misma acción, mantenerse entre zonas y recarga y no duplicar cantidades ni cobrar otra vez. El sedal de recambio se monta explícitamente; unidad montada pertenece a existencias, no se descuenta ni aumenta cantidad. Sin consumo, cambios de resistencia, modelos, ingresos, backend, NPC ni misiones. REQ-INV-002 identifica este contrato de uso/montaje y sus regresiones sin renumerar requisitos previos.
+
 ## C autorizada · tienda y economía básica
 
 B validada y conservada en `1b46d47`, incluidos cartel/UX. C agrupa T04/T05/T06: T/botón cerca de la puerta exterior de ARTES DE PESCA abre catálogo de cucharilla (20), lombriz (15), artificial (35) y monofilamento de recambio (25). Saldo inicial de prueba 100 créditos, concedido una sola vez; equipo/cebos legados permanecen disponibles. Comprar añade una unidad de reserva, sin consumir ni cambiar estadísticas de pesca. Saldo y cantidades persisten juntos en clave nueva; sin ventas, ingresos ni progresión nueva. Encabezado ALDEA/LAGO SERENO según zona. No NPC, interiores ni modelos nuevos. Aceptación C pendiente tras pruebas; los nombres de etapas inferiores son históricos.

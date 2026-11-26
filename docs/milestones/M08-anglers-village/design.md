@@ -1,5 +1,11 @@
 # Diseño propuesto · Angler's Village
 
+## D · contrato previo a implementar
+
+Revisión real: saldo/cantidades/recibos C ya se guardan juntos; señuelo seleccionado sólo en alba-equipment-v1 y sedal comprado sólo contaba reservas sin acción de montaje. Se mantiene clave alba-village-progress-v1, con esquema interno 2 añadiendo equipo (lureId, lineId y lineUnit). Leer esquema 1 preserva saldo, cantidades y recibos e importa selección legado; completar nuevo esquema al siguiente cambio guardado, sin regalo ni reset. Esquema 2 validará que lo equipado existe y la unidad está dentro de existencias. Capturas y preferencias mantienen sus claves; alba-equipment-v1 queda como espejo compatible del señuelo, no autoridad sobre el nuevo documento.
+
+Selección/montaje compartidos por tienda y Equipo, sin modificar simulación ni resistencia. Persistir candidato antes de aplicarlo al juego; fallo de escritura mantiene equipo anterior y compras intactas. Datos comerciales corruptos se preservan; la pesca con equipo legado sigue disponible con aviso si sólo puede cambiarse por sesión. Recambio de sedal monta última unidad poseída sin consumir, duplicar ni cobrar. Guardar/cargar y cambiar zona no debe invocar compra ni regenerar moneda. Prever regresiones de guardados antiguos, esquema C y selección posterior, errores de escritura y uso real en pesca PC/móvil.
+
 ## C · diseño de implementación autorizado
 
 Dominio de tienda independiente del renderer, catálogo mapeado a LURES/EQUIPMENT existentes. Proximidad a la puerta exterior compartida con las huellas de casa; T y botón contextual despachan una sola acción (tienda o viaje), sin duplicar listeners de interacción. Panel modal detiene movimiento/cámara y cierra con controles existentes/Esc. En equipo se muestran existencias y saldo sin sustituir selección de señuelo.

@@ -1,5 +1,7 @@
 # Tareas · Angler's Village
 
+**D implementada, pendiente de aceptación:** C validada en `19d31c5`; T04–T06 VERIFIED dentro de C. M08-T08 · REQ-INV-002/REQ-SAVE-001 IMPLEMENTED_UNVERIFIED: migración compatible de equipo, acción compartida de selección/montaje, stock y aplicación en pesca, regresión de reload/viajes/fallos. 35/35 y build correctos; navegador PC/móvil vertical-horizontal correcto. Mantener T07 PARTIAL hasta aceptación humana y límites físicos; no abrir funcionalidades RPG adicionales.
+
 **C implementada:** B aceptada en `1b46d47`; T02/T03 VERIFIED. T04/T05/T06 IMPLEMENTED_UNVERIFIED, ahora agrupadas como Etapa C: interacción/catálogo, moneda/compras/existencias y persistencia aditiva. 29/29 pruebas relevantes, build y PC/móvil vertical-horizontal correctos; pendiente aceptación del propietario. T07 PARTIAL, sólo regresión acotada de C. No nuevas zonas/modelos ni ingresos. La aceptación B no elimina los límites de hardware físico.
 
 **B implementada, pendiente de aceptación:** M08-T02/M08-T03 IMPLEMENTED_UNVERIFIED agrupan ahora zona independiente y construcción de aldea, con evidencia técnica y revisión visual emulada. M08-T01 aceptada en `2c7b2ef`; T04/T05/T06 NOT_STARTED. T07 PARTIAL se limita a evidencias de B, sin declarar verificado el MVP completo. El orden inferior refleja planificación original; no se habilitan compras.

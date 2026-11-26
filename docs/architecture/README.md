@@ -1,5 +1,9 @@
 # Arquitectura del cliente
 
+### M08-D · selección y montaje persistentes
+
+El mismo documento alba-village-progress-v1 incorpora esquema interno 2 con `equipment` (lureId, lineId, lineUnit). Leer esquema C 1 adapta en memoria sin regalar crédito ni tocar cantidades/recibos; el siguiente cambio confirmado persiste todo el candidato. `VillageShop.equip` valida propiedad/unidad y guarda antes de aplicar. `main.equipItem` comparte esta acción entre ShopPanel y Equipo y utiliza FishingGame.selectLure después del guardado; monta unidades del monofilamento existente sin cambiar resistencia/stock. Inicio restaura equipo del documento nuevo; alba-equipment-v1 queda como espejo legado. Fallo de escritura mantiene equipo anterior; progreso comercial ilegible se preserva sin impedir la pesca compatible. Capturas/audio y otros guardados conservan sus claves y formatos. [Diseño/evidencia M08](../milestones/M08-anglers-village/design.md).
+
 ### M08-C · comercio local
 
 `VillageShop` separa catálogo/compras del renderer y guarda saldo, cantidades y recibos juntos en `alba-village-progress-v1` antes de aplicar cada compra. Preserva claves de capturas, selección y audio. Datos inválidos/inaccesibles bloquean comercio; fallo de compra no consume saldo. `ShopPanel` presenta catálogo modal, bloquea doble activación y usa `FishingGame.selectLure` existente; Equipo muestra cantidades/saldo. `main` despacha una sola acción T/botón según cercanía (puerta de tienda o salida), limpia entradas al abrir modal y actualiza encabezado por zona. Sin cambiar mecánicas, estadísticas, consumo ni modelos; inventario comercial agrega reservas al equipo inicial. [Diseño M08](../milestones/M08-anglers-village/design.md).

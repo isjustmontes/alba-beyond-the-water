@@ -49,6 +49,18 @@ function travel(){
 }
 function toast(message) { $('toast').textContent = message; $('toast').classList.add('visible'); clearTimeout(toastTimer); toastTimer = setTimeout(()=>$('toast').classList.remove('visible'),5000); }
 function fatal(error) { console.error(error); $('loading').hidden = true; $('fatal').hidden = false; $('fatal-message').textContent = `Este juego necesita un navegador con WebGL 2 y aceleración gráfica. ${error.message}`; }
+function equipItem(id){
+  if(!['ready','caught'].includes(game.state))return {ok:false,message:'Recupera el aparejo antes de cambiar tu equipo.'};
+  const result=shop.equip(id);
+  if(!result.ok){
+    // Unreadable commerce data must not remove the legacy fishing experience.
+    if(shop.blocked&&LURES.some(lure=>lure.id===id)&&game.selectLure(id))return {ok:true,message:'Señuelo seleccionado sólo para esta sesión; no se pudo guardar el progreso comercial.'};
+    toast(result.message);return result;
+  }
+  if(LURES.some(lure=>lure.id===id))game.selectLure(id);
+  else renderEquipment();
+  return result;
+}
 function renderJournal() {
   const catches = game.catches;
   const records=personalRecords(catches);
@@ -82,14 +94,16 @@ function renderEquipment() {
   $('hands-status').textContent=world.hands.available ? 'Modelo validado. Ajuste opcional.' : 'Sin modelo validado. Desactivado.';
   $('equipment-toggle').textContent=`${game.lureType.name} ▾`;
   $('rod-name').textContent=EQUIPMENT.rod;$('rod-action').textContent=EQUIPMENT.action;
-  $('line-name').textContent=EQUIPMENT.line;$('line-strength').textContent=`Resistencia: ${number(EQUIPMENT.lineStrengthKg,1)} kg · Existencias: ${shop.count('line')}`;
+  $('line-name').textContent=EQUIPMENT.line;$('line-strength').textContent=`Resistencia: ${number(EQUIPMENT.lineStrengthKg,1)} kg · Existencias: ${shop.count('line')} · Montado: unidad ${shop.equipment.lineUnit}`;
+  let mount=$('mount-line');if(!mount){mount=document.createElement('button');mount.id='mount-line';mount.className='secondary-button';mount.textContent='Montar recambio de sedal';$('line-strength').after(mount);}
+  mount.disabled=!!shop.blocked||!['ready','caught'].includes(game.state);mount.onclick=()=>{const result=equipItem('line');$('equipment-hint').textContent=result.message;};
   $('lure-options').replaceChildren();
   for(const lure of LURES) {
     const button=document.createElement('button');button.className='lure-option';button.dataset.lure=lure.id;
     button.setAttribute('aria-pressed',String(game.lureId===lure.id));button.disabled=!['ready','caught'].includes(game.state);
     const title=document.createElement('strong'),description=document.createElement('span'),details=document.createElement('small'),technique=document.createElement('em');
     title.textContent=lure.name;description.textContent=lure.description;details.textContent=`${number(lure.depth,1)} m aprox. · ${lure.targets} · Existencias: ${shop.count(lure.id)}`;technique.textContent=lure.technique;
-    button.append(title,description,details,technique);button.onclick=()=>{if(game.selectLure(lure.id))$('lure-options').querySelector(`[data-lure="${lure.id}"]`)?.focus({preventScroll:true});};$('lure-options').append(button);
+    button.append(title,description,details,technique);button.onclick=()=>{const result=equipItem(lure.id);if(result.ok)$('lure-options').querySelector(`[data-lure="${lure.id}"]`)?.focus({preventScroll:true});$('equipment-hint').textContent=result.message;};$('lure-options').append(button);
   }
   $('equipment-hint').textContent=['ready','caught'].includes(game.state) ? 'El señuelo elegido se guarda para el próximo lanzamiento.' : 'Recupera el aparejo antes de cambiar de señuelo.';
   $('retrieve-rig').hidden=game.state==='ready'||game.state==='caught';
@@ -264,7 +278,8 @@ try {
     game.lureId=getLure(localStorage.getItem('alba-equipment-v1')).id;
   } catch { /* Private browsing and corrupt storage must not prevent playing. */ }
   try{shop=new VillageShop(localStorage);}catch{shop=new VillageShop(null);}
-  shopPanel=new ShopPanel({shop,game,dialog:$('shop-dialog'),onChange:renderEquipment});
+  game.lureId=shop.equipment.lureId;
+  shopPanel=new ShopPanel({shop,game,dialog:$('shop-dialog'),onChange:renderEquipment,onEquip:equipItem});
   renderJournal();renderEquipment(); controls(); updateUI();
   $('scene').addEventListener('webglcontextlost',e=>{ e.preventDefault(); setPaused(true); toast('Se ha perdido la conexión con la GPU. Recarga para volver al lago.'); });
   function frame(now) {

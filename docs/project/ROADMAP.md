@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**M08-D actual:** C aceptada y guardada en `19d31c5`; D completa persistencia/uso de equipo sin ampliar mecánicas RPG. Selección/montaje y compatibilidad local implementados, pendientes de validación del propietario; no se autoriza siguiente etapa, backend, misiones ni publicación.
+
 **M08-C actual:** B aceptada en `1b46d47`; el propietario autoriza tienda/economía básica agrupando T04/T05/T06 como C. Implementación y evidencia pendientes de aceptación humana; no se abren interiores, ingresos, misiones ni NPC. Se conserva el historial de etapas inferior.
 
 **M08-B vigente:** propietario acepta A y autoriza aldea y conexión como una sola Etapa B (T02/T03). Tienda únicamente exterior; compras, economía e inventario nuevo permanecen pendientes de autorización posterior. Detenerse tras evidencia técnica y revisión visual; no publicar.

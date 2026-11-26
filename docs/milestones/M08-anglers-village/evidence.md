@@ -1,5 +1,23 @@
 # Evidencia · Angler's Village · Etapa A
 
+**Corrección posterior de cara del cartel LAGO SERENO:** textura asignada explícitamente al material de la cara 5 de BoxGeometry (normal local/world −Z), en lugar de rotar toda la tabla. Tabla sin rotación y posición (1,8; 2,6639; 28) conservada; poste, interacción y transición intactos. Comprobación focalizada en aplicación real: entrada en aldea, inicio de fixture en plaza y aproximación con W/ratón hasta jugador (1,139; 2,880; 22,128), yaw −3,0296, mirando hacia el lago. Captura lake-sign-real-player.png revisada: LAGO SERENO legible, sin inversión ni ocultación; cara opuesta mantiene madera. Inspección de normales/materiales confirma texto sólo en −Z. Sin suite/build generales, commit ni publicación; artefactos de comprobación ignorados en test-results/.
+
+## D · persistencia e integración de equipo · aceptación PENDIENTE
+
+**Aceptación posterior D:** el propietario declara D validada al pedir su commit y publicación v0.7.0, incluida corrección final del cartel (texto en cara −Z, sin rotar soporte). Se conservan las evidencias y límites anteriores; no se repiten pruebas visuales ya realizadas ni se afirma hardware físico.
+
+**SHA y fecha** — 26/11/2026; C validada y conservada en `19d31c5`, incluido giro del cartel. Git limpio antes de D. Rama feature/v0.7.0-anglers-village, wolffish; dartfish intacto. D local sin commit/publicación. Sólo dominio de comercio, selección/montaje, UI existente, pruebas y documentación; no backend/NPC/misiones ni dependencias.
+
+**Equipo, navegador y perfil** — Windows/Node 24.20.0; Edge Chromium headless/WebGL SwiftShader: PC 1280×800, teléfono 390×844, horizontal 844×390. Sin dispositivos físicos ni WebKit. No benchmark de rendimiento nuevo, dado que no cambia representación 3D.
+
+**Comando y datos** — `node --test tests/shop.test.js tests/village.test.js tests/zones.test.js tests/input.test.js tests/fishing.test.js tests/journal.test.js`: **35/35**, cero fallos. Seis regresiones nuevas: migración de esquema C sin reset, selección legado sin tienda, recambio montado idempotente sin duplicar/cobrar, escritura fallida de equipo con reintento, cinco viajes/recarga/lance sin tocar guardado y equipo inválido preservado. `shop.test.js` total 14. `npm.cmd run build`: correcto, 48 módulos, JS 669,63 kB (gzip 185,30 kB), CSS 31,84 kB; aviso de chunk >500 kB existente.
+
+`node tests/shop-browser.mjs`: correcto en PC, vertical y horizontal. Fixture de posición acota recorrido a interacciones (sin declarar navegación repetida). Parte de guardado C esquema 1/cebo legado lombriz; compra mantiene recibos y cambia a esquema 2. Doble clic/toque cobra una vez, 4 compras dejan 5 créditos y dos unidades de cada artículo. Montar sedal selecciona unidad 2, seleccionar artificial aplica ese cebo real; Equipo usa la misma acción para volver a lombriz/artificial y montar de nuevo sin cobrar. Recarga conserva dinero, compras, stock y equipo incluso con espejo legado deliberadamente obsoleto; capturas/audio intactos. Regreso al lago y lance con artificial no consumen ni duplican existencias ni alteran documento de progreso. PC simula escritura denegada al seleccionar: no cambia cebo de pesca; restaurar almacenamiento permite reintento. Sin errores JavaScript/shaders. Artefactos locales ignorados test-results/shop-*.
+
+**Resultado y límites** — La clave histórica alba-village-progress-v1 se conserva, con esquema interno 2. Leer esquema 1 importa el señuelo legado sin escribir de inmediato; primer cambio confirmado guarda versión 2 con saldo/items/receipts/equipment completo. El documento nuevo prevalece sobre espejo alba-equipment-v1; éste se mantiene para compatibilidad. Montaje indica unidad contable poseída del mismo monofilamento de 7,5 kg, sin inventar estadísticas ni descontar stock. Guardado inválido/futuro se conserva y bloquea comercio, manteniendo pesca con equipo legado; captura y preferencias no se migran ni borran. Fallo al guardar equipo conserva selección anterior. Posiciones siguen siendo sólo de sesión; no ingresos, consumos ni persistencia de clima añadidos. Sin garantía de atomicidad distribuida entre pestañas simultáneas ni antitrampas local. **D pendiente de aceptación del propietario**, M08-T08 IMPLEMENTED_UNVERIFIED, T07 PARTIAL.
+
+---
+
 ## C · tienda y economía básica · aceptación PENDIENTE
 
 **Aceptación posterior C:** el propietario declara C validada al autorizar su commit antes de D. Incluye giro visual π del cartel LAGO SERENO, sin moverlo ni alterar colisiones/interacción/transición; comprobado desde el pueblo en captura local lake-sign-facing-village.png. Los estados pendientes inferiores conservan el historial de C anterior a esta aceptación.

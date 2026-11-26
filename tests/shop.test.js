@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {VillageShop,SHOP_CATALOG,SHOP_STORAGE_KEY} from '../src/shop.js';
 import {nearVillageShop,villageWalkHeight} from '../src/village-layout.js';
 import {FishingGame,LURES,EQUIPMENT} from '../src/fishing.js';
+import {ZoneManager} from '../src/zones.js';
 
 function storage(){const data=new Map();return {data,getItem:key=>data.get(key)??null,setItem:(key,value)=>data.set(key,value)};}
 test('initial funds are granted once, all legacy gear stays owned and old storage keys are untouched',()=>{
@@ -32,7 +33,7 @@ test('a failed purchase write cannot spend coins or grant items and is retryable
 });
 test('corrupt, future and invalid progress remain byte-for-byte intact with commerce disabled',()=>{
  const base={version:1,balance:100,items:{spinner:1,worm:1,minnow:1,line:1},receipts:[]};
- for(const raw of ['{bad',JSON.stringify({...base,version:2}),JSON.stringify({...base,balance:-1}),JSON.stringify({...base,items:{worm:1}}),JSON.stringify({...base,receipts:[{id:'x',itemId:'missing'}]})]){
+ for(const raw of ['{bad',JSON.stringify({...base,version:99}),JSON.stringify({...base,balance:-1}),JSON.stringify({...base,items:{worm:1}}),JSON.stringify({...base,receipts:[{id:'x',itemId:'missing'}]})]){
   const s=storage();s.setItem(SHOP_STORAGE_KEY,raw);const shop=new VillageShop(s);assert.ok(shop.blocked);assert.equal(shop.buy('worm','x').ok,false);assert.equal(s.getItem(SHOP_STORAGE_KEY),raw);
  }
  const s={getItem(){throw Error('denied');},setItem(){throw Error('denied');}};assert.ok(new VillageShop(s).blocked);assert.ok(new VillageShop(null).blocked);
@@ -50,4 +51,48 @@ test('catalog gear maps to existing selection without changing fishing propertie
  const before=JSON.stringify({LURES,EQUIPMENT}),shop=new VillageShop(storage()),game=new FishingGame();
  for(const item of SHOP_CATALOG){if(item.lureId){assert.ok(game.selectLure(item.lureId));assert.equal(shop.count(item.id),1);}}
  shop.buy('minnow','fish-gear');game.press();game.release();assert.equal(game.actionCounts.casts,1);assert.equal(shop.count('minnow'),2);assert.equal(JSON.stringify({LURES,EQUIPMENT}),before);
+});
+
+test('C progress imports legacy selection without resetting funds, receipts or quantities',()=>{
+ const s=storage(),old={version:1,balance:65,items:{spinner:1,worm:1,minnow:2,line:1},receipts:[{id:'c-buy',itemId:'minnow'}]},raw=JSON.stringify(old);
+ s.setItem(SHOP_STORAGE_KEY,raw);s.setItem('alba-equipment-v1','worm');
+ const shop=new VillageShop(s);assert.equal(shop.balance,65);assert.equal(shop.count('minnow'),2);assert.equal(shop.equipment.lureId,'worm');assert.equal(s.getItem(SHOP_STORAGE_KEY),raw,'reading old data does not rewrite it');
+ assert.equal(shop.equip('minnow').ok,true);const upgraded=JSON.parse(s.getItem(SHOP_STORAGE_KEY));
+ assert.equal(upgraded.version,2);assert.equal(upgraded.balance,65);assert.deepEqual(upgraded.items,old.items);assert.deepEqual(upgraded.receipts,old.receipts);
+ assert.equal(new VillageShop(s).equipment.lureId,'minnow','new document is authoritative over stale legacy mirror');
+ assert.equal(new VillageShop(s).buy('minnow','c-buy').duplicate,true);
+});
+test('legacy equipment with no commerce save receives initial funds only once and keeps its lure',()=>{
+ const s=storage();s.setItem('alba-equipment-v1','worm');const first=new VillageShop(s);
+ assert.equal(first.equipment.lureId,'worm');assert.equal(first.balance,100);first.buy('line','legacy-line');
+ const again=new VillageShop(s);assert.equal(again.balance,75);assert.equal(again.equipment.lureId,'worm');assert.equal(again.count('line'),2);
+});
+test('purchased line can be mounted repeatedly without a second charge or duplicated items',()=>{
+ const s=storage(),shop=new VillageShop(s);shop.buy('line','spare-line');const before=JSON.parse(s.getItem(SHOP_STORAGE_KEY));
+ assert.equal(shop.equip('line').ok,true);assert.deepEqual(shop.equipment,{lureId:'spinner',lineId:'line',lineUnit:2});
+ for(let i=0;i<5;i++)shop.equip('line');
+ const after=JSON.parse(s.getItem(SHOP_STORAGE_KEY));assert.equal(after.balance,before.balance);assert.deepEqual(after.items,before.items);assert.deepEqual(after.receipts,before.receipts);
+ assert.equal(new VillageShop(s).equipment.lineUnit,2);
+});
+test('failed equipment write preserves previous usable gear, money and purchases and can retry',()=>{
+ const s=storage(),shop=new VillageShop(s);shop.buy('line','line');const before=s.getItem(SHOP_STORAGE_KEY),write=s.setItem;
+ s.setItem=()=>{throw Error('quota');};assert.equal(shop.equip('line').ok,false);assert.equal(shop.equip('worm').ok,false);
+ assert.equal(shop.equipment.lineUnit,1);assert.equal(shop.equipment.lureId,'spinner');assert.equal(s.getItem(SHOP_STORAGE_KEY),before);assert.equal(shop.count('line'),2);assert.equal(shop.balance,75);
+ s.setItem=write;assert.equal(shop.equip('line').ok,true);assert.equal(shop.equipment.lineUnit,2);
+});
+test('zone travel, reload and casting keep the bought lure and mounted line without changing inventory',()=>{
+ const s=storage(),shop=new VillageShop(s);shop.buy('minnow','lure');shop.buy('line','line');shop.equip('minnow');shop.equip('line');
+ const before=s.getItem(SHOP_STORAGE_KEY),zones=new ZoneManager(),options={mode:'exploring',state:'ready',heightAt:()=>1};
+ for(let i=0;i<5;i++){
+  const out=zones.travel('village',{position:{x:6,y:3,z:74},yaw:0,pitch:0},options);assert.ok(out);
+  const back=zones.travel('lake',{position:{x:0,y:3,z:29},yaw:0,pitch:0},options);assert.ok(back);
+ }
+ const restored=new VillageShop(s),game=new FishingGame();game.lureId=restored.equipment.lureId;game.press();game.release();game.update(1.2);
+ assert.equal(game.lureType.id,'minnow');assert.equal(restored.equipment.lineUnit,2);assert.equal(s.getItem(SHOP_STORAGE_KEY),before);
+});
+test('invalid mounted items in the new schema are preserved and never silently repaired',()=>{
+ const s=storage(),shop=new VillageShop(s),base=JSON.parse(s.getItem(SHOP_STORAGE_KEY));
+ for(const equipment of [{lureId:'missing',lineId:'line',lineUnit:1},{lureId:'worm',lineId:'unknown',lineUnit:1},{lureId:'worm',lineId:'line',lineUnit:0},{lureId:'worm',lineId:'line',lineUnit:2}]){
+  const raw=JSON.stringify({...base,equipment});s.setItem(SHOP_STORAGE_KEY,raw);const invalid=new VillageShop(s);assert.ok(invalid.blocked);assert.equal(invalid.equip('worm').ok,false);assert.equal(s.getItem(SHOP_STORAGE_KEY),raw);
+ }
 });

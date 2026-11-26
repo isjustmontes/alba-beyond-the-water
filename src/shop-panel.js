@@ -1,8 +1,8 @@
 import {SHOP_CATALOG} from './shop.js';
 
 export class ShopPanel {
-  constructor({shop,game,dialog,onChange}){
-    this.shop=shop;this.game=game;this.dialog=dialog;this.onChange=onChange;this.sequence=0;
+  constructor({shop,game,dialog,onChange,onEquip}){
+    this.shop=shop;this.game=game;this.dialog=dialog;this.onChange=onChange;this.onEquip=onEquip;this.sequence=0;
     this.session=globalThis.crypto?.randomUUID?.()??`${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
   }
   render(){
@@ -30,10 +30,8 @@ export class ShopPanel {
         setTimeout(()=>{if(!buy.isConnected)return;transactionId=`${this.session}-${++this.sequence}`;busy=false;refresh();},800);
       };
       refresh();actions.append(buy);
-      if(item.lureId){
-        const equip=document.createElement('button');equip.className='secondary-button';equip.textContent='Seleccionar';equip.dataset.equip=item.id;
-        equip.onclick=()=>{if(this.game.selectLure(item.lureId)){dialog.querySelector('#shop-feedback').textContent=`${item.name} preparado para el próximo lanzamiento.`;this.onChange();}};actions.append(equip);
-      }
+      const equip=document.createElement('button');equip.className='secondary-button';equip.textContent=item.lureId?'Seleccionar':'Montar recambio';equip.dataset.equip=item.id;
+      equip.onclick=()=>{const result=this.onEquip(item.id);dialog.querySelector('#shop-feedback').textContent=result.message;this.onChange();};actions.append(equip);
       row.append(category,title,description,owned,actions);items.append(row);
     }
   }

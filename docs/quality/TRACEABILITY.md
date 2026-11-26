@@ -6,6 +6,8 @@ Cada fila define un criterio acotado. El origen de los requisitos funcionales es
 
 | ID | Hito | Prioridad | Comportamiento | Criterio | Implementación | Prueba | Estado | Límite |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| REQ-INV-002 | M08-D | P1 | Usar cebo y montar sedal comprado con persistencia | Misma acción tienda/Equipo; reload/viajes/lance conservan selección, unidad, saldo, recibos y stock | VillageShop.equip, main.equipItem | shop.test.js, shop-browser.mjs | IMPLEMENTED_UNVERIFIED | Pendiente aceptación D; sin consumo ni estadísticas nuevas |
+| REQ-SAVE-001 (extensión D) | M08-D | P1 | Guardado compatible del equipo activo | Esquema C→2 sin reset, guardar antes de aplicar; espejo obsoleto/fallo no pierde equipo | shop.js y composición | shop.test.js, shop-browser.mjs | IMPLEMENTED_UNVERIFIED | Documento local, no atomicidad distribuida |
 | REQ-VIL-003 | M08-C | P1 | Tienda cercana T/táctil y catálogo | Puerta exterior, modal accesible, sin interacción lejos ni entradas retenidas | main, ShopPanel, nearVillageShop | shop.test.js, shop-browser.mjs | IMPLEMENTED_UNVERIFIED | Pendiente aceptación C; sin interiores |
 | REQ-ECO-001 | M08-C | P1 | Compra con saldo e idempotencia | 100 iniciales una vez, precios de catálogo, no dobles cargos ni saldo negativo | VillageShop.buy | shop.test.js, shop-browser.mjs | IMPLEMENTED_UNVERIFIED | Moneda de prueba finita, sin ventas/ingresos |
 | REQ-INV-001 | M08-C | P1 | Existencias compatibles persistentes | Comprar agrega unidad, Equipo/selección y recarga conservan legado | VillageShop, ShopPanel, renderEquipment | shop.test.js, shop-browser.mjs | IMPLEMENTED_UNVERIFIED | Reservas sin consumo/estadísticas nuevas |

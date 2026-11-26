@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**M08-D:** C aceptada en `19d31c5`; persistencia compatible y uso de cebo/sedal comprado implementados localmente, pendientes de validación del propietario. [Criterios y evidencia](milestones/M08-anglers-village/README.md). Sin commit D ni publicación; los estados inferiores son históricos.
+
 **M08-C:** B validada y conservada en `1b46d47`; tienda/economía básica y existencias persistentes implementadas localmente, pendientes de validación del propietario. [Criterios/evidencia M08](milestones/M08-anglers-village/README.md). Sin commit C ni publicación; las notas inferiores son históricas.
 
 **M08-B:** A aprobada en `2c7b2ef`; aldea gallega explorable y conexión con Lago Sereno en implementación local, pendiente de validación visual. [Estado y evidencia](milestones/M08-anglers-village/README.md). Sin funciones comerciales ni publicación.

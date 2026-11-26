@@ -1,5 +1,11 @@
 # Aceptación propuesta · Angler's Village
 
+**D aceptada por el propietario al autorizar publicación v0.7.0.** Incluye persistencia/equipo y corrección final de la cara del cartel. M08-T08 y REQ-INV-002, junto con la ampliación D de REQ-SAVE-001, VERIFIED dentro de los criterios y límites documentados. No implica pruebas físicas, benchmark sostenido, aceptación retrospectiva M07 ni funcionalidades fuera del MVP.
+
+**Resultado técnico D:** REQ-INV-002 y ampliación D de REQ-SAVE-001 IMPLEMENTED_UNVERIFIED; criterios anteriores de C aceptados. 35/35 relevantes, build y tres perfiles de navegador comprueban montaje/selección, migración de C, recarga y viaje con lanzamiento conservando inventario/dinero/equipo. Pruebas de dominio cubren esquema inválido y fallo al guardar equipo sin cambiar selección anterior. Aceptación humana D pendiente, sin extrapolar emulación a dispositivos físicos.
+
+**D · criterios previos (pendiente):** comprar cebo/sedal, seleccionar/montar, viajar lago→aldea→lago y recargar conserva dinero, recibos, cantidades y selección/unidad montada; lanzar con ese señuelo sin decrementar ni duplicar stock. Guardado C esquema 1 y legado sin tienda conservan equipo/capturas/preferencias y no reciben crédito adicional si ya existe saldo. Un fallo de escritura al equipar conserva selección anterior; guardado corrupto/futuro no se sobrescribe. Tienda y Equipo utilizan las mismas acciones en PC y móvil. REQ-INV-002 para este uso/montaje; aceptación D sólo tras validación del propietario.
+
 **C validada por el propietario:** al autorizar D confirma C aceptada, incluida la corrección visual del cartel LAGO SERENO (giro π, posición e interacción intactas, captura revisada desde el pueblo). T04/T05/T06 y requisitos comerciales quedan VERIFIED en el alcance acotado de C; D revisará uso/persistencia del equipamiento sin aceptar aún sus cambios.
 
 **Resultado técnico C:** REQ-VIL-003, REQ-ECO-001, REQ-INV-001 y REQ-SAVE-001 IMPLEMENTED_UNVERIFIED. Catálogo, compras/duplicados/fondos, guardado/errores, selección y compatibilidad cubiertos por 29 pruebas relevantes y tres perfiles de navegador; build correcto. Falta aceptación visual/funcional del propietario. La validación móvil sigue siendo emulada. Los estados B/NOT_STARTED inferiores reflejan el historial previo a C.
