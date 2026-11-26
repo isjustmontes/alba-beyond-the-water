@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**26/11/2026 · Entrega v0.6.0 autorizada.** Implementación M07 A–D cerrada para pre-release, D conservada en `be1430a`. A/B/C aceptadas; D y aceptación final pendientes. La autorización actual sustituye las restricciones históricas de publicación inferiores; no autoriza ampliar funcionalidades ni abrir otro hito.
+
 La línea publicada es M06. Antes de ampliar el lago conviene decidir si las entradas táctiles, el audio y la frecuencia de cuadro son aceptables en los equipos de los jugadores. Las siguientes agrupaciones requieren decisión del propietario.
 
 **Actualización autorizada:** M07 identifica ahora [First Steps · v0.6.0](../milestones/M07-first-steps/README.md), con Etapa A validada y sin publicar. La anterior propuesta «M07 Calidad de entrega» permanece como candidata sin ID asignado; no se renumeran requisitos o tareas existentes.

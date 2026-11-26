@@ -1,5 +1,9 @@
 # Aceptación · First Steps · Etapa A
 
+## Cierre de implementación para v0.6.0 · 26/11/2026
+
+El propietario autoriza publicar First Steps como pre-release. A/B/C tienen aceptación explícita; D (`be1430a`) y aceptación final M07 **siguen pendientes de confirmación humana**. No se declara VERIFIED por la sola publicación. Evidencia técnica final: `npm.cmd test` **115/115** y `npm.cmd run build` correctos sobre D, sin cambios funcionales posteriores. Conservados límites de emulación, falta de dispositivos físicos y benchmark sostenido. El cierre de implementación no cierra estas verificaciones pendientes ni autoriza otra etapa.
+
 ## D · criterios previos · aceptación PENDIENTE
 
 REQ-ZONE-001: iniciar con Lago Sereno, escena previa por identidad y aparición del muelle original; ninguna salida activada. REQ-ZONE-002: con registros de prueba, preparar una salida devuelve ID de destino, entrada y aparición; nunca cambia zona/escena/jugador y no admite destino inexistente o posición no finita. NFR-EXP-001: mantener código de pesca, exploración, clima, audio, HUD y guardados; ejecutar sólo pruebas relevantes y build. Sin nueva zona jugable ni transición visual.

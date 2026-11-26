@@ -1,5 +1,7 @@
 # Estado del proyecto · 26 de noviembre de 2026
 
+**Entrega autorizada: v0.6.0 — First Steps (Pre-Alpha).** M07 cierra implementación A–D para publicación: A/B/C aceptadas, D en `be1430a`, aceptación humana D y final M07 pendientes. Suite final 115/115 y build correctos; persiste aviso de bundle. README actualizado en inglés. Las cifras y descripciones inferiores documentan la evolución histórica: no significan que la versión actual siga limitada al muelle. Se conservan límites de emulación y pendientes de pruebas físicas/rendimiento sostenido. La publicación se verificará contra origin/main y tag remoto; no se declara concluida antes del push. Siguiente acción de aceptación: confirmación explícita de D/M07, sin iniciar otra etapa.
+
 **Estado actual M07-D:** C validada por el propietario y conservada en `b7ae025` (commit local). D prepara registro de Lago Sereno y planes de salidas sobre la escena existente, sin activar transiciones ni cambiar el juego. **27/27** pruebas relevantes y build correctos; D sin commit, pendiente de aceptación. Sin publicación. Los resultados C inferiores son históricos. [Evidencia](../milestones/M07-first-steps/evidence.md).
 
 **ALBA v0.5.0 · A World Alive · Pre-Alpha.** Base auditada: `main`, `544b7e1182279ee1b3b50f7de0a1f654e97fde1b`. Se partió de un árbol limpio en 6500994 y se actualizó por fast-forward al main remoto antes de auditar. El tag v0.5.0 y la prepublicación de GitHub identifican la entrega; el manifiesto y la interfaz aún indican 0.4.0.

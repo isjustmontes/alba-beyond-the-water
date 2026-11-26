@@ -1,5 +1,7 @@
 # Tareas · First Steps · Etapa A
 
+**Cierre de implementación v0.6.0 · 26/11/2026:** T01–T11 aceptadas; T12–T14 implementadas en `be1430a`, 115/115 y build final correctos. Se conservan IMPLEMENTED_UNVERIFIED hasta aceptación humana D. Publicación autorizada; las prohibiciones de publicar y estados intermedios inferiores son históricos y quedan sustituidos por esta autorización. No se abre una etapa nueva.
+
 ## Etapa D · tareas autorizadas
 
 | ID | Requisito / alcance | Prueba | Estado |

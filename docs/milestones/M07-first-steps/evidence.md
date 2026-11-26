@@ -1,3 +1,11 @@
+# Cierre técnico de entrega v0.6.0 · 26/11/2026
+
+Base funcional final: `be1430a` (D), precedida por C `b7ae025`, B `00208d9` y A `4b23cdcc`. Publicación autorizada por el propietario; aceptación humana D y final M07 no confirmadas. El commit documental de preparación y el tag v0.6.0 identificarán la entrega sin reescribir estos commits.
+
+En wolffish, Windows/Node 24.20.0: `npm.cmd test` **115/115**, cero fallos/omisiones; `npm.cmd run build` correcto, 43 módulos, JS 640,16 kB (gzip 175,51 kB), CSS 29,94 kB. Persiste aviso de chunk >500 kB. Revisión del diff: D sólo añade registro/planificación y conexión con escena existente; esta preparación sólo actualiza documentación/README. Sin prototipos, recursos temporales ni cambios de dependencias. No se repiten recorridos visuales ya registrados; no se afirma hardware físico ni rendimiento sostenido. A/B/C aceptadas por el propietario. D permanece IMPLEMENTED_UNVERIFIED por aceptación pendiente.
+
+---
+
 # Evidencia · First Steps · Etapa A
 
 ## D · zonas conectadas, preparación · 26/11/2026
