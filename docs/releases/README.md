@@ -2,6 +2,7 @@
 
 | Hito | Revisión | Entrega y evidencia |
 | --- | --- | --- |
+| M11 | d4b3139 · v0.10.0 | [The First Morning](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.10.0): cinematic village arrival, skippable/reduced-motion introduction, persistent location and compatible old saves. [Owner-accepted scope and evidence](../milestones/M11-first-morning/acceptance.md), Pre-Alpha. |
 | M01 | d98231d | Checkpoint jugable previo a mejoras visuales, sin tag propio. |
 | M02 | 6144732 · v0.1.0 | Geometría, materiales y paisaje procedural. |
 | M03 | db6fd45 · v0.2.0 | Simulación avanzada y entrada táctil. |

@@ -1,5 +1,7 @@
 # Tareas · The First Morning
 
+**Final status:** M11-T01–T06 VERIFIED in the owner-accepted delivered MVP, with A/B/C commits retained; T07 PARTIAL for physical/WebKit/accessibility and sustained-performance certification. Final automated suite 184/184, nine integrated scenarios and Pages build PASS; remaining limits explicitly accepted as Pre-Alpha follow-up, not silently marked complete. Publication authorized, subject to fast-forward/tag safety. The original task table and earlier pending notes below are historical.
+
 **Entrega C:** M11-T02/T03 y parte de T06 (aviso opcional) IMPLEMENTED_UNVERIFIED hasta validación manual. B/T04/T05 aceptadas en `094ee84`. 41/41 relevantes y nueve escenarios de navegador PASS; build correcto. La verificación amplia de habitantes, tienda, accesibilidad física/WebKit y presupuesto sostenido T06/T07 no se declara completada por estas pruebas focalizadas. Detener para revisión, sin commit C ni publicación. La nota «C en curso» inferior describe el alcance autorizado antes de implementar.
 
 **C en curso:** B aceptada visual/funcionalmente y guardada en `094ee84`, M11-T04/T05 VERIFIED en alcance de presentación. M11-T02/T03 y aviso inicial de T06 IN_PROGRESS: clasificación previa a escritores, documento aditivo con marca/ubicación, restauración segura y aviso opcional. Pruebas focalizadas: nuevo/legado, storage fallido/corrupto, recarga durante/después, posición/orientación, viajes y salto/reducción de movimiento. E y aceptación final siguen pendientes; no commit/publicación de C.

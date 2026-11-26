@@ -1,5 +1,7 @@
 # Arquitectura del cliente
 
+**M11 release contract accepted:** the C startup/location implementation is manually accepted for v0.10.0. One camera/scene owner, additive player document and unchanged legacy progress keys retained. Earlier pending/planning notes below are historical; [final evidence and limitations](../milestones/M11-first-morning/evidence.md).
+
 **M11-C · inicio persistente implementado:** `PlayerProgress` lee presencia de claves antes de los inicializadores escritores y añade sólo `alba-player-v1` (marca de introducción y ubicación juntas). Valida suelo/zona/orientación, protege raw corrupto/desconocido y no escribe las claves comerciales/capturas/audio. Main restaura pose segura, activa presentación sólo para ausencia total confirmada con marcador durable y persiste ubicación a baja frecuencia/viajes/ocultación, excluyendo cámara cinematográfica/preview. [Contrato y límites](../milestones/M11-first-morning/design.md); aprobación manual C pendiente.
 
 **M11-B · presentación implementada, activación real pendiente:** `animation/first-morning.js` controla tiempo/pose sin renderer o persistencia; `ui/first-morning.js` posee overlay, arbitraje temporal de cámara y bloqueo/limpieza de eventos. Main activa únicamente la preview DEV `?intro=1`, reutilizando escena rural y controles. Sin parámetro/producción conserva inicio normal; no nuevas claves de guardado. [Contrato y evidencia](../milestones/M11-first-morning/design.md); clasificación/aparición del diseño A inferior aún no implementadas.

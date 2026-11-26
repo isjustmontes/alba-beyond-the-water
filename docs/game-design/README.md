@@ -1,5 +1,7 @@
 # Diseño de Lago Sereno
 
+**v0.10.0 accepted scope:** new profiles arrive in the existing plaza after an optional/reduced-motion sunrise introduction; the exploration objective is nonblocking. Current safe location/orientation persists, existing profiles without position retain compatible fallback. No required conversations, tutorials or new economy gates. [M11 final acceptance](../milestones/M11-first-morning/acceptance.md); previous pending notes are historical.
+
 **M11-C · en revisión manual:** perfiles realmente nuevos llegan a la plaza tras introducción saltable; «Explora la aldea» es aviso breve sin obligación/recompensa. Ubicación actual se guarda localmente y se restaura sin repetir introducción; perfiles anteriores sin ubicación mantienen muelle y progreso. No hay tutorial ni bloqueos nuevos de habitantes/tienda/sendero. [Evidencia y límites](../milestones/M11-first-morning/README.md).
 
 **M11-B · presentación en revisión:** la cinemática se prueba sólo en DEV con `?intro=1`: unos 12 s hacia la plaza, título/frase, salto y movimiento reducido. Arranque habitual, guardados y pesca intactos. La bienvenida automática del plan inferior todavía no está activada. [Revisión y límites](../milestones/M11-first-morning/README.md).

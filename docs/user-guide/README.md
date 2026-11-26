@@ -1,5 +1,7 @@
 # Explorar y pescar
 
+**The First Morning · v0.10.0 (Pre-Alpha):** genuinely new profiles begin in the village square. Watch the sunrise introduction or skip with Space/Escape on PC or **Saltar introducción** on touchscreens; reduced-motion preferences return control without camera travel. “Explora la aldea” is optional and fades away. Location/orientation save locally without replaying the intro after reload or travel. Existing profiles without location retain the dock fallback; catches, commerce and preferences remain compatible. Older stage-specific position limits below are historical.
+
 **Shopkeeper (v0.9.0 development):** approach the portrait sign left of the ARTES DE PESCA door. Press E or the mobile contextual button to talk. Choose the catalog option to open the existing store; T still opens the store directly on PC. Close/leave or return through conversation topics as usual. Conversation does not grant or spend money; only normal catalog purchases change saved progress. Manuel remains by the plaza bench.
 
 **Manuel · desarrollo v0.9.0:** en la aldea, acércate al banco de la plaza, a la derecha del pozo al llegar desde el sendero. Aparece **E · Hablar con Manuel** en PC o el botón contextual táctil. El retrato sólo aparece en la conversación; no hay personaje 3D. Elige los temas, vuelve o despídete; × y Esc también cierran. La jornada y los controles se pausan mientras conversas. E sigue abriendo Equipo fuera del encuentro. Al cerrar, vuelve a pulsar para caminar o mover los joysticks; el ratón no se captura automáticamente.

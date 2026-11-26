@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Final delivery v0.10.0 — The First Morning (Pre-Alpha):** [M11 accepted functional scope](milestones/M11-first-morning/acceptance.md), B/C manually accepted and publication authorized. C `d4b3139`; 184/184 logic tests, nine integrated scenarios and Pages build PASS, plus production desktop/phone smoke checks. Existing saves/history preserved; physical/WebKit/sustained limits remain explicit. Earlier pending notes below are historical.
+
 **Vigente M11-C:** [primera llegada y ubicación persistente](milestones/M11-first-morning/README.md), implementadas y pendientes de validación manual. B aceptada en `094ee84`; 41/41 relevantes, nueve escenarios emulados y build correctos. Perfiles antiguos sin introducción ni reinicio; C sin commit/publicación. Las notas de preview B/A inferiores son históricas.
 
 **Vigente M11-B:** [cinemática de The First Morning](milestones/M11-first-morning/README.md), previsualizable en desarrollo con `?intro=1`, pendiente de validación visual/funcional. A aprobada en `107ac34`; sin activación automática, cambios de guardado o aparición normal, commit B ni publicación. Las notas de planificación inferiores son históricas.

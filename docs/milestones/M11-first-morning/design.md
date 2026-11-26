@@ -1,5 +1,7 @@
 # Diseño · The First Morning
 
+**Release contract:** B/C implementation manually accepted; C stored in `d4b3139`. No functional changes during closure. The implemented C adapter/atomic local document supersede A's proposed separate onboarding key and exclusion of location persistence; A remains design history. One renderer/camera, unchanged previous save keys and conservative fallback remain the authoritative contracts. See final evidence for validation scope and limitations.
+
 ## C · diseño autorizado de inicio y persistencia
 
 **Implementado, pendiente de aceptación:** `PlayerProgress` aplica este contrato sin renderer; `main` resuelve inicio antes de inicializar comercio, prepara la ubicación después de registrar controles y bloquea entrada durante la espera de carga/cinemática. Se conserva también un registro de ubicación versión 1 anterior sin `introSeen`: su propia presencia excluye la introducción y sus campos adicionales se mantienen. Documentos/versiones desconocidos no se reemplazan. La entrada DEV repetible no instancia PlayerProgress ni guarda su cámara.

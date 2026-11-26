@@ -2,11 +2,19 @@
 
 ![ALBA — Beyond the Water](alba%20-%20banner.webp)
 
-**v0.9.0 — Stories of the Village · Pre-Alpha.** Meet Manuel and Xosé through narrative watercolor portraits and branching conversations in the Galician-inspired village. Existing fishing, environmental simulation, commerce, audio and saved progress are preserved. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
+**v0.10.0 — The First Morning · Pre-Alpha.** New adventures begin in the village square with a skippable sunrise introduction. Player location and orientation now survive reloads, while existing saves, fishing, illustrated inhabitants, commerce and environmental systems remain compatible. The npm package retains its legacy 0.4.0 version; release tags identify published versions.
 
-[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.9.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.9.0)
+[Play on GitHub Pages](https://isjustmontes.github.io/alba-beyond-the-water/) · [How to play](docs/user-guide/README.md) · [v0.10.0 release notes](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.10.0)
 
 *Every water has a story.*
+
+## The First Morning
+
+- **A first arrival:** genuinely new profiles start in the existing village square after an approximately 12-second sunrise camera sequence. Manuel, Xosé, the shop and the lake path are immediately available.
+- **An accessible introduction:** ALBA's title and “Cada agua guarda una historia. Esta es la tuya” accompany a slow view toward the plaza. Press **Space / Escape** or the visible **Skip introduction** button to continue; reduced-motion preferences omit camera travel and return control immediately.
+- **A gentle invitation:** “Explora la aldea” appears briefly after the introduction without requiring conversations or a tutorial.
+- **Local continuity:** the introduction is consumed before playback and does not repeat on reload or zone travel. Safe current location, orientation and mode are stored locally; old profiles without location use the compatible dock fallback without replaying the introduction or resetting progress.
+- **Safe recovery:** unknown or corrupt player-location records are preserved and use a safe fallback. Height is derived from walkable ground; jumps, active fights, environmental time/weather and per-zone return history are not persisted. Abrupt process termination can lose the last short position-save interval. No cloud synchronization is provided.
 
 ## Stories of the Village
 
@@ -63,6 +71,7 @@ Human hands remain disabled. Provisional visual wildlife is not available in gam
 - **Left mouse / Space in fishing mode:** hold and release to cast, press during a bite to set the hook, and hold to retrieve. Release periodically to manage fight tension.
 - **E / contextual button:** talk to Manuel near the plaza bench or Xosé by the shop door; E opens equipment elsewhere. Back/farewell/×/Esc leave the conversation.
 - **R:** recover tackle; **J:** journal; **P:** pause; **H:** help; **M:** open/close the current-zone map; **N:** sound; **F:** fullscreen.
+- **During the first introduction:** Space or Escape skips it without triggering a gameplay jump or fishing action.
 
 ### Mobile
 
@@ -71,8 +80,9 @@ Human hands remain disabled. Provisional visual wildlife is not available in gam
 - In fishing mode, hold **LANZAR** and release to cast. The contextual action changes to **CLAVAR** during a bite and **RECOGER** for retrieval and fighting.
 - **MAPA** opens the current-zone map; close it with × to resume. Jump is currently a PC keyboard action.
 - **EQUIPO** opens equipment and lures; **CUADERNO** opens catches and records. Compact contextual indicators, safe areas and portrait/landscape layouts remain supported.
+- **During the first introduction:** tap **Saltar introducción** to continue; normal touch controls return after the camera handoff.
 
-Audio starts after a browser-permitted interaction and respects saved mute preferences. Exploration position and environmental time/weather are not persisted between sessions. Money, inventory, purchase receipts and equipped tackle are saved locally; catch storage and existing preferences are preserved. Commerce errors do not erase previous saves. These local saves are not cloud-synchronized.
+Audio starts after a browser-permitted interaction and respects saved mute preferences. Safe current player location and orientation are persisted; environmental time/weather still restart with each session. Money, inventory, purchase receipts and equipped tackle are saved locally; catch storage and existing preferences are preserved. Commerce errors do not erase previous saves. These local saves are not cloud-synchronized.
 
 ## Run locally
 
@@ -107,6 +117,7 @@ All releases remain **Pre-Alpha**.
 | [v0.8.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.0) | A Living Village: Atlantic vegetation, natural terrain and paths, refined rural materials, weather-responsive lighting and distant rolling hills. |
 | [v0.8.1](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.8.1) | Movement & Navigation: faster walking/running, PC jumping, zone maps and dual mobile joysticks. |
 | [v0.9.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.9.0) | Stories of the Village: illustrated Manuel and Xosé, branching dialogue, contextual signs and direct catalog access. |
+| [v0.10.0](https://github.com/isjustmontes/alba-beyond-the-water/releases/tag/v0.10.0) | The First Morning: skippable sunrise introduction, village-square starts, reduced-motion support, persistent player location and compatible previous saves. |
 
 ## Development
 
@@ -121,6 +132,8 @@ Consult the [project status](docs/project/STATUS.md), [roadmap](docs/project/ROA
 [v0.8.1 SDD acceptance and evidence](docs/milestones/M09-living-village/navigation-0.8.1.md) record the accepted movement and navigation update. The final relevant suite passed 76/76 and the production build succeeded. Existing browser evidence covers six desktop/mobile/tablet profiles, independent two-finger controls, maps and fishing. The 688.39 kB JavaScript chunk (191.84 kB gzip) retains the known >500 kB warning; no dependency or bundling refactor was added. Physical mobile, WebKit and sustained performance checks remain pending.
 
 [M10 acceptance and evidence](docs/milestones/M10-stories-of-the-village/acceptance.md) record the owner-validated inhabitants, reusable dialogue and existing-shop integration. Final validation includes 169/169 logic tests and production/Pages builds; PC and mobile/tablet emulation cover dialogue, controls, commerce, travel and saved progress. The known large-bundle warning, physical-device/WebKit checks and sustained performance remain explicit Pre-Alpha limitations.
+
+[M11 acceptance and evidence](docs/milestones/M11-first-morning/acceptance.md) record the owner-validated introduction and persistent startup. Final checks include 184/184 logic tests, nine integrated desktop/mobile/tablet scenarios and a production build using the GitHub Pages relative base. The known large-bundle warning, physical-device/WebKit accessibility checks and sustained performance remain explicit limitations.
 
 ## Future direction — planned, not implemented
 

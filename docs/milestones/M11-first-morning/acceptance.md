@@ -1,5 +1,9 @@
 # Aceptación · The First Morning
 
+## Final accepted delivery · v0.10.0
+
+Owner explicitly confirms B/C manual validation and authorizes safe publication. AC-INTRO-01–06 accepted in the delivered functional scope, backed by cinematic/new/legacy/reload/skip/travel checks. AC-INTRO-07/09 verified in stated desktop and touch-emulation scope; physical Android/iOS, WebKit and real assistive-technology coverage remain partial. AC-INTRO-08 sustained comparison/10% budget is not certified and remains PARTIAL; lightweight reuse/no new dependencies is evidenced, not a hardware performance guarantee. These limits are carried into Pre-Alpha release documentation. M11 closes for this MVP; publication must still satisfy Git safety. No future milestone opened automatically. Historical tables below describe earlier stages, not final acceptance.
+
 **Decisión C vigente:** B aceptada visual/funcionalmente por el propietario y conservada en `094ee84`. C implementada; AC-INTRO-01/05/06 y restauración de ubicación cuentan con 41/41 pruebas de lógica relevantes y nueve escenarios integrados PASS, pero siguen pendientes de aceptación manual C. AC-INTRO-02/03/04 mantienen aceptación de presentación B; movimiento reducido y controles se comprueban también con inicio real. NFR físicos/WebKit/lector de pantalla y medición sostenida continúan parciales. No cerrar M11 ni certificar dispositivos físicos. Los estados inferiores son históricos.
 
 **Decisión humana vigente:** A aprobada al encargar B; guardada en `107ac34`. B entregada para validación visual/funcional, aún no aceptada. AC-INTRO-02/03/04 tienen evidencia de lógica/emulación en alcance de previsualización; AC-INTRO-07/09 parciales. AC-INTRO-01/05/06 y medición comparativa completa AC-INTRO-08 no se completan en B. No inferir aceptación física, accesible o de rendimiento de capturas automatizadas. Los procedimientos/estados A inferiores son históricos; [resultados B](evidence.md).

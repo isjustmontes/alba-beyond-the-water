@@ -1,5 +1,13 @@
 # Evidencia · The First Morning
 
+## Final release validation · 26/11/2026 · implementation `d4b3139`
+
+Owner explicitly accepts B/C manually and authorizes v0.10.0 publication. Local C commit created without rewriting A/B. `npm.cmd test`: **184/184 PASS**. `node tests/player-progress-browser.mjs`: **9/9 scenarios PASS**, including natural finish, skip, reduced motion, reload during/after, old/available/corrupt location, denied storage, PC/touch controls and lake round trip. `npm.cmd run build -- --base=./`: **PASS**, matching Pages workflow; JS 729.15 kB / gzip 205.53, CSS 42.40 kB / gzip 9.31, known >500 kB chunk warning retained.
+
+Additional bounded production smoke check in ignored `test-results/first-morning-release-smoke.mjs`, served at local port 5183: desktop 1280×800 and touch phone 390×844 **PASS**. Real compiled intro, Escape/touch skip, objective, map modal, village reload without intro, unchanged commerce, no DEV diagnostic leak and no detected JavaScript/shader errors. Windows Edge/Chromium headless/SwiftShader; no physical-device, WebKit, assistive-technology or sustained-performance claim. Temporary smoke script/results are not committed.
+
+Git preflight: wolffish feature branch, expected files only, origin is `https://github.com/isjustmontes/alba-beyond-the-water.git`; fetched main remains v0.9.0 `f7751bf`, ancestor of implementation. v0.10.0 absent locally/remotely before publication; previous remote tag objects recorded for final comparison. README banner/install instructions/previous versions preserved. Final documentation commit will retain this implementation SHA; remote publication is verified separately after a normal atomic push, never inferred from these preflight checks.
+
 ## Etapa C · 26/11/2026 · base local `094ee84`
 
 B aceptada visual/funcionalmente por el propietario y guardada como `feat: add first morning cinematic`; C todavía sin commit, pendiente de aceptación manual. Archivos funcionales: nuevo `src/player-progress.js`, integración acotada en `main.js` y estilo del aviso inicial en `ui/first-morning.css`. Sin cambios a comercio, capturas, peces, clima, audio, navegación o recursos.
