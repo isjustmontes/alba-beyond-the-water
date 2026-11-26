@@ -1,5 +1,13 @@
 # Evidencia · Angler's Village · Etapa A
 
+## Cierre de entrega v0.7.0 · 26/11/2026
+
+Propietario confirma D validada y autoriza publicación. Commit funcional D `92d2548f70ae46cf05daf9aa2f0ca4aac3fc7fc7`; conserva A/B/C y cartel final con textura en cara −Z. Se revisan únicamente cambios de M08 y se excluyen test-results/prototipos. Origin correcto y remoto main en `28432a5` (v0.6.0), antecesor de la rama; sin divergencia ni tag v0.7.0 al comprobar. Se volverán a comprobar antes del push; no se declara publicación exitosa hasta verificar remoto.
+
+Comprobación final breve tras ajuste de cara: `node --test tests/shop.test.js tests/village.test.js tests/zones.test.js tests/input.test.js tests/fishing.test.js tests/journal.test.js` **35/35**, cero fallos/omisiones; `npm.cmd run build` correcto, 48 módulos, JS **669,57 kB** / gzip **185,29 kB**, CSS 31,84 kB. Aviso de bundle >500 kB conocido. No se repiten navegadores o recorridos ya validados: se reutilizan evidencias B/C/D y la última vista con cámara real desde plaza. Sin modificar código después de estas pruebas: sólo cierre documental y README.
+
+MVP A–D aceptado; requisitos funcionales VERIFIED. T07/NFR-VIL-001 PARTIAL por físico/WebKit/rendimiento sostenido pendientes. No se atribuye nueva evidencia ni se acepta M07 retrospectivamente. README en inglés conserva banner, enlaces/historial e incorpora funciones, controles y limitaciones reales. El tag v0.7.0 identificará el commit final con documentación; conservar commits y tags previos. Sin assets externos, dependencias nuevas ni prototipos en archivos seguidos por Git.
+
 **Corrección posterior de cara del cartel LAGO SERENO:** textura asignada explícitamente al material de la cara 5 de BoxGeometry (normal local/world −Z), en lugar de rotar toda la tabla. Tabla sin rotación y posición (1,8; 2,6639; 28) conservada; poste, interacción y transición intactos. Comprobación focalizada en aplicación real: entrada en aldea, inicio de fixture en plaza y aproximación con W/ratón hasta jugador (1,139; 2,880; 22,128), yaw −3,0296, mirando hacia el lago. Captura lake-sign-real-player.png revisada: LAGO SERENO legible, sin inversión ni ocultación; cara opuesta mantiene madera. Inspección de normales/materiales confirma texto sólo en −Z. Sin suite/build generales, commit ni publicación; artefactos de comprobación ignorados en test-results/.
 
 ## D · persistencia e integración de equipo · aceptación PENDIENTE

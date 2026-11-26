@@ -1,5 +1,7 @@
 # Documentación de ALBA
 
+**Entrega v0.7.0 — The Angler's Village:** [M08 cerrado y aceptado](milestones/M08-anglers-village/acceptance.md), publicación autorizada; implementación A–D conservada, D en `92d2548`. 35/35 relevantes y build final correctos. Dispositivos físicos/WebKit/rendimiento sostenido pendientes, sin certificarlos por emulación. Las notas inferiores son históricas; resultado de publicación se verifica en tag/release remotos.
+
 **M08-D:** C aceptada en `19d31c5`; persistencia compatible y uso de cebo/sedal comprado implementados localmente, pendientes de validación del propietario. [Criterios y evidencia](milestones/M08-anglers-village/README.md). Sin commit D ni publicación; los estados inferiores son históricos.
 
 **M08-C:** B validada y conservada en `1b46d47`; tienda/economía básica y existencias persistentes implementadas localmente, pendientes de validación del propietario. [Criterios/evidencia M08](milestones/M08-anglers-village/README.md). Sin commit C ni publicación; las notas inferiores son históricas.

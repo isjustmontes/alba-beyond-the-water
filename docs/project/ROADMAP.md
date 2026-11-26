@@ -1,5 +1,7 @@
 # Hoja de ruta propuesta
 
+**Cierre M08:** The Angler's Village v0.7.0 aceptado como MVP Pre-Alpha y publicación autorizada; D conservada en `92d2548`. Próximo trabajo pendiente de priorización: móviles físicos/WebKit, rendimiento sostenido y balance de economía. No se autoriza implementar ingresos, misiones, interiores, NPC ni ampliar zonas. Propuestas inferiores permanecen como historial/planificación.
+
 **M08-D actual:** C aceptada y guardada en `19d31c5`; D completa persistencia/uso de equipo sin ampliar mecánicas RPG. Selección/montaje y compatibilidad local implementados, pendientes de validación del propietario; no se autoriza siguiente etapa, backend, misiones ni publicación.
 
 **M08-C actual:** B aceptada en `1b46d47`; el propietario autoriza tienda/economía básica agrupando T04/T05/T06 como C. Implementación y evidencia pendientes de aceptación humana; no se abren interiores, ingresos, misiones ni NPC. Se conserva el historial de etapas inferior.

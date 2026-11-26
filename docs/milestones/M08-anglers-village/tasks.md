@@ -1,5 +1,7 @@
 # Tareas · Angler's Village
 
+**Cierre vigente:** A/B/C/D aceptadas; T01–T06 y T08 VERIFIED dentro del alcance acordado. D conservada en `92d2548`. T07 PARTIAL conserva límites de dispositivos físicos y rendimiento sostenido; no se inventa evidencia para cerrarlos. MVP M08 cerrado para pre-release v0.7.0 por autorización del propietario. Las letras/estados inferiores son registro histórico de decisiones; no autorizan tareas futuras.
+
 **D implementada, pendiente de aceptación:** C validada en `19d31c5`; T04–T06 VERIFIED dentro de C. M08-T08 · REQ-INV-002/REQ-SAVE-001 IMPLEMENTED_UNVERIFIED: migración compatible de equipo, acción compartida de selección/montaje, stock y aplicación en pesca, regresión de reload/viajes/fallos. 35/35 y build correctos; navegador PC/móvil vertical-horizontal correcto. Mantener T07 PARTIAL hasta aceptación humana y límites físicos; no abrir funcionalidades RPG adicionales.
 
 **C implementada:** B aceptada en `1b46d47`; T02/T03 VERIFIED. T04/T05/T06 IMPLEMENTED_UNVERIFIED, ahora agrupadas como Etapa C: interacción/catálogo, moneda/compras/existencias y persistencia aditiva. 29/29 pruebas relevantes, build y PC/móvil vertical-horizontal correctos; pendiente aceptación del propietario. T07 PARTIAL, sólo regresión acotada de C. No nuevas zonas/modelos ni ingresos. La aceptación B no elimina los límites de hardware físico.

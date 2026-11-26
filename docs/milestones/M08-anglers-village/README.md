@@ -1,4 +1,6 @@
-# M08 · Angler's Village · v0.7.0 · propuesta de MVP
+# M08 · The Angler's Village · v0.7.0 · MVP cerrado y aceptado
+
+**Cierre autorizado para pre-release:** A (`2c7b2ef`), B (`1b46d47`), C (`19d31c5`) y D (`92d2548`) aceptadas por el propietario. Incluye la corrección final de cara del cartel. Requisitos funcionales y T01–T06/T08 VERIFIED en su alcance; T07/NFR-VIL-001 conservan PARTIAL por validación física/rendimiento sostenido pendientes. Aceptación del MVP Pre-Alpha con los límites registrados; no se presenta como certificación de dispositivos físicos ni autorización de otra etapa. Las notas siguientes conservan la evolución histórica, no el estado de aceptación vigente. Publicación v0.7.0 autorizada; su resultado se verifica en tag/release remotos.
 
 **D implementada, pendiente de validación:** C aceptada en `19d31c5`, incluida orientación del cartel. Tienda y Equipo comparten selección de cebo y **Montar recambio de sedal**; se muestra la unidad montada y se conservan saldo/existencias al usarla, viajar y recargar. Guardado C/legado compatible, sin nueva moneda ni duplicación. Pruebas 35/35, build y PC/móvil vertical-horizontal correctos. Para revisar: comprar cebo/sedal, seleccionar/montar, volver al lago, lanzar y recargar; comprobar selección, unidad montada, saldo y cantidades en Equipo. Sin consumo, estadísticas nuevas, backend/NPC/misiones; D sin commit/publicación, pendiente del propietario.
 

@@ -1,5 +1,11 @@
 # Aceptación propuesta · Angler's Village
 
+## Cierre M08 · The Angler's Village · v0.7.0
+
+El propietario confirma D validada y ordena cerrar/publicar M08. A/B/C/D aceptadas con las evidencias existentes; implementación funcional final conservada en `92d2548`. REQ-VIL-001/002/003, REQ-ECO-001, REQ-INV-001/002 y REQ-SAVE-001 (incluida extensión D) VERIFIED dentro del MVP. Prueba final breve 35/35 y build correctos tras corregir cara del cartel; evidencias de interacción PC/móvil y cámara real conservadas. No se repiten recorridos visuales ya validados.
+
+T07/NFR-VIL-001 permanecen PARTIAL: no hay hardware Android/iOS físico, WebKit ni benchmark sostenido/p95 aprobado. Estos límites acompañan la entrega Pre-Alpha y quedan como trabajo de calidad pendiente, no como pruebas realizadas ni aceptación retroactiva de M07. Sin interiores, NPC, misiones, ingresos recurrentes o consumo de inventario. Cierre de este MVP; no se abre otra etapa. Los estados pendientes inferiores son históricos y quedan sustituidos por este cierre.
+
 **D aceptada por el propietario al autorizar publicación v0.7.0.** Incluye persistencia/equipo y corrección final de la cara del cartel. M08-T08 y REQ-INV-002, junto con la ampliación D de REQ-SAVE-001, VERIFIED dentro de los criterios y límites documentados. No implica pruebas físicas, benchmark sostenido, aceptación retrospectiva M07 ni funcionalidades fuera del MVP.
 
 **Resultado técnico D:** REQ-INV-002 y ampliación D de REQ-SAVE-001 IMPLEMENTED_UNVERIFIED; criterios anteriores de C aceptados. 35/35 relevantes, build y tres perfiles de navegador comprueban montaje/selección, migración de C, recarga y viaje con lanzamiento conservando inventario/dinero/equipo. Pruebas de dominio cubren esquema inválido y fallo al guardar equipo sin cambiar selección anterior. Aceptación humana D pendiente, sin extrapolar emulación a dispositivos físicos.
